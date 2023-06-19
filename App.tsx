@@ -4,17 +4,19 @@ import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 // import { Initial, Login } from "./screens/auth";
-import Initial from "./screens/auth/Initial/initial";
-import Login from "./screens/auth/Login/login";
+import Initial from "./src/screens/auth/Initial/initial";
+import Login from "./src/screens/auth/Login/login";
+import About from "./src/screens/auth/About/about";
 
-type StackNavigation = {
+export type StackNavigation = {
   Initial: undefined;
   Login: undefined;
+  About: undefined;
 };
 
-type StackTypes = NativeStackNavigationProp<StackNavigation>
-
 const Stack = createNativeStackNavigator();
+
+export type StackTypes = NativeStackNavigationProp<StackNavigation>
 
 export default function App() {
   return (
@@ -33,6 +35,13 @@ export default function App() {
             headerBackVisible: false,
             headerShown: false,
           }}/>
+        <Stack.Screen 
+          name="About" 
+          component={About} 
+          options={{
+            headerBackVisible: false,
+            headerShown: false,
+        }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

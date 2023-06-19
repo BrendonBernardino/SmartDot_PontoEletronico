@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
 import styles from "./styles"
 
-function LoginScreen() {
+function Login() {
     return (
         <View style={styles.container}>
         <View style={styles.logo}>
@@ -26,4 +26,4 @@ function LoginScreen() {
         </View>
     )
 }
-export default LoginScreen;
+export default Login;
