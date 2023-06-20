@@ -1,29 +1,51 @@
-import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
-import { useState } from 'react';
-import { Ionicons, Feather, Entypo } from 'react-native-vector-icons'
+import { Text, View, Image, Linking } from 'react-native';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Ionicons } from 'react-native-vector-icons'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./styles"
 import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
-import GithubIcon from '../../../assets/github.svg';
+import GithubIcon from '../../../../assets/github.svg';
 
 function About() {
+    const [avatarBrendon, setAvatarBrendon] = useState(null);
+    const [avatarGabriel, setAvatarGabriel] = useState(null);
     const [themeMode, setThemeMode] = useState(COLORSLIGHT);
+    const navigation = useNavigation();
     const route = useRoute();
     // const {themeMode} = route.params;
+
+    useEffect(() => {
+        fetch("https://api.github.com/users/brendonbernardino")
+            .then((response) => response.json())
+            .then((data) => setAvatarBrendon(data.avatar_url))
+            .catch(() => console.log("Erro"))
+            .finally(() => console.log("Finalizado"));
+    }, []);
+    useEffect(() => {
+        fetch("https://api.github.com/users/gabrielras")
+            .then((response) => response.json())
+            .then((data) => setAvatarGabriel(data.avatar_url))
+            .catch(() => console.log("Erro"))
+            .finally(() => console.log("Finalizado"));
+    }, []);
+
     return (
         <View style={[styles.container, { backgroundColor: themeMode.primary }]}>
             <View style={styles.toplayer}>
-                <Ionicons style={styles.back} name="chevron-back" size={10} />
+                <Ionicons style={styles.back} name="chevron-back" size={10} onPress={() => {
+                    navigation.goBack();
+                }} />
                 <Text style={styles.title}>PROJETO</Text>
                 <Image
                     style={styles.logo}
-                    source={require('../../../assets/Logo.png')}
+                    source={require('../../../../assets/Logo.png')}
                 />
             </View>
             <View style={styles.ufclayer}>
                 <Image
                     style={styles.logoufc}
-                    source={require('../../../assets/ufcuniv.png')}
+                    source={require('../../../../assets/ufcuniv.png')}
                 />
             </View>
             <View style={styles.descriptionlayer}>
@@ -40,15 +62,20 @@ function About() {
             <View style={styles.photoslayer}>
                 <Image
                     style={styles.photo}
-                    source={require('../../../assets/Brendon.jpg')}
+                    source={{ uri: avatarBrendon }}
                 />
                 <Image
                     style={styles.photo}
-                    source={require('../../../assets/Gabriel.jpg')}
+                    source={{ uri: avatarGabriel }}
                 />
             </View>
             <View style={styles.githublayer}>
-                <GithubIcon width={40} height={40}/>
+                <GithubIcon width={40} height={40} paddingRight={90} onPress={() => {
+                    Linking.openURL('https://github.com/BrendonBernardino');
+                }} />
+                <GithubIcon width={40} height={40} paddingLeft={90} onPress={() => {
+                    Linking.openURL('https://github.com/gabrielras');
+                }} />
             </View>
         </View>
     )

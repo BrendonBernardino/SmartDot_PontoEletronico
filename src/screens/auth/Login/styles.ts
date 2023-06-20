@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -7,24 +7,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  logolayer: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: 'blue',
+  },
   logo: {
-    flex: 1.5,
+    // flex: 0.325,
     alignItems: 'center',
     justifyContent: 'center',
+    width: 111,
+    height: 111,
   },
-  buttom: {
-    flex: 0.3,
+  midlayer: {
+    flex: 0.8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: "2%",
-    width: "65%",
-    height: "10%",
-    borderRadius: 20
+    width: "100%",
   },
-  info: {
-    flex: 1,
+  loginlayer: {
+    flex: 0.7,
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+    width: "100%",
+    // paddingBottom: "40%",
+  },
+  infolayer: {
+    flex: 0.5,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    // backgroundColor: 'blue',
   }
 });
 

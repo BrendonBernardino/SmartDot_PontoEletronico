@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import React from 'react';
 import { useState } from 'react';
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -43,7 +44,7 @@ function Initial() {
       <View style={styles.top}>
         <Image
           style={styles.logo}
-          source={themeMode === COLORSLIGHT ? require('../../../assets/Logo.png') : require('../../../assets/LogoDark.png')}
+          source={themeMode === COLORSLIGHT ? require('../../../../assets/Logo.png') : require('../../../../assets/LogoDark.png')}
         />
         <Text style={[styles.title, { color: themeMode.text_2 }]}>SmartDot</Text>
       </View>
@@ -52,6 +53,7 @@ function Initial() {
           text="Entrar"
           color={themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.secundary}
           textColor={themeMode === COLORSLIGHT ? themeMode.text : themeMode.text_2}
+          flex={0.5}
           borderTopLeftRadius={33}
           elevation={5}
           centralized={1}
@@ -62,6 +64,7 @@ function Initial() {
           text="Criar Conta"
           color={themeMode === COLORSLIGHT ? themeMode.auxiliar : themeMode.tertiary}
           textColor={themeMode.text}
+          flex={0.5}
           borderBottomRightRadius={33}
           elevation={5}
           centralized={1}

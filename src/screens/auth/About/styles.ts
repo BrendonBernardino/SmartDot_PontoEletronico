@@ -5,11 +5,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     toplayer: {
-        flex: 0.10,
+        flex: 0.1,
         flexDirection: "row",
         alignItems: 'flex-end',
         justifyContent: 'space-around',
-        backgroundColor: "gray",
+        // backgroundColor: "gray",
     },
     back: {
         flex: 0.1, 
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         flex: 0.1,
-        height: "27%",
+        height: "48%",
         // paddingRight: "0%", 
         // width: "5%",
         // backgroundColor: "pink",
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: "100%",
         height: "10%",
-        backgroundColor: "pink",
+        // backgroundColor: "pink",
     },
     logoufc: {
         flex: 0.5,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         flex: 0.3,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: "blue",
+        // backgroundColor: "blue",
     },
     text: {
         flex: 0.35,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         flexDirection: "row",
-        backgroundColor: "yellow",
+        // backgroundColor: "yellow",
     },
     photo: {
         flex: 0.2,
@@ -71,8 +71,11 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     githublayer: {
-        flex: 0.2,
-        backgroundColor: "green",
+        flex: 0.1,
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        flexDirection: "row",
+        // backgroundColor: "green",
     }
 });
 

@@ -22,26 +22,26 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen 
-          name="Initial" 
+        <Stack.Screen
+          name="Initial"
           component={Initial}
           options={{
             headerShown: false,
-          }}/>
-        <Stack.Screen 
-          name="Login" 
-          component={Login} 
+          }} />
+        <Stack.Screen
+          name="About"
+          component={About}
           options={{
             headerBackVisible: false,
             headerShown: false,
-          }}/>
-        <Stack.Screen 
-          name="About" 
-          component={About} 
+          }} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
           options={{
             headerBackVisible: false,
             headerShown: false,
-        }}/>
+          }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,9 +1,7 @@
 import { Text, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from 'react';
+import { useNavigation } from "@react-navigation/native";
 import styles from "./styles"
-import { COLORSLIGHT, COLORSDARK } from '../../styles/themes/colors';
 import { StackTypes } from '../../../App';
 
 interface Props {
@@ -15,11 +13,10 @@ interface Props {
     elevation?: number;
     centralized: number;
     nextPage: string;
-    mode: unknown;
+    mode?: unknown;
 }
 
 export default function (props: Props) {
-    // const [themeMode, setThemeMode] = useState(props.mode);
     const navigation = useNavigation<StackTypes>();
     return (
         <TouchableOpacity
@@ -27,10 +24,13 @@ export default function (props: Props) {
                 styles.buttom,
                 {
                     backgroundColor: props.color,
+                    width: "65%",
+                    height: 59,
                     borderTopLeftRadius: props.borderTopLeftRadius,
                     borderBottomRightRadius: props.borderBottomRightRadius,
                     elevation: props.elevation,
                     alignItems: props.centralized == 0 ? "flex-start" : "center"
+
                 }]}
             onPress={() => navigation.navigate(props.nextPage, props.mode)}
         >
