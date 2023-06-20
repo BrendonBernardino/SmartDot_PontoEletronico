@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles"
 import { StackTypes } from '../../../App';
+import { Ionicons } from 'react-native-vector-icons'
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -39,6 +40,7 @@ export default function (props: Props) {
                 cursorColor={props.textColor}
                 selectionColor={props.textColor}
             />
+            {/* <Ionicons name="eye-outline" size={25}/> */}
         </View>
     )
 }

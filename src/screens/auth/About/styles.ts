@@ -9,21 +9,18 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: 'flex-end',
         justifyContent: 'space-around',
-        // backgroundColor: "gray",
     },
     back: {
-        flex: 0.1, 
         justifyContent: 'flex-start', 
         fontSize: 25, 
         marginRight: "0%", 
-        // backgroundColor: "pink"
     },
     title: {
         flex: 0.25,
         textAlign: "center",
         fontSize: 25,
         fontWeight: "bold",
-        // elevation: 1,
+        elevation: 0,
         // backgroundColor: "pink",
     },
     logo: {

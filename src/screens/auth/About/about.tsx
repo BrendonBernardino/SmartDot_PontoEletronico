@@ -1,4 +1,4 @@
-import { Text, View, Image, Linking } from 'react-native';
+import { Text, View, Image, Linking, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Ionicons } from 'react-native-vector-icons'
@@ -33,9 +33,11 @@ function About() {
     return (
         <View style={[styles.container, { backgroundColor: themeMode.primary }]}>
             <View style={styles.toplayer}>
-                <Ionicons style={styles.back} name="chevron-back" size={10} onPress={() => {
-                    navigation.goBack();
-                }} />
+                <TouchableOpacity style={{ flex: 0.1 }}>
+                    <Ionicons style={styles.back} name="chevron-back" size={10} onPress={() => {
+                        navigation.goBack();
+                    }} />
+                </TouchableOpacity>
                 <Text style={styles.title}>PROJETO</Text>
                 <Image
                     style={styles.logo}
