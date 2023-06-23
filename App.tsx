@@ -7,6 +7,9 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-na
 import Initial from "./src/screens/auth/Initial/initial";
 import Login from "./src/screens/auth/Login/login";
 import About from "./src/screens/auth/About/about";
+import ManagerCollaborators from "./src/screens/manager/Collaborators/index";
+import ManagerPointPresences from "./src/screens/manager/PointPresences/index";
+import ManagerProfiles from "./src/screens/manager/Profiles/index";
 
 export type StackNavigation = {
   Initial: undefined;
@@ -22,6 +25,25 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="ManagerPointPresences"
+          component={ManagerPointPresences}
+          options={{
+            headerShown: false,
+          }} />
+        <Stack.Screen
+          name="ManagerCollaborators"
+          component={ManagerCollaborators}
+          options={{
+            headerShown: false,
+          }} />
+        <Stack.Screen
+          name="ManagerProfiles"
+          component={ManagerProfiles}
+          options={{
+            headerShown: false,
+          }} />
+        
         <Stack.Screen
           name="Initial"
           component={Initial}

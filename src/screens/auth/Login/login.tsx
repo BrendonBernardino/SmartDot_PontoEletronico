@@ -2,7 +2,6 @@ import { Text, View, Image } from 'react-native';
 import CheckBox from 'expo-checkbox';
 import React from 'react';
 import { useState } from 'react';
-import { Ionicons } from 'react-native-vector-icons'
 import styles from "./styles";
 import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";

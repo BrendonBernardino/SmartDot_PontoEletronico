@@ -1,11 +1,8 @@
-import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useState } from 'react';
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 import { Feather, Entypo } from 'react-native-vector-icons'
-// import { Card } from 'react-native-shadow-cards'
-import { Card } from 'react-native-paper';
 import Button from "../../../components/Button/Button";
 import styles from "./styles"
 import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
