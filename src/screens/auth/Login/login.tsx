@@ -1,13 +1,18 @@
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import CheckBox from 'expo-checkbox';
 import React from 'react';
 import { useState } from 'react';
-import { Ionicons } from 'react-native-vector-icons'
+import { useNavigation } from "@react-navigation/native";
+// import { Ionicons } from 'react-native-vector-icons'
 import styles from "./styles";
 import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";
+import { StackTypes } from '../../../../App';
+// import { TouchableRipple } from 'react-native-paper';
 
 function Login() {
+    const navigation = useNavigation<StackTypes>();
+
     const [isChecked, setChecked] = useState(false);
 
     return (
@@ -26,6 +31,7 @@ function Login() {
                     centralized={0}
                     borderTopLeftRadius={33}
                     password={false}
+                    visible={true}
                 />
                 <InputBlock
                     text='Senha'
@@ -33,6 +39,7 @@ function Login() {
                     textColor='#FFD95A'
                     centralized={0}
                     password={true}
+                    visible={true}
                 />
                 {/* <Ionicons name="eye-outline" size={25}/> */}
             </View>
@@ -58,7 +65,9 @@ function Login() {
             </View>
             <View style={styles.infolayer}>
                 <Text style={{ color: "#83908D", fontWeight: "bold", fontSize: 19 }}>Não tem conta ainda?</Text>
-                <Text style={{ color: "#C07F00", fontWeight: "bold", fontSize: 19, paddingBottom: "10%" }}>Criar Conta</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+                    <Text style={{ color: "#C07F00", fontWeight: "bold", fontSize: 19, paddingBottom: "10%" }}>Criar Conta</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )

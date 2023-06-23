@@ -5,7 +5,7 @@ import { Ionicons } from 'react-native-vector-icons'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./styles"
 import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
-import GithubIcon from '../../../../assets/github.svg';
+import GithubIcon from '../../../../assets/svg/github.svg';
 
 function About() {
     const [avatarBrendon, setAvatarBrendon] = useState(null);
@@ -33,10 +33,8 @@ function About() {
     return (
         <View style={[styles.container, { backgroundColor: themeMode.primary }]}>
             <View style={styles.toplayer}>
-                <TouchableOpacity style={{ flex: 0.1 }}>
-                    <Ionicons style={styles.back} name="chevron-back" size={10} onPress={() => {
-                        navigation.goBack();
-                    }} />
+                <TouchableOpacity style={{ flex: 0.1 }} onPress={() => {navigation.goBack();}}>
+                    <Ionicons style={styles.back} name="chevron-back" size={10} />
                 </TouchableOpacity>
                 <Text style={styles.title}>PROJETO</Text>
                 <Image
@@ -72,12 +70,16 @@ function About() {
                 />
             </View>
             <View style={styles.githublayer}>
-                <GithubIcon width={40} height={40} paddingRight={90} onPress={() => {
-                    Linking.openURL('https://github.com/BrendonBernardino');
-                }} />
-                <GithubIcon width={40} height={40} paddingLeft={90} onPress={() => {
-                    Linking.openURL('https://github.com/gabrielras');
-                }} />
+                <TouchableOpacity onPress={() => {
+                        Linking.openURL('https://github.com/BrendonBernardino');
+                    }}>
+                    <GithubIcon width={40} height={40} paddingRight={90}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                        Linking.openURL('https://github.com/gabrielras');
+                    }}>
+                    <GithubIcon width={40} height={40} paddingRight={90}/>
+                </TouchableOpacity>
             </View>
         </View>
     )

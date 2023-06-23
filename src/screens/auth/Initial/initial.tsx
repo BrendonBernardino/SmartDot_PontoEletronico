@@ -53,7 +53,6 @@ function Initial() {
           text="Entrar"
           color={themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.secundary}
           textColor={themeMode === COLORSLIGHT ? themeMode.text : themeMode.text_2}
-          flex={0.5}
           borderTopLeftRadius={33}
           elevation={5}
           centralized={1}
@@ -64,21 +63,19 @@ function Initial() {
           text="Criar Conta"
           color={themeMode === COLORSLIGHT ? themeMode.auxiliar : themeMode.tertiary}
           textColor={themeMode.text}
-          flex={0.5}
           borderBottomRightRadius={33}
           elevation={5}
           centralized={1}
-          nextPage="Login"
+          nextPage="Register"
           mode={themeMode}
         />
       </View>
       <View style={styles.info}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("About")}>
           <Text
             style={{
               color: themeMode.gray, fontWeight: "bold", fontSize: 19, paddingBottom: "10%"
             }}
-            onPress={() => navigation.navigate("About")}
           >Mais sobre o projeto</Text>
         </TouchableOpacity>
       </View>

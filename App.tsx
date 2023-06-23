@@ -7,6 +7,8 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-na
 import Initial from "./src/screens/auth/Initial/initial";
 import Login from "./src/screens/auth/Login/login";
 import About from "./src/screens/auth/About/about";
+import Register from "./src/screens/auth/Register/register";
+import ClockIn from "./src/screens/colab/ClockIn/clockin";
 
 export type StackNavigation = {
   Initial: undefined;
@@ -22,7 +24,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Initial"
           component={Initial}
           options={{
@@ -38,6 +40,20 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{
+            headerBackVisible: false,
+            headerShown: false,
+          }} />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{
+            headerBackVisible: false,
+            headerShown: false,
+          }} /> */}
+        <Stack.Screen
+          name="ClockIn"
+          component={ClockIn}
           options={{
             headerBackVisible: false,
             headerShown: false,
