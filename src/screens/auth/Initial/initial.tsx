@@ -10,6 +10,7 @@ import Button from "../../../components/Button/Button";
 import styles from "./styles"
 import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
 import { StackTypes } from '../../../../App';
+import LogoIcon from '../../../.././assets/svg/Logosvg.svg';
 
 function Initial() {
   const [themeMode, setThemeMode] = useState(COLORSLIGHT);
@@ -44,8 +45,9 @@ function Initial() {
       <View style={styles.top}>
         <Image
           style={styles.logo}
-          source={themeMode === COLORSLIGHT ? require('../../../../assets/Logo.png') : require('../../../../assets/LogoDark.png')}
+          source={themeMode === COLORSLIGHT ? require('../../../../assets/Logosvg_1.png') : require('../../../../assets/LogoDark.png')}
         />
+        {/* <LogoIcon/> */}
         <Text style={[styles.title, { color: themeMode.text_2 }]}>SmartDot</Text>
       </View>
       <View style={styles.buttons}>

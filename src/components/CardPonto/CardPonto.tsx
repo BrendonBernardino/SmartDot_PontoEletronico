@@ -67,10 +67,10 @@ export default function (props: Props) {
                 textAlign: "center",
                 color: "#83908D",
                 // fontWeight: "bold",
-                width: "16%",
+                width: "20%",
                 fontSize: 15
             }}>
-                Planejado
+                Planejado{'\n'}
                 {props.planned}
             </Text>
         }

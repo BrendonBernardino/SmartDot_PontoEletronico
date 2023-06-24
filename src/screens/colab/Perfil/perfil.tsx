@@ -1,26 +1,46 @@
-import { Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { useNavigation } from "@react-navigation/native";
-import { Switch } from 'react-native-switch';
-// import { Ionicons } from 'react-native-vector-icons'
-// import { SelectList } from 'react-native-dropdown-select-list';
+import { View, StyleSheet, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import styles from "./styles";
-import CardDashboard from "../../../components/CardDashboard/CardDashboard";
-import ReloadIcon from '../../../../assets/svg/reload.svg';
-import FooterMenu from "../../../components/FooterMenu/collaborator";
-import { StackTypes } from '../../../../App';
+// import FooterMenu from "../../../components/FooterMenu/manage";
 
 function Perfil() {
-    const [day, setDay] = useState(23);
-    const [month, setMonth] = useState(5);
-    const [year, setYear] = useState(2023);
-    const [showMode, setShowMode] = useState("Mês");
+  return (
+    <View style={styles.container}>
+      <View style={[styles.yellowSection, {backgroundColor: '#FFD95A'}]}>
+        <View style={styles.topRow}>
+          <Text style={styles.nameLeft}>Nome</Text>
+          <View style={styles.iconContainer}>
+            <Ionicons name="help-circle-outline" size={24} color="black" />
+            <Ionicons name="notifications-outline" size={24} color="black" />
+          </View>
+        </View>
+        <View style={styles.bottomRow}>
+          <Ionicons name="person-circle-outline" size={60} color="black" />
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>Nome do Usuário</Text>
+            <Text style={styles.userDescription}>Descrição do Usuário</Text>
+          </View>
+        </View>
+      </View>
+      <View style={styles.whiteSection}>
+        <View style={styles.row}>
+          <Text style={styles.rowText}>Nome da Linha 1</Text>
+          <Ionicons name="chevron-forward-outline" size={24} color="black" />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.rowText}>Nome da Linha 2</Text>
+          <Ionicons name="chevron-forward-outline" size={24} color="black" />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.rowText}>Nome da Linha 3</Text>
+          <Ionicons name="chevron-forward-outline" size={24} color="black" />
+        </View>
+      </View>
 
-    return (
-        <View style={[styles.container, { backgroundColor: "#FFF7D4" }]}>
+      {/* <FooterMenu leftPage="ManagerPointPresences" centerPage="ManagerCollaborators" rightPage="ManagerProfiles" /> */}
 
-        </View >
-    )
+    </View>
+  );
 }
 export default Perfil;

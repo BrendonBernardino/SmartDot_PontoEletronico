@@ -16,7 +16,7 @@ export type StackNavigation = {
   Initial: undefined;
   Login: undefined;
   About: undefined;
-  Register: undefined;
+  // Register: undefined;
 };
 
 const Stack = createNativeStackNavigator();
@@ -32,22 +32,22 @@ export default function App() {
           component={Initial}
           options={{
             headerShown: false,
-          }} />
-        <Stack.Screen
+          }} /> */}
+        {/* <Stack.Screen
           name="About"
           component={About}
           options={{
             headerBackVisible: false,
             headerShown: false,
-          }} />
-        <Stack.Screen
+          }} /> */}
+        {/* <Stack.Screen
           name="Login"
           component={Login}
           options={{
             headerBackVisible: false,
             headerShown: false,
-          }} />
-        <Stack.Screen
+          }} /> */}
+        {/* <Stack.Screen
           name="Register"
           component={Register}
           options={{

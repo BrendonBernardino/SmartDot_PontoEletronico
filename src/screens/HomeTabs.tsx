@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as Animatable from 'react-native-animatable';
 import styles from "./styles";
@@ -47,8 +47,7 @@ function HomeTabs() {
               return (
                 <Animatable.View
                   animation="zoomIn"
-                  // ref={viewRef}
-                  duration={1000}
+                  duration={2000}
                 >
                   <ClockInIcon
                     style={styles.iconFooter}
@@ -62,7 +61,7 @@ function HomeTabs() {
             return (
               <Animatable.View
                 animation="zoomIn"
-                duration={1000}
+                duration={2000}
               >
                 <ClockInIcon
                   style={styles.iconFooter}
@@ -87,7 +86,7 @@ function HomeTabs() {
               return (
                 <Animatable.View
                   animation="zoomIn"
-                  duration={1000}
+                  duration={2000}
                 >
                   <DashIcon
                     style={styles.iconFooter}
@@ -101,7 +100,7 @@ function HomeTabs() {
             return (
               <Animatable.View
                 animation="zoomIn"
-                duration={1000}
+                duration={2000}
               >
                 <DashIcon
                   style={styles.iconFooter}
@@ -126,13 +125,13 @@ function HomeTabs() {
               return (
                 <Animatable.View
                   animation="zoomIn"
-                  duration={1000}
+                  duration={2000}
                 >
                   <PerfilIcon
                     style={styles.iconFooter}
                     color={color}
-                    width={size}
-                    height={size}
+                    width={30}
+                    height={30}
                   />
                 </Animatable.View>
               )
@@ -140,13 +139,13 @@ function HomeTabs() {
             return (
               <Animatable.View
                 animation="zoomIn"
-                duration={1000}
+                duration={2000}
               >
                 <PerfilIcon
                   style={styles.iconFooter}
                   color={color}
-                  width={size}
-                  height={size}
+                  width={30}
+                  height={30}
                 />
               </Animatable.View>
             )

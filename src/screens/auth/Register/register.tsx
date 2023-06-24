@@ -29,7 +29,7 @@ function Register() {
             <View style={styles.logolayer}>
                 <Image
                     style={styles.logo}
-                    source={require('../../../../assets/Logo.png')}
+                    source={require('../../../../assets/Logosvg_1.png')}
                 />
                 <SelectList
                     data={data}

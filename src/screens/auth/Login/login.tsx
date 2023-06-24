@@ -20,7 +20,7 @@ function Login() {
             <View style={styles.logolayer}>
                 <Image
                     style={styles.logo}
-                    source={require('../../../../assets/Logo.png')}
+                    source={require('../../../../assets/Logosvg_1.png')}
                 />
             </View>
             <View style={styles.midlayer}>
