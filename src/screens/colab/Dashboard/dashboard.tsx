@@ -2,9 +2,6 @@ import { Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { Switch } from 'react-native-switch';
-// import { Ionicons } from 'react-native-vector-icons'
-// import { SelectList } from 'react-native-dropdown-select-list';
 import styles from "./styles";
 import CardDashboard from "../../../components/CardDashboard/CardDashboard";
 import ReloadIcon from '../../../../assets/svg/reload.svg';
@@ -82,6 +79,12 @@ function Dashboard() {
                     textColor='#000000'
                 />
             </View>
+            {/* <FooterMenu 
+            actual={2}
+            leftPage={"ClockIn"}
+            centerPage={"Dashboard"}
+            rightPage={"Perfil"}
+            /> */}
         </View >
     )
 }

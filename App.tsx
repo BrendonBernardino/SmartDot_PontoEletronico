@@ -1,20 +1,22 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
-// import { Initial, Login } from "./screens/auth";
+import HomeTabs from "./src/screens/HomeTabs";
 import Initial from "./src/screens/auth/Initial/initial";
 import Login from "./src/screens/auth/Login/login";
 import About from "./src/screens/auth/About/about";
 import Register from "./src/screens/auth/Register/register";
 import ClockIn from "./src/screens/colab/ClockIn/clockin";
 import Dashboard from "./src/screens/colab/Dashboard/dashboard";
+// import Perfil from "./src/screens/colab/Perfil/perfil";
 
 export type StackNavigation = {
   Initial: undefined;
   Login: undefined;
   About: undefined;
+  Register: undefined;
 };
 
 const Stack = createNativeStackNavigator();
@@ -59,9 +61,16 @@ export default function App() {
             headerBackVisible: false,
             headerShown: false,
           }} /> */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Dashboard"
           component={Dashboard}
+          options={{
+            headerBackVisible: false,
+            headerShown: false,
+          }} /> */}
+        <Stack.Screen
+          name="Home"
+          component={HomeTabs}
           options={{
             headerBackVisible: false,
             headerShown: false,
