@@ -7,10 +7,9 @@ import HomeTabs from "./src/screens/HomeTabs";
 import Initial from "./src/screens/auth/Initial/initial";
 import Login from "./src/screens/auth/Login/login";
 import About from "./src/screens/auth/About/about";
-import Register from "./src/screens/auth/Register/register";
-import ClockIn from "./src/screens/colab/ClockIn/clockin";
-import Dashboard from "./src/screens/colab/Dashboard/dashboard";
-// import Perfil from "./src/screens/colab/Perfil/perfil";
+import ManagerCollaborators from "./src/screens/manager/Collaborators/index";
+import ManagerPointPresences from "./src/screens/manager/PointPresences/index";
+import ManagerProfiles from "./src/screens/manager/Profiles/index";
 
 export type StackNavigation = {
   Initial: undefined;
