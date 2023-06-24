@@ -19,12 +19,12 @@ const styles = StyleSheet.create({
         // backgroundColor: "blue",
         alignItems: "center",
         justifyContent: "center",
-        // width: '100%',
+        width: '50%',
     },
     headerDivider: {
         backgroundColor: 'gray',
         height: 1,
-        width: '50%',
+        width: '80%',
         marginVertical: 4,
     },
     cardslayer: {

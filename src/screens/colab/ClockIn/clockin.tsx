@@ -12,21 +12,38 @@ import { StackTypes } from '../../../../App';
 import CalendarIcon from '../../../../assets/svg/calendar.svg';
 import ListIcon from '../../../../assets/svg/lista.svg';
 
+
+
 function ClockIn() {
     const [progressBarAtived, setProgressBarAtived] = useState(true);
     const [dailyJourneyAtived, setDailyJourneyAtived] = useState(true);
     const [intervalAtived, setIntervalAtived] = useState(true);
+    const [dayWeek, setDayWeek] = useState("Sexta");
+    const [day, setDay] = useState(23);
+    const [month, setMonth] = useState(5);
+    const [year, setYear] = useState(2023);
+
+    function MonthAjusted() {
+        if(month < 10)
+            return <Text>0{month}</Text>
+        else
+            return <Text>{month}</Text>
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.headerlayer}>
-                <ListIcon width={30} height={30}/>
-                <View style={styles.header}>
-                    <Text>HOJE</Text>
-                    <View style={styles.headerDivider} />
-                    <Text>Segunda, 29.05.2023</Text>
+                <View>
+                    <ListIcon width={30} height={30}/>
                 </View>
-                <CalendarIcon width={30} height={30}/>
+                <View style={styles.header}>
+                    <Text style={{fontWeight: "bold", fontSize: 25, color: "#C07F00"}}>HOJE</Text>
+                    <View style={styles.headerDivider} />
+                    <Text style={{fontWeight: "bold", fontSize: 20}}>{dayWeek}, {day}.{MonthAjusted()}.{year}</Text>
+                </View>
+                <View>
+                    <CalendarIcon width={30} height={30}/>
+                </View>
             </View>
             <View style={styles.cardslayer}>
                 <CardPonto

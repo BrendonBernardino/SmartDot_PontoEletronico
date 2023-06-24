@@ -9,6 +9,7 @@ import Login from "./src/screens/auth/Login/login";
 import About from "./src/screens/auth/About/about";
 import Register from "./src/screens/auth/Register/register";
 import ClockIn from "./src/screens/colab/ClockIn/clockin";
+import Dashboard from "./src/screens/colab/Dashboard/dashboard";
 
 export type StackNavigation = {
   Initial: undefined;
@@ -51,9 +52,16 @@ export default function App() {
             headerBackVisible: false,
             headerShown: false,
           }} /> */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="ClockIn"
           component={ClockIn}
+          options={{
+            headerBackVisible: false,
+            headerShown: false,
+          }} /> */}
+        <Stack.Screen
+          name="Dashboard"
+          component={Dashboard}
           options={{
             headerBackVisible: false,
             headerShown: false,
