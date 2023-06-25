@@ -21,6 +21,7 @@ import SaidaIcon from '../../../assets/svg/saida.svg';
 
 interface Props {
     cardType: 1 | 2 | 3 | 4;
+    ponto: string;
     color: string;
     textColor: string;
     clockin: boolean;
@@ -75,11 +76,16 @@ export default function (props: Props) {
 
     function VerifyPonto() {
         if (props.cardType == 1) {
-            if(entradaPonto == true) {
+            if(props.ponto != '') {
                 return <Text style={styles.textPonto}>
-                    {timePonto}
+                    {props.ponto}
                 </Text>
             }
+            // if(entradaPonto == true) {
+            //     return <Text style={styles.textPonto}>
+            //         {timePonto}
+            //     </Text>
+            // }
             else {
                 return (
                     <View style={styles.cardBaterPonto}>
@@ -91,9 +97,9 @@ export default function (props: Props) {
             }
         }
         if (props.cardType == 2) {
-            if(startIntervaloPonto == true) {
+            if(props.ponto != '') {
                 return <Text style={styles.textPonto}>
-                    {timePonto}
+                    {props.ponto}
                 </Text>
             }
             else {
@@ -107,9 +113,9 @@ export default function (props: Props) {
             }
         }
         if (props.cardType == 3) {
-            if(finishIntervaloPonto == true) {
+            if(props.ponto != '') {
                 return <Text style={styles.textPonto}>
-                    {timePonto}
+                    {props.ponto}
                 </Text>
             }
             else {
@@ -123,9 +129,9 @@ export default function (props: Props) {
             }
         }
         if (props.cardType == 4) {
-            if(saidaPonto == true) {
+            if(props.ponto != '') {
                 return <Text style={styles.textPonto}>
-                    {timePonto}
+                    {props.ponto}
                 </Text>
             }
             else {

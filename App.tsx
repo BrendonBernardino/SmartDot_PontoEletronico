@@ -16,7 +16,8 @@ export type StackNavigation = {
   Initial: undefined;
   Login: undefined;
   About: undefined;
-  // Register: undefined;
+  Register: undefined;
+  HomeTabs: undefined;
 };
 
 const Stack = createNativeStackNavigator();
@@ -55,7 +56,7 @@ export default function App() {
             headerShown: false,
           }} />
         <Stack.Screen
-          name="Home"
+          name="HomeTabs"
           component={HomeTabs}
           options={{
             headerBackVisible: false,

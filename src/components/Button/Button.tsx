@@ -12,7 +12,7 @@ interface Props {
     borderBottomRightRadius?: number;
     elevation?: number;
     centralized: number;
-    nextPage: string;
+    onPress: () => void;
     mode?: unknown;
 }
 
@@ -32,7 +32,7 @@ export default function (props: Props) {
                     alignItems: props.centralized == 0 ? "flex-start" : "center"
 
                 }]}
-            onPress={() => navigation.navigate(props.nextPage, props.mode)}
+            onPress={props.onPress}
         >
             <Text style={{ color: props.textColor, fontWeight: "bold", fontSize: 19 }}>{props.text}</Text>
         </TouchableOpacity>

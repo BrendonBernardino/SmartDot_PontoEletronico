@@ -1,7 +1,7 @@
 import { Text, View, Image, TouchableNativeFeedback, TouchableOpacity, Modal } from 'react-native';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Switch } from 'react-native-switch';
 import * as Progress from 'react-native-progress';
 import MapView, { Marker, Circle } from 'react-native-maps';
@@ -21,11 +21,49 @@ function ClockIn() {
     const [progressBarAtived, setProgressBarAtived] = useState(true);
     const [dailyJourneyAtived, setDailyJourneyAtived] = useState(true);
     const [intervalAtived, setIntervalAtived] = useState(true);
-    const [dayWeek, setDayWeek] = useState("Sexta");
-    const [day, setDay] = useState(23);
-    const [month, setMonth] = useState(5);
-    const [year, setYear] = useState(2023);
+    const [dayWeek, setDayWeek] = useState("");
+    // const [day, setDay] = useState(23);
+    // const [month, setMonth] = useState(5);
+    // const [year, setYear] = useState(2023);
     const [visibleModal, setVisibleModal] = useState(false);
+
+    const [entradaplanned, setEntradaplanned] = useState("");
+    const [intervalInicioplanned, setIntervalInicioplanned] = useState("");
+    const [intervalFimplanned, setIntervalFimplanned] = useState("");
+    const [saidaplanned, setSaidaplanned] = useState("");
+
+    const [entradaReal, setEntradaReal] = useState("");
+    const [intervaloInicioReal, setintervaloInicioReal] = useState("");
+    const [intervaloFimReal, setintervaloFimReal] = useState("");
+    const [saidaReal, setSaidaReal] = useState("");
+
+    const [currentDate, setCurrentDate] = useState('');
+
+    const date = new Date();
+
+    const yearCurrent = date.getFullYear();
+    const monthCurrent = String(date.getMonth() + 1).padStart(2, '0');
+    const dayCurrent = String(date.getDate()).padStart(2, '0');
+    const dayWeekCurrent = date.getDay();
+
+    const formattedDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
+
+    function getDayWeek() {
+        if (dayWeekCurrent == 0)
+            setDayWeek('Domingo');
+        if (dayWeekCurrent == 1)
+            setDayWeek('Segunda');
+        if (dayWeekCurrent == 2)
+            setDayWeek('Terça');
+        if (dayWeekCurrent == 3)
+            setDayWeek('Quarta');
+        if (dayWeekCurrent == 4)
+            setDayWeek('Quinta');
+        if (dayWeekCurrent == 5)
+            setDayWeek('Sexta');
+        if (dayWeekCurrent == 6)
+            setDayWeek('Sábado');
+    }
 
     // useEffect(() => {
     //     getMyLocation()
@@ -38,12 +76,63 @@ function ClockIn() {
     //     })
     // }
 
-    function MonthAjusted() {
-        if (month < 10)
-            return <Text>0{month}</Text>
-        else
-            return <Text>{month}</Text>
+    useEffect(() => {
+        setCurrentDate(formattedDate);
+        getDayWeek();intervalFimplanned
+        handleRequisition();
+    }, []);
+
+    const handleRequisition = async () => {
+        const apiUrl = 'https://b3af-2804-d4b-7aa4-c00-cb4a-606b-3371-afdb.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;
+
+        try {
+            const token = await AsyncStorage.getItem('token');
+
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token,
+                },
+            });
+
+            console.log(currentDate)
+            if (response.ok) {
+                const data = await response.json();
+                setEntradaplanned(data[0].tempo_inicial.padrao);
+                setintervaloInicioReal(data[0].interval_inicial.padrao);
+                setintervaloFimReal(data[0].interval_inicial.padrao);
+                setSaidaplanned(data[0].tempo_final.padrao);
+
+                setEntradaReal(data[0].tempo_inicial.real);
+                setintervaloInicioReal(data[0].intervalo_inicial.real);
+                setintervaloFimReal(data[0].intervalo_final.real);
+                setSaidaReal(data[0].tempo_final.real);
+                console.log(entradaReal);
+                console.log(intervaloInicioReal);
+                console.log(intervaloFimReal);
+                console.log(saidaReal);
+            } else {
+                console.log('Solicitacao falhou');
+            }
+        } catch (error) {
+            // Lidar com erros de rede ou da API
+            console.log('Ocorreu um erro:', error);
+        }
     };
+
+    function checkIntervalIsOpen() {
+        if(in) {
+
+        }
+    }
+
+    // function MonthAjusted() {
+    //     if (month < 10)
+    //         return <Text>0{month}</Text>
+    //     else
+    //         return <Text>{month}</Text>
+    // };
 
     function DailyJourneyActivated() {
         if (dailyJourneyAtived == true) {
@@ -94,7 +183,7 @@ function ClockIn() {
                 <View style={styles.header}>
                     <Text style={{ fontWeight: "bold", fontSize: 25, color: "#C07F00" }}>HOJE</Text>
                     <View style={styles.headerDivider} />
-                    <Text style={{ fontWeight: "bold", fontSize: 20 }}>{dayWeek}, {day}.{MonthAjusted()}.{year}</Text>
+                    <Text style={{ fontWeight: "bold", fontSize: 20 }}>{dayWeek}, {currentDate}</Text>
                 </View>
                 <TouchableOpacity onPress={() => setVisibleModal(true)}>
                     <CalendarIcon width={30} height={30} />
@@ -103,14 +192,16 @@ function ClockIn() {
             <View style={styles.cardslayer}>
                 <CardPonto
                     cardType={1}
+                    ponto={entradaReal}
                     color='#FFD95A'
                     textColor='black'
                     clockin={false}
                     intervalAtived={true}
-                    planned='12:00'
+                    planned={entradaplanned}
                 />
                 <CardPonto
                     cardType={2}
+                    ponto=''
                     color='#FFF7D4'
                     textColor='black'
                     clockin={false}
@@ -118,6 +209,7 @@ function ClockIn() {
                 />
                 <CardPonto
                     cardType={3}
+                    ponto=''
                     color='#FFD95A'
                     textColor='black'
                     clockin={false}
@@ -125,11 +217,12 @@ function ClockIn() {
                 />
                 <CardPonto
                     cardType={4}
+                    ponto={saidaReal}
                     color='#FFF7D4'
                     textColor='black'
                     clockin={false}
                     intervalAtived={true}
-                    planned='18:00'
+                    planned={saidaplanned}
                 />
             </View>
             <View style={styles.switchlayer}>

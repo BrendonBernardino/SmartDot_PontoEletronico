@@ -27,6 +27,16 @@ function Initial() {
     }
   };
 
+  const handleEntrar = () => {
+    navigation.navigate("Login");
+    console.log('algo');
+  };
+
+  const handleRegistrar = () => {
+    navigation.navigate("Register");
+    console.log('algo2');
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: themeMode.primary }]}>
       <View style={styles.themeBar}>
@@ -58,7 +68,7 @@ function Initial() {
           borderTopLeftRadius={33}
           elevation={5}
           centralized={1}
-          nextPage="Login"
+          onPress={handleEntrar}
           mode={themeMode}
         />
         <Button
@@ -68,7 +78,7 @@ function Initial() {
           borderBottomRightRadius={33}
           elevation={5}
           centralized={1}
-          nextPage="Register"
+          onPress={handleRegistrar}
           mode={themeMode}
         />
       </View>
