@@ -40,7 +40,7 @@ function Dashboard() {
                 <View style={styles.viewlogo}>
                     <Image
                         style={styles.logo}
-                        source={require('../../../../assets/Logo.png')}
+                        source={require('../../../../assets/Logosvg_1.png')}
                     />
                 </View>
                 <View style={styles.viewreload}>
@@ -63,7 +63,7 @@ function Dashboard() {
                     color='#C07F00'
                     textColor='#000000'
                 />
-                <CardDashboard
+                {/* <CardDashboard
                     cardType={3}
                     color='#FFD95A'
                     textColor='#000000'
@@ -72,19 +72,13 @@ function Dashboard() {
                     cardType={4}
                     color='#C07F00'
                     textColor='#000000'
-                />
+                /> */}
                 <CardDashboard
                     cardType={5}
                     color='#FFD95A'
                     textColor='#000000'
                 />
             </View>
-            {/* <FooterMenu 
-            actual={2}
-            leftPage={"ClockIn"}
-            centerPage={"Dashboard"}
-            rightPage={"Perfil"}
-            /> */}
         </View >
     )
 }

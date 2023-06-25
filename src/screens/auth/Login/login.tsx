@@ -8,7 +8,6 @@ import styles from "./styles";
 import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
-// import { TouchableRipple } from 'react-native-paper';
 
 function Login() {
     const navigation = useNavigation<StackTypes>();
@@ -59,7 +58,7 @@ function Login() {
                     color="#4C3D3D"
                     textColor="#CBE4DE"
                     centralized={1}
-                    nextPage="ClockIn"
+                    nextPage="Home"
                     borderBottomRightRadius={33}
                 />
             </View>

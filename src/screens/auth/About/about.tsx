@@ -39,7 +39,7 @@ function About() {
                 <Text style={styles.title}>PROJETO</Text>
                 <Image
                     style={styles.logo}
-                    source={require('../../../../assets/Logo.png')}
+                    source={require('../../../../assets/Logosvg_1.png')}
                 />
             </View>
             <View style={styles.ufclayer}>

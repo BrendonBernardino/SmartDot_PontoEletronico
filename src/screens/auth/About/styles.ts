@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         marginRight: "0%", 
     },
     title: {
-        flex: 0.25,
+        flex: 0.30,
         textAlign: "center",
         fontSize: 25,
         fontWeight: "bold",

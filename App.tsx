@@ -27,47 +27,33 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Initial"
           component={Initial}
           options={{
             headerShown: false,
-          }} /> */}
-        {/* <Stack.Screen
+          }} />
+        <Stack.Screen
           name="About"
           component={About}
           options={{
             headerBackVisible: false,
             headerShown: false,
-          }} /> */}
-        {/* <Stack.Screen
+          }} />
+        <Stack.Screen
           name="Login"
           component={Login}
           options={{
             headerBackVisible: false,
             headerShown: false,
-          }} /> */}
-        {/* <Stack.Screen
+          }} />
+        <Stack.Screen
           name="Register"
           component={Register}
           options={{
             headerBackVisible: false,
             headerShown: false,
-          }} /> */}
-        {/* <Stack.Screen
-          name="ClockIn"
-          component={ClockIn}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }} /> */}
-        {/* <Stack.Screen
-          name="Dashboard"
-          component={Dashboard}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }} /> */}
+          }} />
         <Stack.Screen
           name="Home"
           component={HomeTabs}

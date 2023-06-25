@@ -26,20 +26,20 @@ interface Props {
     clockin: boolean;
     intervalAtived?: boolean;
     planned?: string;
-    // borderTopLeftRadius?: number;
-    // borderBottomRightRadius?: number;
-    // elevation?: number;
-    // centralized: number;
-    // nextPage: string;
-    // mode?: unknown;
 }
 
 export default function (props: Props) {
     const navigation = useNavigation<StackTypes>();
 
     const [textCard, setTextCard] = useState("");
-    const [pontoBatido, setPontoBatido] = useState(true);
+    const [pontoBatido, setPontoBatido] = useState(false);
     const [timePonto, setTimePonto] = useState("12:00");
+
+    // ESTADO DOS PONTOS DIÁRIOS (depois que passar das 23:59, tem que ficar em false todos)
+    const [entradaPonto, setEntradaPonto] = useState(true);
+    const [startIntervaloPonto, setStartIntervaloPonto] = useState(true);
+    const [finishIntervaloPonto, setFinishIntervaloPonto] = useState(true);
+    const [saidaPonto, setSaidaPonto] = useState(false);
 
     function VerifyIcon() {
         if (props.cardType == 1) {
@@ -58,51 +58,85 @@ export default function (props: Props) {
     
     function Planejado() {
         if (props.planned != null) {
-            return <Text style={{
-                // left: 80,
-                // flex: 0.24,
-                // backgroundColor: "pink",
-                // alignItems: "center",
-                // justifyContent: "center",
-                textAlign: "center",
+            return <Text style={[styles.textplanned, {
                 color: "#83908D",
-                // fontWeight: "bold",
-                width: "20%",
-                fontSize: 15
-            }}>
+            }]}>
                 Planejado{'\n'}
                 {props.planned}
             </Text>
         }
         else {
-            return <Text style={{
-                // left: 80,
-                // flex: 0.24,
-                // backgroundColor: "pink",
-                // alignItems: "center",
-                // justifyContent: "center",
-                textAlign: "center",
+            return <Text style={[styles.textplanned, {
                 color: "#83908D",
-                fontWeight: "bold",
-                width: "16%",
-                fontSize: 19
-            }}>
+            }]}>
             </Text>
         }
     };
 
     function VerifyPonto() {
-        if (pontoBatido == true) {
-            return <Text style={{
-                // backgroundColor: "blue",
-                textAlign: "center",
-                // color: "#83908D",
-                fontWeight: "bold",
-                width: "20%",
-                fontSize: 22,
-            }}>
-                {timePonto}
-            </Text>
+        if (props.cardType == 1) {
+            if(entradaPonto == true) {
+                return <Text style={styles.textPonto}>
+                    {timePonto}
+                </Text>
+            }
+            else {
+                return (
+                    <View style={styles.cardBaterPonto}>
+                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
+                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
+        }
+        if (props.cardType == 2) {
+            if(startIntervaloPonto == true) {
+                return <Text style={styles.textPonto}>
+                    {timePonto}
+                </Text>
+            }
+            else {
+                return (
+                    <View style={styles.cardBaterPonto}>
+                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
+                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
+        }
+        if (props.cardType == 3) {
+            if(finishIntervaloPonto == true) {
+                return <Text style={styles.textPonto}>
+                    {timePonto}
+                </Text>
+            }
+            else {
+                return (
+                    <View style={styles.cardBaterPonto}>
+                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
+                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
+        }
+        if (props.cardType == 4) {
+            if(saidaPonto == true) {
+                return <Text style={styles.textPonto}>
+                    {timePonto}
+                </Text>
+            }
+            else {
+                return (
+                    <View style={styles.cardBaterPonto}>
+                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
+                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
         }
     };
 
