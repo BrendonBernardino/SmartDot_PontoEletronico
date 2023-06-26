@@ -4,12 +4,10 @@ import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-// import { Ionicons } from 'react-native-vector-icons'
 import styles from "./styles";
 import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
-import HomeTabs from '../../HomeTabs';
 
 function Login() {
     const navigation = useNavigation<StackTypes>();
@@ -29,7 +27,7 @@ function Login() {
     };
 
     const handleLogin = async () => {
-        const apiUrl = 'https://b3af-2804-d4b-7aa4-c00-cb4a-606b-3371-afdb.ngrok-free.app/login';//'http://127.0.0.1:3000/login';
+        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/login'
         const credentials = {
             email: usernameOrEmail,
             password: password,

@@ -100,7 +100,7 @@ function ClockIn() {
     }, []);
 
     const handleRequisition = async () => {
-        const apiUrl = 'https://b3af-2804-d4b-7aa4-c00-cb4a-606b-3371-afdb.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';
+        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';
         console.log(apiUrl)
 
         try {

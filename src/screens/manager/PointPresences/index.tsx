@@ -88,7 +88,7 @@ const TaskList: React.FC<TaskListProps> = () => {
 
   const fetchData = async (date: string, name?: string) => {
     try {
-      let url = `http://127.0.0.1:3000/manager/point_presences?data=${date}`;
+      let url = `https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/point_presences?data=${date}`;
 
       if (name) {
         url += `&name=${name}`;

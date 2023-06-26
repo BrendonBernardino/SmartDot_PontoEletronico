@@ -71,7 +71,7 @@ const TaskList: React.FC = () => {
 
   const fetchUsers = async (name?: string) => {
     try {
-      let url = `http://127.0.0.1:3000/manager/users`;
+      let url = `https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users`;
 
       if (name) {
         url += `?name=${name}`;
@@ -93,7 +93,7 @@ const TaskList: React.FC = () => {
 
   const removeUser = async (userId: number) => {
     try {
-      await fetch(`http://127.0.0.1:3000/manager/users/${userId}`, {
+      await fetch(`https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ const TaskList: React.FC = () => {
   const editUser = async (userId: number) => {
     try {
       // Fetch the user data from the API for the given userId
-      const response = await fetch(`http://127.0.0.1:3000/manager/users?id=${userId}`,
+      const response = await fetch(`https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users?id=${userId}`,
       {
         method: 'Get',
         headers: {
@@ -146,7 +146,7 @@ const TaskList: React.FC = () => {
   const updateUser = async () => {
     try {
       // Fetch the user data from the API for the given userId
-      const response = await fetch(`http://127.0.0.1:3000/manager/users/${id}`,
+      const response = await fetch(`https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users/${id}`,
       {
         method: 'Put',
         headers: {
@@ -180,11 +180,10 @@ const TaskList: React.FC = () => {
     }
   };
 
-
   const addUser = async () => {
     try {
       // Send a POST request to the API with the new user data
-      const response = await fetch('http://127.0.0.1:3000/manager/users', {
+      const response = await fetch('https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
