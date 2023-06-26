@@ -47,12 +47,16 @@ function Login() {
             if (response.ok) {
                 const data = await response.json();
                 const token = data.token;
+                const role = data.role;
 
                 // Salvar o token no AsyncStorage
                 await AsyncStorage.setItem('token', token);
 
-                // Login bem-sucedido, navegar para a página desejada
-                navigation.navigate("HomeTabs")
+                if (role === 'colab'){
+                  navigation.navigate("HomeTabs")
+                } else {
+                  navigation.navigate("HomeManager")
+                }
             } else {
                 // Login falhou, lidar com o erro
                 // Por exemplo, você pode exibir uma mensagem de erro para o usuário

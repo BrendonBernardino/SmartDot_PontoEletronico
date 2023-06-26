@@ -4,16 +4,11 @@ import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 import HomeTabs from "./src/screens/HomeTabs";
+import HomeManager from "./src/screens/HomeManager";
 import Initial from "./src/screens/auth/Initial/initial";
 import Login from "./src/screens/auth/Login/login";
 import Register from "./src/screens/auth/Register/register";
 import About from "./src/screens/auth/About/about";
-import ClockIn from "./src/screens/colab/ClockIn/clockin";
-import Dashboard from "./src/screens/colab/Dashboard/dashboard";
-import Perfil from "./src/screens/colab/Perfil/perfil";
-import ManagerCollaborators from "./src/screens/manager/Collaborators/index";
-import ManagerPointPresences from "./src/screens/manager/PointPresences/index";
-import ManagerProfiles from "./src/screens/manager/Profiles/index";
 
 export type StackNavigation = {
   Initial: undefined;
@@ -21,6 +16,7 @@ export type StackNavigation = {
   About: undefined;
   Register: undefined;
   HomeTabs: undefined;
+  HomeManager: undefined;
 };
 
 const Stack = createNativeStackNavigator();
@@ -61,6 +57,13 @@ export default function App() {
         <Stack.Screen
           name="HomeTabs"
           component={HomeTabs}
+          options={{
+            headerBackVisible: false,
+            headerShown: false,
+          }} />
+        <Stack.Screen
+          name="HomeManager"
+          component={HomeManager}
           options={{
             headerBackVisible: false,
             headerShown: false,
