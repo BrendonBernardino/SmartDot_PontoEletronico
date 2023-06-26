@@ -121,6 +121,26 @@ const styles = StyleSheet.create({
         marginBottom: 80,
         borderRadius: 20,
     },
+    addressContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    addressText: {
+        flex: 1,
+        marginRight: 10,
+    },
+    bottomRowContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    periodoTrabalhoText: {
+        marginLeft: 10,
+    },
+    intervaloText: {
+        marginRight: 10,
+    },
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -163,6 +183,44 @@ const styles = StyleSheet.create({
         top: 10,
         right: 15,
     },
+    modalListContainer: {
+        flexDirection: 'column',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 180,
+        backgroundColor: 'white',
+        borderBottomRightRadius: 10,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    messageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    messageText: {
+        flex: 1,
+        marginRight: 10,
+        fontSize: 16,
+    },
+    //   circle: {
+    //     width: 20,
+    //     height: 20,
+    //     borderRadius: 10,
+    //     borderWidth: 2,
+    //     borderColor: 'black',
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //   },
+    //   circleInner: {
+    //     width: 10,
+    //     height: 10,
+    //     borderRadius: 5,
+    //     backgroundColor: 'black',
+    //   },
 });
 
 export default styles;

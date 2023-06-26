@@ -1,5 +1,6 @@
 import { Text, View, Image, TouchableNativeFeedback, TouchableOpacity, Modal } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import CheckBox from 'expo-checkbox';
 import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Switch } from 'react-native-switch';
@@ -32,6 +33,7 @@ function ClockIn() {
     // const [year, setYear] = useState(2023);
     const [visibleModal, setVisibleModal] = useState(false);
     const [modalPontoVisible, setModalPontoVisible] = useState(false);
+    const [visibleModalList, setVisibleModalList] = useState(false);
 
     const [entradaplanned, setEntradaplanned] = useState("");
     const [intervalInicioplanned, setIntervalInicioplanned] = useState("");
@@ -47,6 +49,13 @@ function ClockIn() {
     const [horaTotal, setHoraTotal] = useState('');
     const [minTotal, setMinTotal] = useState('');
 
+    const [cardPontoType, setCardPontoType] = useState(0);
+
+    const [myLatitude, setMyLatitude] = useState(-3.824426321813534);
+    const [myLongitude, setMyLongitude] = useState(-38.48832181744508);
+
+    const geoLocalization: number[] = [2];
+
 
     const date = new Date();
 
@@ -61,8 +70,16 @@ function ClockIn() {
         const date = new Date();
         const hour = String(date.getHours()).padStart(2, '0');
         const minute = String(date.getMinutes()).padStart(2, '0');
-        return `${hour}h${minute}`;
+        return `${hour}:${minute}`;
     };
+
+    function getGeolocalization() {
+        geoLocalization.push(myLatitude);
+        geoLocalization.push(myLongitude);
+        console.log('Localização: ');
+        console.log(geoLocalization[1]);
+        console.log(geoLocalization[2]);
+    }
 
     function getDayWeek() {
         if (dayWeekCurrent == 0)
@@ -148,8 +165,41 @@ function ClockIn() {
         }
     };
 
-    const handleBaterPontoPress = () => {
+    const handleBaterPontoPress = (index: number) => {
         setModalPontoVisible(true);
+        setCardPontoType(index);
+    };
+
+    const handlePontoBatido = () => {
+        setModalPontoVisible(false);
+        if (cardPontoType == 1) {
+            setEntradaReal(getCurrentTime);
+            console.log('Entrada: ');
+            console.log(entradaReal);
+            getGeolocalization();
+            // handlePOSTapi();
+        }
+        if (cardPontoType == 2) {
+            setintervaloInicioReal(getCurrentTime);
+            console.log('Intervalo Inicio: ');
+            console.log(intervaloInicioReal);
+            getGeolocalization();
+            // handlePOSTapi();
+        }
+        if (cardPontoType == 3) {
+            setintervaloFimReal(getCurrentTime);
+            console.log('Intervalo Fim: ');
+            console.log(intervaloFimReal);
+            getGeolocalization();
+            // handlePOSTapi();
+        }
+        if (cardPontoType == 4) {
+            setSaidaReal(getCurrentTime);
+            console.log('Saida: ');
+            console.log(saidaReal);
+            getGeolocalization();
+            // handlePOSTapi();
+        }
     };
 
     function checkIntervalIsOpen() {
@@ -193,12 +243,45 @@ function ClockIn() {
     }
 
     function ProgressBarActivated() {
-        if (dailyJourneyAtived == true) {
+        if (progressBarAtived == true) {
             return (
                 <View style={styles.optional2}>
                     <MaletaIcon style={styles.cafeicon} width={40} height={40} color={"#4C3D3D"} />
                     <Progress.Bar progress={0.8} width={200} color='#C07F00' unfilledColor='#4C3D3D' />
                     <ClimbingIcon style={styles.cafeicon} width={40} height={40} color={"#C07F00"} />
+                </View>
+            )
+        }
+    }
+
+    function switchAvailable() {
+        if (interval_blocked == false) {
+            return (
+                <View style={styles.switchlayer}>
+                    <Text style={styles.interval}>Intervalo?</Text>
+                    <Switch
+                        value={interval_Atived}
+                        onValueChange={interval_blocked == false ? setInterval_Atived : setValueIgnored}
+                        disabled={false}
+                        // activeText={'On'}
+                        // inActiveText={'Off'}
+                        circleSize={30}
+                        barHeight={30}
+                        circleBorderWidth={3}
+                        backgroundActive={'#C07F00'}
+                        backgroundInactive={'#83908D'}
+                        circleActiveColor={'#4C3D3D'}
+                        circleInActiveColor={'#4C3D3D'}
+                        changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+                        innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
+                        outerCircleStyle={{}} // style for outer animated circle
+                        renderActiveText={false}
+                        renderInActiveText={false}
+                        switchLeftPx={2} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
+                        switchRightPx={2} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+                        switchWidthMultiplier={2} // multiplied by the `circleSize` prop to calculate total width of the Switch
+                        switchBorderRadius={30} // Sets the border Radius of the switch slider. If unset, it remains the circleSize.
+                    />
                 </View>
             )
         }
@@ -212,12 +295,16 @@ function ClockIn() {
         setVisibleModal(false);
     };
 
+    const handleCloseModalList = () => {
+        setVisibleModalList(false);
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.headerlayer}>
-                <View>
+                <TouchableOpacity onPress={() => setVisibleModalList(true)}>
                     <ListIcon width={30} height={30} />
-                </View>
+                </TouchableOpacity>
                 <View style={styles.header}>
                     <Text style={{ fontWeight: "bold", fontSize: 25, color: "#C07F00" }}>HOJE</Text>
                     <View style={styles.headerDivider} />
@@ -236,7 +323,7 @@ function ClockIn() {
                     clockin={false}
                     planned={entradaplanned}
                     intervalAtived={true}
-                    onBaterPontoPress={handleBaterPontoPress}
+                    onBaterPontoPress={() => handleBaterPontoPress(1)}
                 />
                 <CardPonto
                     cardType={2}
@@ -245,7 +332,7 @@ function ClockIn() {
                     textColor='black'
                     clockin={false}
                     intervalAtived={interval_Atived}
-                    onBaterPontoPress={handleBaterPontoPress}
+                    onBaterPontoPress={() => handleBaterPontoPress(2)}
                 />
                 <CardPonto
                     cardType={3}
@@ -254,7 +341,7 @@ function ClockIn() {
                     textColor='black'
                     clockin={false}
                     intervalAtived={interval_Atived}
-                    onBaterPontoPress={handleBaterPontoPress}
+                    onBaterPontoPress={() => handleBaterPontoPress(3)}
                 />
                 <CardPonto
                     cardType={4}
@@ -264,35 +351,10 @@ function ClockIn() {
                     clockin={false}
                     planned={saidaplanned}
                     intervalAtived={true}
-                    onBaterPontoPress={handleBaterPontoPress}
+                    onBaterPontoPress={() => handleBaterPontoPress(4)}
                 />
             </View>
-            <View style={styles.switchlayer}>
-                <Text style={styles.interval}>Intervalo?</Text>
-                <Switch
-                    value={interval_Atived}
-                    onValueChange={interval_blocked == false ? setInterval_Atived : setValueIgnored}
-                    disabled={false}
-                    // activeText={'On'}
-                    // inActiveText={'Off'}
-                    circleSize={30}
-                    barHeight={30}
-                    circleBorderWidth={3}
-                    backgroundActive={'#C07F00'}
-                    backgroundInactive={'#83908D'}
-                    circleActiveColor={'#4C3D3D'}
-                    circleInActiveColor={'#4C3D3D'}
-                    changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-                    innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
-                    outerCircleStyle={{}} // style for outer animated circle
-                    renderActiveText={false}
-                    renderInActiveText={false}
-                    switchLeftPx={2} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
-                    switchRightPx={2} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
-                    switchWidthMultiplier={2} // multiplied by the `circleSize` prop to calculate total width of the Switch
-                    switchBorderRadius={30} // Sets the border Radius of the switch slider. If unset, it remains the circleSize.
-                />
-            </View>
+            {switchAvailable()}
             <View style={styles.statuslayer}>
                 {DailyJourneyActivated()}
                 {ProgressBarActivated()}
@@ -310,32 +372,26 @@ function ClockIn() {
                         <MapView
                             style={styles.map1}
                             initialRegion={{
-                                // -3.824426321813534, -38.48832181744508
-                                latitude: -3.824426321813534,
-                                longitude: -38.48832181744508,
+                                latitude: myLatitude,
+                                longitude: myLongitude,
                                 latitudeDelta: 0.0022,
                                 longitudeDelta: 0.0021,
                             }}
-
                         >
-                            <Marker
-                                coordinate={{ latitude: -3.824426321813534, longitude: -38.48832181744508 }}
-                            />
-                            <Circle
-                                center={{ latitude: -3.824426321813534, longitude: -38.48832181744508 }}
-                                radius={80}
-                            />
+                            <Marker coordinate={{ latitude: myLatitude, longitude: myLongitude }} />
+                            <Circle center={{ latitude: myLatitude, longitude: myLongitude }} radius={80} />
                         </MapView>
-                        <Text>Rua Muniz Freire, 128, Messejana, Brasil</Text>
-                        <Text>Período de Trabalho</Text>
-                        <Text>Intervalo</Text>
-                        {/* <TouchableOpacity onPress={handleCloseModal} style={{ marginTop: 0 }}>
-                            <Text style={{ color: '#C07F00', textAlign: 'center' }}>Fechar</Text>
-                        </TouchableOpacity> */}
-                        <TouchableOpacity
-                            style={styles.closeButton}
-                            onPress={() => setVisibleModal(false)}
-                        >
+                        {/* <View style={styles.addressContainer}>
+                            <Text style={styles.addressText}>Rua Muniz Freire, 128, Messejana, Brasil</Text>
+                            <View style={styles.pin}>
+                                <PinIcon width={30} height={30} color='#C07F00' />
+                            </View>
+                        </View>
+                        <View style={styles.bottomRowContainer}>
+                            <Text style={styles.periodoTrabalhoText}>Período de Trabalho</Text>
+                            <Text style={styles.intervaloText}>Intervalo</Text>
+                        </View> */}
+                        <TouchableOpacity style={styles.closeButton} onPress={() => setVisibleModal(false)}>
                             <AntDesign name="close" size={24} color="black" />
                         </TouchableOpacity>
                     </View>
@@ -373,9 +429,9 @@ function ClockIn() {
                         <View style={styles.pin}>
                             <PinIcon width={30} height={30} color='#C07F00' />
                         </View>
-                        <View style={[styles.fingerprint, { borderColor: '#C07F00' }]}>
+                        <TouchableOpacity style={[styles.fingerprint, { borderColor: '#C07F00' }]} onPress={handlePontoBatido}>
                             <FingerprintIcon width={50} height={50} color='#C07F00' />
-                        </View>
+                        </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.closeButton}
                             onPress={() => setModalPontoVisible(false)}
@@ -383,6 +439,57 @@ function ClockIn() {
                             <AntDesign name="close" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={visibleModalList}
+                onRequestClose={handleCloseModalList}
+            >
+                <View style={styles.modalListContainer}>
+                    {/* <View style={styles.themeBar}>
+                        <View style={[
+                            styles.themeCard,
+                            { backgroundColor:'' }
+                        ]}>
+                            <TouchableOpacity onPress={setLightMode}>
+                                <Feather name="sun" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.gray }} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={setDarkMode}>
+                                <Entypo name="moon" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.gray_erased : themeMode.tertiary }} />
+                            </TouchableOpacity>
+                        </View>
+                    </View> */}
+                    <View style={styles.messageContainer}>
+                        <Text style={styles.messageText}>Exibir Barra de Progresso</Text>
+                        <CheckBox
+                            style={{ borderColor: "#FFD95A" }}
+                            value={progressBarAtived}
+                            onValueChange={setProgressBarAtived}
+                            color={progressBarAtived ? '#FFD95A' : undefined}
+                        />
+                    </View>
+                    <View style={styles.headerDivider} />
+                    <View style={styles.messageContainer}>
+                        <Text style={styles.messageText}>Exibir Jornada Diária</Text>
+                        <CheckBox
+                            style={{ borderColor: "#C07F00" }}
+                            value={dailyJourneyAtived}
+                            onValueChange={setDailyJourneyAtived}
+                            color={dailyJourneyAtived ? '#C07F00' : undefined}
+                        />
+                    </View>
+                    <View style={styles.headerDivider} />
+                    <TouchableOpacity
+                        style={[styles.closeButton, { top: 90, right: 5 }]}
+                        onPress={() => setVisibleModalList(false)}
+                    >
+                        <AntDesign name="close" size={24} color="#000000" />
+                    </TouchableOpacity>
+                    {/* <TouchableOpacity style={styles.circle} onPress={() => console.log('Circle clicked')}>
+                            <View style={styles.circleInner} />
+                        </TouchableOpacity> */}
                 </View>
             </Modal>
         </View>
