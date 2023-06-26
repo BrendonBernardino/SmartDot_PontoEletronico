@@ -29,12 +29,10 @@ function Initial() {
 
   const handleEntrar = () => {
     navigation.navigate("Login");
-    console.log('algo');
   };
 
   const handleRegistrar = () => {
     navigation.navigate("Register");
-    console.log('algo2');
   };
 
   return (

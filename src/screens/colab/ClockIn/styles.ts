@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "flex-start",
         width: '100%',
-        height:"50%",
+        height: "50%",
     },
     cafeicon: {
         alignItems: "center",
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     },
     textJourney: {
         fontSize: 25,
-        fontWeight:'bold',
+        fontWeight: 'bold',
     },
     horaminBlock: {
         flex: 1,
@@ -69,40 +69,99 @@ const styles = StyleSheet.create({
     },
     textHoraMin: {
         fontSize: 20,
-        fontWeight:'bold',
+        fontWeight: 'bold',
     },
     optional2: {
-        flexDirection:'row',
+        flexDirection: 'row',
         alignItems: "center",
         justifyContent: "center",
         width: '100%',
-        height:"30%",
+        height: "30%",
     },
     modalMask: {
-        flex: 1, 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         width: '100%'
     },
-    modalCalendar: {
+    modalCalendarContent: {
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        width:'100%', 
-        height:'80%', 
+        width: '100%',
+        height: '80%',
         marginTop: '40%'
+    },
+    modalPontoContent: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        width: '100%',
+        height: '60%',
+        marginTop: '80%'
     },
     titleModal: {
         fontSize: 25,
         fontWeight: "bold",
-        marginTop:'2%',
-        height:'5%',
+        marginTop: '2%',
+        height: '5%',
     },
-    map: {
+    map1: {
+        // minHeight : '20%',
         width: '90%',
         height: '20%',
         marginBottom: 150,
         borderRadius: 20,
+    },
+    map2: {
+        // minHeight : '20%',
+        width: '70%',
+        height: '30%',
+        marginBottom: 80,
+        borderRadius: 20,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    topLeftText: {
+        position: 'absolute',
+        top: 40,
+        left: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    topRightText: {
+        position: 'absolute',
+        top: 40,
+        right: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    pin: {
+        position: 'absolute',
+        bottom: 170,
+        right: 30,
+    },
+    addressText: {
+        marginBottom: 30,
+        color: 'white',
+        fontSize: 20,
+    },
+    fingerprint: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80,
+        width: 80,
+        borderRadius: 100,
+        borderWidth: 1,
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 10,
+        right: 15,
     },
 });
 

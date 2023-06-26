@@ -27,6 +27,7 @@ interface Props {
     clockin: boolean;
     intervalAtived?: boolean;
     planned?: string;
+    onBaterPontoPress: () => void;
 }
 
 export default function (props: Props) {
@@ -75,74 +76,21 @@ export default function (props: Props) {
     };
 
     function VerifyPonto() {
-        if (props.cardType == 1) {
-            if(props.ponto != '') {
-                return <Text style={styles.textPonto}>
-                    {props.ponto}
-                </Text>
-            }
-            // if(entradaPonto == true) {
-            //     return <Text style={styles.textPonto}>
-            //         {timePonto}
-            //     </Text>
-            // }
-            else {
-                return (
-                    <View style={styles.cardBaterPonto}>
-                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
-                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
-                        </TouchableOpacity>
-                    </View>
-                )
-            }
+        if(props.ponto != '') {
+            return <Text style={styles.textPonto}>
+                {props.ponto}
+            </Text>
         }
-        if (props.cardType == 2) {
-            if(props.ponto != '') {
-                return <Text style={styles.textPonto}>
-                    {props.ponto}
-                </Text>
-            }
-            else {
-                return (
-                    <View style={styles.cardBaterPonto}>
-                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
-                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
-                        </TouchableOpacity>
-                    </View>
-                )
-            }
-        }
-        if (props.cardType == 3) {
-            if(props.ponto != '') {
-                return <Text style={styles.textPonto}>
-                    {props.ponto}
-                </Text>
-            }
-            else {
-                return (
-                    <View style={styles.cardBaterPonto}>
-                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
-                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
-                        </TouchableOpacity>
-                    </View>
-                )
-            }
-        }
-        if (props.cardType == 4) {
-            if(props.ponto != '') {
-                return <Text style={styles.textPonto}>
-                    {props.ponto}
-                </Text>
-            }
-            else {
-                return (
-                    <View style={styles.cardBaterPonto}>
-                        <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]}>
-                            <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
-                        </TouchableOpacity>
-                    </View>
-                )
-            }
+        else {
+            return (
+                <View style={styles.cardBaterPonto}>
+                    <TouchableOpacity style={[styles.buttonBaterPonto, {backgroundColor: '#4C3D3D'}]} 
+                    onPress={props.onBaterPontoPress}
+                    >
+                        <Text style={[styles.textBaterPonto, {color: '#FFFFFF'}]}>Bater Ponto</Text>
+                    </TouchableOpacity>
+                </View>
+            )
         }
     };
 
@@ -186,6 +134,18 @@ export default function (props: Props) {
             </Text>
             {Planejado()}
             {VerifyPonto()}
+            {/* {props.cardType === 4 && props.ponto === '' ? ( // Only show "Bater Ponto" button for cardType 1 when ponto is empty
+                <View style={styles.cardBaterPonto}>
+                    <TouchableOpacity
+                        style={[styles.buttonBaterPonto, { backgroundColor: '#4C3D3D' }]}
+                        onPress={props.onBaterPontoPress} // Call the onBaterPontoPress function on button press
+                    >
+                        <Text style={[styles.textBaterPonto, { color: '#FFFFFF' }]}>Bater Ponto</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <Text style={styles.textPonto}>{props.ponto}</Text>
+            )} */}
         </View>
     )
         : false

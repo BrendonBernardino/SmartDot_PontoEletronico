@@ -1,6 +1,6 @@
 import { Text, View, Image, TouchableNativeFeedback, TouchableOpacity, Modal } from 'react-native';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Switch } from 'react-native-switch';
 import * as Progress from 'react-native-progress';
@@ -14,18 +14,24 @@ import CafeIcon from '../../../../assets/svg/coffee.svg';
 import MaletaIcon from '../../../../assets/svg/maleta.svg';
 import ClimbingIcon from '../../../../assets/svg/homem_subindo_escadas.svg';
 import Calendar from "../../../components/Calendar/Calendar";
+import FingerprintIcon from '../../../../assets/svg/fingerprint.svg';
+import PinIcon from '../../../../assets/svg/pin.svg';
 
 
 
 function ClockIn() {
     const [progressBarAtived, setProgressBarAtived] = useState(true);
     const [dailyJourneyAtived, setDailyJourneyAtived] = useState(true);
-    const [intervalAtived, setIntervalAtived] = useState(true);
+    const [interval_Atived, setInterval_Atived] = useState(true);
+    const [interval_blocked, setInterval_blocked] = useState(false);
+
+    const [valueIgnored, setValueIgnored] = useState(false);
     const [dayWeek, setDayWeek] = useState("");
     // const [day, setDay] = useState(23);
     // const [month, setMonth] = useState(5);
     // const [year, setYear] = useState(2023);
     const [visibleModal, setVisibleModal] = useState(false);
+    const [modalPontoVisible, setModalPontoVisible] = useState(false);
 
     const [entradaplanned, setEntradaplanned] = useState("");
     const [intervalInicioplanned, setIntervalInicioplanned] = useState("");
@@ -37,7 +43,10 @@ function ClockIn() {
     const [intervaloFimReal, setintervaloFimReal] = useState("");
     const [saidaReal, setSaidaReal] = useState("");
 
-    const [currentDate, setCurrentDate] = useState('');
+    const [tempoTotal, setTempoTotal] = useState("");
+    const [horaTotal, setHoraTotal] = useState('');
+    const [minTotal, setMinTotal] = useState('');
+
 
     const date = new Date();
 
@@ -46,7 +55,14 @@ function ClockIn() {
     const dayCurrent = String(date.getDate()).padStart(2, '0');
     const dayWeekCurrent = date.getDay();
 
-    const formattedDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
+    const currentDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
+
+    const getCurrentTime = () => {
+        const date = new Date();
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+        return `${hour}h${minute}`;
+    };
 
     function getDayWeek() {
         if (dayWeekCurrent == 0)
@@ -77,13 +93,15 @@ function ClockIn() {
     // }
 
     useEffect(() => {
-        setCurrentDate(formattedDate);
-        getDayWeek();intervalFimplanned
+        getDayWeek();
         handleRequisition();
+        checkIntervalIsOpen();
+        tempoTotalSlicer();
     }, []);
 
     const handleRequisition = async () => {
-        const apiUrl = 'https://b3af-2804-d4b-7aa4-c00-cb4a-606b-3371-afdb.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;
+        const apiUrl = 'https://b3af-2804-d4b-7aa4-c00-cb4a-606b-3371-afdb.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';
+        console.log(apiUrl)
 
         try {
             const token = await AsyncStorage.getItem('token');
@@ -99,19 +117,28 @@ function ClockIn() {
             console.log(currentDate)
             if (response.ok) {
                 const data = await response.json();
+                console.log(data);
                 setEntradaplanned(data[0].tempo_inicial.padrao);
-                setintervaloInicioReal(data[0].interval_inicial.padrao);
-                setintervaloFimReal(data[0].interval_inicial.padrao);
+                setIntervalInicioplanned(data[0].intervalo_inicial.padrao);//data[0].intervalo_inicial.padrao
+                setIntervalFimplanned(data[0].intervalo_final.padrao);//data[0].intervalo_final.padrao
                 setSaidaplanned(data[0].tempo_final.padrao);
+                console.log('entrada planejada:' + entradaplanned);
+                console.log('intervalo ini planejada:' + intervalInicioplanned);
+                console.log('intervalo fim planejada:' + intervalFimplanned);
+                console.log('saida planejada:' + saidaplanned);
 
                 setEntradaReal(data[0].tempo_inicial.real);
-                setintervaloInicioReal(data[0].intervalo_inicial.real);
-                setintervaloFimReal(data[0].intervalo_final.real);
+                setintervaloInicioReal('');//data[0].intervalo_inicial.real
+                setintervaloFimReal('');//data[0].intervalo_final.real
                 setSaidaReal(data[0].tempo_final.real);
-                console.log(entradaReal);
-                console.log(intervaloInicioReal);
-                console.log(intervaloFimReal);
-                console.log(saidaReal);
+                console.log('entrada real:' + entradaReal);
+                console.log('intervalo ini real:' + intervaloInicioReal);
+                console.log('intervalo fim real:' + intervaloFimReal);
+                console.log('saida real:' + saidaReal);
+
+                setTempoTotal(data[0].tempo_total);
+                console.log('tempo total:' + tempoTotal);
+
             } else {
                 console.log('Solicitacao falhou');
             }
@@ -121,18 +148,29 @@ function ClockIn() {
         }
     };
 
-    function checkIntervalIsOpen() {
-        if(in) {
+    const handleBaterPontoPress = () => {
+        setModalPontoVisible(true);
+    };
 
+    function checkIntervalIsOpen() {
+        if (intervalInicioplanned == '' && intervalFimplanned == '') { //não tem intervalo
+            setInterval_Atived(false);
+            setInterval_blocked(true);
+        }
+        else {
+            setInterval_Atived(true);
+            setInterval_blocked(false);
         }
     }
 
-    // function MonthAjusted() {
-    //     if (month < 10)
-    //         return <Text>0{month}</Text>
-    //     else
-    //         return <Text>{month}</Text>
-    // };
+    function tempoTotalSlicer() {
+        setHoraTotal(tempoTotal.slice(0, 2));
+        setMinTotal(tempoTotal.slice(3, 5));
+        if (horaTotal == '')
+            setHoraTotal('0');
+        if (minTotal == '')
+            setMinTotal('0');
+    }
 
     function DailyJourneyActivated() {
         if (dailyJourneyAtived == true) {
@@ -142,11 +180,11 @@ function ClockIn() {
                     <Text style={styles.textJourney}>Jornada Diária de Trabalho</Text>
                     <View style={[styles.horaminBlock, { backgroundColor: '#FFD95A' }]}>
                         <Text style={styles.textHoraMin}>
-                            6 Horas
+                            {horaTotal} Horas
                         </Text>
                         <View style={[styles.headerDivider, { width: '100%' }]} />
                         <Text style={styles.textHoraMin}>
-                            2 Minutos
+                            {minTotal} Minutos
                         </Text>
                     </View>
                 </View>
@@ -196,24 +234,27 @@ function ClockIn() {
                     color='#FFD95A'
                     textColor='black'
                     clockin={false}
-                    intervalAtived={true}
                     planned={entradaplanned}
+                    intervalAtived={true}
+                    onBaterPontoPress={handleBaterPontoPress}
                 />
                 <CardPonto
                     cardType={2}
-                    ponto=''
+                    ponto={intervaloInicioReal}
                     color='#FFF7D4'
                     textColor='black'
                     clockin={false}
-                    intervalAtived={intervalAtived}
+                    intervalAtived={interval_Atived}
+                    onBaterPontoPress={handleBaterPontoPress}
                 />
                 <CardPonto
                     cardType={3}
-                    ponto=''
+                    ponto={intervaloFimReal}
                     color='#FFD95A'
                     textColor='black'
                     clockin={false}
-                    intervalAtived={intervalAtived}
+                    intervalAtived={interval_Atived}
+                    onBaterPontoPress={handleBaterPontoPress}
                 />
                 <CardPonto
                     cardType={4}
@@ -221,15 +262,16 @@ function ClockIn() {
                     color='#FFF7D4'
                     textColor='black'
                     clockin={false}
-                    intervalAtived={true}
                     planned={saidaplanned}
+                    intervalAtived={true}
+                    onBaterPontoPress={handleBaterPontoPress}
                 />
             </View>
             <View style={styles.switchlayer}>
                 <Text style={styles.interval}>Intervalo?</Text>
                 <Switch
-                    value={intervalAtived}
-                    onValueChange={setIntervalAtived}
+                    value={interval_Atived}
+                    onValueChange={interval_blocked == false ? setInterval_Atived : setValueIgnored}
                     disabled={false}
                     // activeText={'On'}
                     // inActiveText={'Off'}
@@ -255,26 +297,62 @@ function ClockIn() {
                 {DailyJourneyActivated()}
                 {ProgressBarActivated()}
             </View>
-            {/* <Modal
-                visible={visibleModal}
-                transparent={true}
-                onRequestClose={() => setVisibleModal(false)}
-            >
-
-            </Modal> */}
-
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={visibleModal}
                 onRequestClose={handleCloseModal}
             >
-                <View style={[styles.modalMask, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]} onPress={handleCloseModal}>
-                    <View style={[styles.modalCalendar, { backgroundColor: '#FFFFFF' }]}>
+                <View style={[styles.modalMask, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
+                    <View style={[styles.modalCalendarContent, { backgroundColor: '#FFFFFF' }]}>
                         <Text style={[styles.titleModal, { color: '#C07F00' }]}>Espelho de Ponto</Text>
                         <Calendar onDatePress={handleDatePress} />
                         <MapView
-                            style={styles.map}
+                            style={styles.map1}
+                            initialRegion={{
+                                // -3.824426321813534, -38.48832181744508
+                                latitude: -3.824426321813534,
+                                longitude: -38.48832181744508,
+                                latitudeDelta: 0.0022,
+                                longitudeDelta: 0.0021,
+                            }}
+
+                        >
+                            <Marker
+                                coordinate={{ latitude: -3.824426321813534, longitude: -38.48832181744508 }}
+                            />
+                            <Circle
+                                center={{ latitude: -3.824426321813534, longitude: -38.48832181744508 }}
+                                radius={80}
+                            />
+                        </MapView>
+                        <Text>Rua Muniz Freire, 128, Messejana, Brasil</Text>
+                        <Text>Período de Trabalho</Text>
+                        <Text>Intervalo</Text>
+                        {/* <TouchableOpacity onPress={handleCloseModal} style={{ marginTop: 0 }}>
+                            <Text style={{ color: '#C07F00', textAlign: 'center' }}>Fechar</Text>
+                        </TouchableOpacity> */}
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => setVisibleModal(false)}
+                        >
+                            <AntDesign name="close" size={24} color="black" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalPontoVisible}
+                onRequestClose={handleCloseModal}
+            >
+                <View style={[styles.modalMask, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
+                    <View style={[styles.modalPontoContent, { backgroundColor: '#000000' }]}>
+                        <Text style={[styles.topLeftText, { color: '#C07F00' }]}>Você está:</Text>
+                        <Text style={[styles.topRightText, { color: '#C07F00' }]}>{getCurrentTime()}</Text>
+                        <MapView
+                            style={styles.map2}
                             initialRegion={{
                                 // -3.824426321813534, -38.48832181744508
                                 latitude: -3.824426321813534,
@@ -291,12 +369,19 @@ function ClockIn() {
                                 radius={80}
                             />
                         </MapView>
-                        <Text>Rua Muniz Freire, 128, Messejana, Brasil</Text>
-                        <Text>Período de Trabalho</Text>
-                        <Text>Intervalo</Text>
-                        {/* <TouchableOpacity onPress={handleCloseModal} style={{ marginTop: 0 }}>
-                            <Text style={{ color: '#C07F00', textAlign: 'center' }}>Fechar</Text>
-                        </TouchableOpacity> */}
+                        <Text style={styles.addressText}>123 Main St, City</Text>
+                        <View style={styles.pin}>
+                            <PinIcon width={30} height={30} color='#C07F00' />
+                        </View>
+                        <View style={[styles.fingerprint, { borderColor: '#C07F00' }]}>
+                            <FingerprintIcon width={50} height={50} color='#C07F00' />
+                        </View>
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => setModalPontoVisible(false)}
+                        >
+                            <AntDesign name="close" size={24} color="white" />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>

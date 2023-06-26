@@ -13,6 +13,7 @@ interface Props {
     cardType: 1 | 2 | 3 | 4 | 5;
     color: string;
     textColor: string;
+    value: string | number;
 }
 
 export default function (props: Props) {
@@ -67,12 +68,12 @@ export default function (props: Props) {
     function Result() {
         if (props.cardType == 1) {
             if (horasExtras >= 0 && minExtras >= 0)
-                return <Text style={[styles.textResult, { color: "#4AD658" }]}>+{horasMinExtras}</Text>
+                return <Text style={[styles.textResult, { color: "#4AD658" }]}>{props.value == '' ? 0 : '+'+props.value}</Text>
             else
-                return <Text style={[styles.textResult, { color: "#D64A4A" }]}>-{horasMinExtras}</Text>
+                return <Text style={[styles.textResult, { color: "#D64A4A" }]}>-{props.value}</Text>
         }
         if (props.cardType == 2) {
-            return <Text style={[styles.textResult, { color: "#000000" }]}>142:30</Text>
+            return <Text style={[styles.textResult, { color: "#000000" }]}>{props.value}</Text>
         }
         if (props.cardType == 3) {
             return <Text style={[styles.textResult, { color: "#000000", marginBottom: "10%" }]}>R$10,67</Text>
@@ -81,7 +82,7 @@ export default function (props: Props) {
             return <Text style={[styles.textResult, { color: "#000000" }]}>R$170,72</Text>
         }
         if (props.cardType == 5) {
-            return <Text style={[styles.textResult, { color: "#000000" }]}>1</Text>
+            return <Text style={[styles.textResult, { color: "#000000" }]}>{props.value > 0 ? props.value : 0}</Text>
         }
     };
 
