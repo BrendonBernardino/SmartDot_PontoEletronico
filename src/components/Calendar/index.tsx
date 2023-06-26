@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import styles from "./styles"
 
 interface CalendarProps {
-  onDatePress: (date: number) => void;
+  onDatePress: (date: { day: number, month: number, year: number }) => void;
 }
 
 const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
@@ -36,8 +36,8 @@ const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
         <TouchableOpacity
           key={day}
           style={styles.dayContainer}
-          onPress={() => onDatePress(day)}
-        >
+          onPress={() => onDatePress({ day, month: currentMonth, year: currentYear })}
+          >
           <Text style={styles.dayText}>{day}</Text>
         </TouchableOpacity>
       );

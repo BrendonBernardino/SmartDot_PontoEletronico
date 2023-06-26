@@ -1,81 +1,271 @@
-import React, { useState } from 'react';
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, FlatList, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Modal, Switch, Text, TextInput, TouchableOpacity, View, FlatList, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FooterMenu from "../../../components/FooterMenu/manage";
 import SearchBar from "../../../components/SearchBar/index";
+import styles from './style';
 
-interface Task {
+interface User {
   id: number;
   name: string;
-  description: string;
-  deadline: string;
+  email: string;
+  authentication_id: string,
+  company_name: string,
+  start_time: string,
+  initial_interval: string,
+  final_interval: string,
+  final_time: string,
+  monday: boolean,
+  tuesday: boolean,
+  wednesday: boolean,
+  thursday: boolean,
+  friday: boolean,
+  saturday: boolean,
+  sunday: boolean
 }
 
+
+interface CustomTextInputProps {
+  label: string;
+  value: string;
+  onChangeText: (text: string) => void;
+}
+
+const CustomTextInput: React.FC<CustomTextInputProps> = ({ label, value, onChangeText }) => (
+  <View style={{ marginBottom: 10 }}>
+    <Text>{label}</Text>
+    <TextInput
+      style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
+      value={value}
+      onChangeText={onChangeText}
+    />
+  </View>
+);
+
 const TaskList: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: 1,
-      name: 'Tarefa 1',
-      description: 'Descrição da tarefa 1',
-      deadline: '31/12/2023',
-    },
-    {
-      id: 2,
-      name: 'Tarefa 2',
-      description: 'Descrição da tarefa 2',
-      deadline: '15/12/2023',
-    },
-    {
-      id: 3,
-      name: 'Tarefa 3',
-      description: 'Descrição da tarefa 3',
-      deadline: '10/12/2023',
-    },
-  ]);
-
+  const [users, setUsers] = useState<User[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [horario, setHorario] = useState('');
 
-  const handleRemoveTask = (taskId: number) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
+  const [startTimeHour, setStartTimeHour] = useState(0);
+  const [startTimeMinute, setStartTimeMinute] = useState(0);
+  const [initialIntervalHour, setInitialIntervalHour] = useState(0);
+  const [initialIntervalMinute, setInitialIntervalMinute] = useState(0);
+  const [finalIntervalHour, setFinalIntervalHour] = useState(0);
+  const [finalIntervalMinute, setFinalIntervalMinute] = useState(0);
+  const [finalTimeHour, setFinalTimeHour] = useState(0);
+  const [finalTimeMinute, setFinalTimeMinute] = useState(0);
+  const [monday, setMonday] = useState(false);
+  const [tuesday, setTuesday] = useState(false);
+  const [wednesday, setWednesday] = useState(false);
+  const [thursday, setThursday] = useState(false);
+  const [friday, setFriday] = useState(false);
+  const [saturday, setSaturday] = useState(false);
+  const [sunday, setSunday] = useState(false);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async (name?: string) => {
+    try {
+      let url = `http://127.0.0.1:3000/manager/users`;
+
+      if (name) {
+        url += `?name=${name}`;
+      }
+      const response = await fetch(url, 
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+        }
+      });
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.log('Error fetching users:', error);
+    }
   };
 
-  const handleEditTask = (taskId: number) => {
-    // Implemente a lógica de edição da tarefa com base no ID aqui
-    console.log(`Editar tarefa com ID ${taskId}`);
+  const removeUser = async (userId: number) => {
+    try {
+      await fetch(`http://127.0.0.1:3000/manager/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+        }
+      });
+      setUsers(users.filter((user) => user.id !== userId));
+    } catch (error) {
+      console.log('Error removing user:', error);
+    }
   };
 
-  const handleOpenModal = () => {
+  const editUser = async (userId: number) => {
+    try {
+      // Fetch the user data from the API for the given userId
+      const response = await fetch(`http://127.0.0.1:3000/manager/users?id=${userId}`,
+      {
+        method: 'Get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+        }
+      });
+      const userData = await response.json();
+
+      setId(userData[0].id)
+      setEmail(userData[0].email)
+      setStartTimeHour(userData[0].start_time_hour)
+      setStartTimeMinute(userData[0].start_time_minute);
+      setInitialIntervalHour(userData[0].initial_interval_hour);
+      setInitialIntervalMinute(userData[0].initial_interval_minute);
+      setFinalIntervalHour(userData[0].final_interval_hour);
+      setFinalIntervalMinute(userData[0].final_interval_minute);
+      setFinalTimeHour(userData[0].final_time_hour);
+      setFinalTimeMinute(userData[0].final_time_minute);
+      setMonday(userData[0].monday);
+      setTuesday(userData[0].tuesday);
+      setWednesday(userData[0].wednesday);
+      setThursday(userData[0].thursday);
+      setFriday(userData[0].friday);
+      setSaturday(userData[0].saturday);
+      setSunday(userData[0].sunday);
+    
+      setModalVisible(true);
+    } catch (error) {
+      console.log('Error editing user:', error);
+    }
+  };
+
+  const updateUser = async () => {
+    try {
+      // Fetch the user data from the API for the given userId
+      const response = await fetch(`http://127.0.0.1:3000/manager/users/${id}`,
+      {
+        method: 'Put',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+        },
+        body: JSON.stringify({
+          start_time_hour: startTimeHour,
+          start_time_minute: startTimeMinute,
+          initial_interval_hour: initialIntervalHour,
+          initial_interval_minute: initialIntervalMinute,
+          final_interval_hour: finalIntervalHour,
+          final_interval_minute: finalIntervalMinute,
+          final_time_hour: finalTimeHour,
+          final_time_minute: finalTimeMinute,
+          monday,
+          tuesday,
+          wednesday,
+          thursday,
+          friday,
+          saturday,
+          sunday,
+        }),
+      });
+
+      if (response.ok) {
+        setModalVisible(false);
+      }
+    } catch (error) {
+      console.log('Error editing user:', error);
+    }
+  };
+
+
+  const addUser = async () => {
+    try {
+      // Send a POST request to the API with the new user data
+      const response = await fetch('http://127.0.0.1:3000/manager/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          start_time_hour: startTimeHour,
+          start_time_minute: startTimeMinute,
+          initial_interval_hour: initialIntervalHour,
+          initial_interval_minute: initialIntervalMinute,
+          final_interval_hour: finalIntervalHour,
+          final_interval_minute: finalIntervalMinute,
+          final_time_hour: finalTimeHour,
+          final_time_minute: finalTimeMinute,
+          monday,
+          tuesday,
+          wednesday,
+          thursday,
+          friday,
+          saturday,
+          sunday,
+        }),
+      });
+
+      if (response.ok) {
+        setModalVisible(false);
+      }
+
+    } catch (error) {
+      console.log('Error adding user:', error);
+    }
+  };
+
+  const openModal = () => {
     setModalVisible(true);
+    setEmail('');
+    setId('');
+    setStartTimeHour(0);
+    setStartTimeMinute(0);
+    setInitialIntervalHour(0);
+    setInitialIntervalMinute(0);
+    setFinalIntervalHour(0);
+    setFinalIntervalMinute(0);
+    setFinalTimeHour(0);
+    setFinalTimeMinute(0);
+    setMonday(false);
+    setTuesday(false);
+    setWednesday(false);
+    setThursday(false);
+    setFriday(false);
+    setSaturday(false);
+    setSunday(false);
   };
 
-  const handleCloseModal = () => {
+  const closeModal = () => {
     setModalVisible(false);
   };
 
-  const handleSave = () => {
-    // Aqui você pode fazer alguma ação com o horário coletado
-    console.log('Horário selecionado:', horario);
-    handleCloseModal();
+  const handleSearch = (name: string) => {
+    fetchUsers(name);
   };
 
-  const handleSearch = () => {
-    // Implementar a lógica de pesquisa aqui
+  const saveButton = () => {
+    if (id && id.trim() !== "") {
+      updateUser();
+    } else{
+      addUser();
+    }
   };
 
-  const renderItem = ({ item }: { item: Task }) => (
+  const renderItem = ({ item }: { item: User }) => (
     <View style={styles.taskContainer}>
       <View style={styles.textContainer}>
         <Text style={styles.taskName}>{item.name}</Text>
-        <Text style={styles.taskDescription}>{item.description}</Text>
-        <Text style={styles.taskDeadline}>{item.deadline}</Text>
+        <Text style={styles.taskDescription}>{item.email}</Text>
       </View>
       <View style={styles.iconsContainer}>
-        <TouchableOpacity onPress={() => handleEditTask(item.id)}>
+        <TouchableOpacity onPress={() => editUser(item.id)}>
           <Ionicons name="pencil" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleRemoveTask(item.id)}>
+        <TouchableOpacity onPress={() => removeUser(item.id)}>
           <Ionicons name="trash" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -92,8 +282,8 @@ const TaskList: React.FC = () => {
       <TouchableOpacity style={styles.headerIcon}>
         <View style={styles.logolayer}>
           <Image
-              style={styles.logo}
-              source={require('../../../../assets/Logo.png')}
+            style={styles.logo}
+            source={require('../../../../assets/Logo.png')}
           />
         </View>
       </TouchableOpacity>
@@ -106,32 +296,171 @@ const TaskList: React.FC = () => {
       <SearchBar onSearch={handleSearch} />
 
       <FlatList
-        data={tasks}
+        data={users}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => <View style={styles.divider} />}
       />
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={handleCloseModal}
+        onRequestClose={closeModal}
       >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-            <Text style={{ fontSize: 18, marginBottom: 10 }}>Selecione um horário:</Text>
-            <TextInput
-              style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10 }}
-              placeholder="Horário (00:00)"
-              value={horario}
-              onChangeText={text => setHorario(text)}
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={{ fontSize: 18, marginBottom: 10 }}>Usuário:</Text>
+            <CustomTextInput
+              label="Email"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
             />
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 1, marginRight: 10 }}>
+              <CustomTextInput
+                label="Entrada (Hora)"
+                value={startTimeHour.toString()}
+                onChangeText={(text) => {
+                  const input = parseInt(text);
+                  if (input >= 0 && input <= 23) {
+                    setStartTimeHour(input);
+                  }
+                }}
+              />
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomTextInput
+                  label="Entrada (Minuto)"
+                  value={startTimeMinute.toString()}
+                  onChangeText={(text) => {
+                    const input = parseInt(text);
+                    if (input >= 0 && input <= 59) {
+                      setStartTimeMinute(input);
+                    }
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <CustomTextInput
+                  label="Intervalo Inicio (Hour)"
+                  value={initialIntervalHour.toString()}
+                  onChangeText={(text) => {
+                    const input = parseInt(text);
+                    if (input >= 0 && input <= 23) {
+                      setInitialIntervalHour(input);
+                    }
+                  }}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomTextInput
+                  label="Intervalo Inic. (Minuto)"
+                  value={initialIntervalMinute.toString()}
+                  onChangeText={(text) => {
+                    const input = parseInt(text);
+                    if (input >= 0 && input <= 59) {
+                      setInitialIntervalMinute(input);
+                    }
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <CustomTextInput
+                  label="Intervalo Final (Hora)"
+                  value={finalIntervalHour.toString()}
+                  onChangeText={(text) => {
+                    const input = parseInt(text);
+                    if (input >= 0 && input <= 23) {
+                      setFinalIntervalHour(input);
+                    }
+                  }}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomTextInput
+                  label="Intervalo Final (Minuto)"
+                  value={finalIntervalMinute.toString()}
+                  onChangeText={(text) => {
+                    const input = parseInt(text);
+                    if (input >= 0 && input <= 59) {
+                      setFinalIntervalMinute(input);
+                    }
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <CustomTextInput
+                  label="Saída (Hora)"
+                  value={finalTimeHour.toString()}
+                  onChangeText={(text) => {
+                    const input = parseInt(text);
+                    if (input >= 0 && input <= 23) {
+                      setFinalTimeHour(input);
+                    }
+                  }}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomTextInput
+                  label="Saída (Minuto)"
+                  value={finalTimeMinute.toString()}
+                  onChangeText={(text) => {
+                    const input = parseInt(text);
+                    if (input >= 0 && input <= 59) {
+                      setFinalTimeMinute(input);
+                    }
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{ marginRight: 10 }}>Segunda:</Text>
+              <Switch value={monday} onValueChange={setMonday} />
+            </View>
 
-            <TouchableOpacity onPress={handleSave} style={{ backgroundColor: '#c88f20', padding: 10, borderRadius: 5 }}>
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{ marginRight: 10 }}>Terça:</Text>
+              <Switch value={tuesday} onValueChange={setTuesday} />
+            </View>
+
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{ marginRight: 10 }}>Quarta:</Text>
+              <Switch value={wednesday} onValueChange={setWednesday} />
+            </View>
+
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{ marginRight: 10 }}>Quinta:</Text>
+              <Switch value={thursday} onValueChange={setThursday} />
+            </View>
+
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{ marginRight: 10 }}>Sexta:</Text>
+              <Switch value={friday} onValueChange={setFriday} />
+            </View>
+
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{ marginRight: 10 }}>Sábado:</Text>
+              <Switch value={saturday} onValueChange={setSaturday} />
+            </View>
+
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{ marginRight: 10 }}>Domingo:</Text>
+              <Switch value={sunday} onValueChange={setSunday} />
+            </View>
+
+
+            <TouchableOpacity onPress={saveButton} style={{ backgroundColor: '#c88f20', padding: 10, borderRadius: 5 }}>
               <Text style={{ color: 'white', textAlign: 'center' }}>Salvar</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleCloseModal} style={{ marginTop: 10 }}>
+            <TouchableOpacity onPress={closeModal} style={{ marginTop: 10 }}>
               <Text style={{ color: 'blue', textAlign: 'center' }}>Fechar</Text>
             </TouchableOpacity>
           </View>
@@ -139,7 +468,7 @@ const TaskList: React.FC = () => {
       </Modal>
 
       <TouchableOpacity
-        onPress={handleOpenModal}
+        onPress={openModal}
         style={{
           position: 'absolute',
           bottom: 20,
@@ -156,120 +485,8 @@ const TaskList: React.FC = () => {
       </TouchableOpacity>
 
       <FooterMenu leftPage="ManagerPointPresences" centerPage="ManagerCollaborators" rightPage="ManagerProfiles" />
-
     </View>
-    
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: 'white',
-  },
-  taskContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    margin: 12,
-  },
-  textContainer: {
-    flex: 1,
-    marginRight: 16,
-  },
-  taskName: {
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  taskDescription: {
-    fontSize: 14,
-    marginBottom: 4,
-  },
-  taskDeadline: {
-    fontSize: 12,
-  },
-  iconsContainer: {
-    flexDirection: 'row',
-  },
-  divider: {
-    backgroundColor: 'gray',
-    height: 1,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  headerIcon: {
-    padding: 10,
-  },
-  headerTextContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  headerDivider: {
-    backgroundColor: 'gray',
-    height: 1,
-    width: '80%',
-    marginVertical: 4,
-  },
-  headerText: {
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  containerFooter: {
-    position: 'absolute',
-    bottom: 30,
-    alignSelf: 'center',
-    backgroundColor: 'white',
-    borderRadius: 30,
-    padding: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    width: '60%',
-    shadowOffset: {
-      width: 1,
-      height: 2,
-    },
-  },
-  iconFooter: {
-    marginHorizontal: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 25,
-    height: 30,
-  },
-  searchContainer: {
-    borderRadius: 50,
-    overflow: 'hidden',
-  },
-  searchButton: {
-    padding: 8,
-  },
-  searchIconContainer: {
-    backgroundColor: '#4C3D3D',
-    borderRadius: 50,
-    padding: 8,
-  },
-  logolayer: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // backgroundColor: 'blue',
-  },
-  logo: {
-    // flex: 0.325,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 40,
-    height: 40,
-  },
-});
 
 export default TaskList;

@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import styles from "./styles"
 
 interface SearchBarProps {
-  onSearch: () => void;
+  onSearch: (searchText: string) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = () => {
+    onSearch(searchText);
+  };
+
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}>
       <View
@@ -25,11 +31,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <TextInput
           style={{ flex: 1, height: 40, paddingHorizontal: 10 }}
           placeholder="Pesquisar..."
-          // Adicione os outros atributos necessários para o TextInput
+          value={searchText}
+          onChangeText={setSearchText}
         />
 
         <View style={styles.searchContainer}>
-          <TouchableOpacity onPress={onSearch} style={styles.searchButton}>
+          <TouchableOpacity onPress={handleSearch} style={styles.searchButton}>
             <View style={styles.searchIconContainer}>
               <Ionicons name="search" size={24} color="white" />
             </View>

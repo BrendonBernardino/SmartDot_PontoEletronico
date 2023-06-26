@@ -2,7 +2,6 @@ import { Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
-// import { Ionicons } from 'react-native-vector-icons'
 import { SelectList } from 'react-native-dropdown-select-list';
 import styles from "./styles";
 import Button from "../../../components/Button/Button";
@@ -16,9 +15,7 @@ function Register() {
 
     const data = [
         { key: '1', value: 'Colaborador' },
-        { key: '2', value: 'Colaborador Independente' },
-        { key: '3', value: 'Gestor' },
-        // {key:'4', value:'Computers', disabled:true},
+        { key: '2', value: 'Gestor' }
     ]
 
     useEffect(() => {
@@ -50,7 +47,7 @@ function Register() {
                     text='Nome'
                     color='#C07F00'
                     textColor='#FFD95A'
-                    size={userType == 3 ? 53 : 59}
+                    size={userType == 2 ? 53 : 59}
                     centralized={0}
                     borderTopLeftRadius={33}
                     password={false}
@@ -60,16 +57,7 @@ function Register() {
                     text='Email'
                     color='#C07F00'
                     textColor='#FFD95A'
-                    size={userType == 3 ? 53 : 59}
-                    centralized={0}
-                    password={false}
-                    visible={true}
-                />
-                <InputBlock
-                    text='Nome de usuário'
-                    color='#C07F00'
-                    textColor='#FFD95A'
-                    size={userType == 3 ? 53 : 59}
+                    size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={false}
                     visible={true}
@@ -78,30 +66,20 @@ function Register() {
                     text='Nome da Empresa'
                     color='#C07F00'
                     textColor='#FFD95A'
-                    size={userType == 3 ? 53 : 59}
+                    size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={false}
-                    visible={userType == 3 ? true : false}
+                    visible={userType == 2 ? true : false}
                 />                   
                 <InputBlock
                     text='Senha'
                     color='#C07F00'
                     textColor='#FFD95A'
-                    size={userType == 3 ? 53 : 59}
+                    size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={true}
                     visible={true}
                 />
-                <InputBlock
-                    text='Confirmar Senha'
-                    color='#C07F00'
-                    textColor='#FFD95A'
-                    size={userType == 3 ? 53 : 59}
-                    centralized={0}
-                    password={true}
-                    visible={true}
-                />
-                {/* <Ionicons name="eye-outline" size={25}/> */}
             </View>
             <View style={styles.registerlayer}>
                 <Button

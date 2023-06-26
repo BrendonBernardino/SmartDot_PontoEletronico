@@ -1,0 +1,13 @@
+        <View style={styles.line} />
+        <TouchableOpacity onPress={handleIconPress(tempo_inicial_latitude, tempo_inicial_longitude)}>
+          <Ionicons name="map" size={16} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleIconPress(intervalo_inicial_latitude, intervalo_inicial_longitude)}>
+          <Ionicons name="map" size={16} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleIconPress(intervalo_final_latitude, intervalo_final_longitude)}>
+          <Ionicons name="map" size={16} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleIconPress(tempo_final_latitude, tempo_final_longitude)}>
+          <Ionicons name="map" size={16} color="white" />
+        </TouchableOpacity>
