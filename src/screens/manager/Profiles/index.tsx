@@ -1,103 +1,158 @@
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, Image, TextInput, Modal, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import FooterMenu from "../../../components/FooterMenu/manage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from "./styles";
+import { useNavigation } from "@react-navigation/native";
+import { StackTypes } from '../../../../App';
+import PerfilIdIcon from '../../../.././assets/svg/perfil_id.svg';
+import HelpIcon from '../../../.././assets/svg/help.svg';
+import LogoutIcon from '../../../.././assets/svg/logout.svg';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <View style={styles.yellowSection}>
-        <View style={styles.topRow}>
-          <Text style={styles.nameLeft}>Nome</Text>
-          <View style={styles.iconContainer}>
-            <Ionicons name="help-circle-outline" size={24} color="black" />
-            <Ionicons name="notifications-outline" size={24} color="black" />
-          </View>
-        </View>
-        <View style={styles.bottomRow}>
-          <Ionicons name="person-circle-outline" size={60} color="black" />
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>Nome do Usuário</Text>
-            <Text style={styles.userDescription}>Descrição do Usuário</Text>
-          </View>
-        </View>
-      </View>
-      <View style={styles.whiteSection}>
-        <View style={styles.row}>
-          <Text style={styles.rowText}>Nome da Linha 1</Text>
-          <Ionicons name="chevron-forward-outline" size={24} color="black" />
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.rowText}>Nome da Linha 2</Text>
-          <Ionicons name="chevron-forward-outline" size={24} color="black" />
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.rowText}>Nome da Linha 3</Text>
-          <Ionicons name="chevron-forward-outline" size={24} color="black" />
-        </View>
-      </View>
 
-      <FooterMenu leftPage="ManagerPointPresences" centerPage="ManagerCollaborators" rightPage="ManagerProfiles" />
+function Profiles() {
+    const navigation = useNavigation<StackTypes>();
+    const animation = useRef(new Animated.Value(0)).current;
 
-    </View>
-  );
+    const [name, setName] = useState('');
+    const [companyName, setCompanyName] = useState('');
+
+    const [editedName, setEditedName] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalHelpVisible, setModalHelpVisible] = useState(false);
+
+    const handleRequisition = async () => {
+        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/info';
+        console.log(apiUrl)
+
+        try {
+            const token = await AsyncStorage.getItem('token');
+
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                setName(data.name);
+                setCompanyName(data.company_name);
+
+            } else {
+                console.log('Solicitacao falhou');
+            }
+        } catch (error) {
+            // Lidar com erros de rede ou da API
+            console.log('Ocorreu um erro:', error);
+        }
+    };
+
+    useEffect(() => {
+        handleRequisition();
+    }, []);
+
+    const handleModalHelp = () => {
+        setModalHelpVisible(true);
+    };
+
+    return (
+        <View style={styles.container}>
+            <View style={[styles.yellowSection, { backgroundColor: '#FFD95A' }]}>
+                <View style={styles.topRow}>
+                    <Text style={styles.nameLeft}>GESTOR</Text>
+                    <View style={styles.iconContainer}>
+                        <TouchableOpacity onPress={handleModalHelp}>
+                            <HelpIcon width={28} height={28} marginHorizontal={5} />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Ionicons name="notifications-outline" size={24} color="black" marginHorizontal={5} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.bottomRow}>
+                    <PerfilIdIcon width={80} height={80} margin={10} />
+                    <View style={styles.userInfo}>
+                        <Text style={styles.userName}>Bom dia, {name}</Text>
+                        <Text style={styles.userDescription}>{companyName}</Text>
+                    </View>
+                </View>
+            </View>
+            <View style={styles.whiteSection}>
+                <View style={styles.settings}>
+                    <TouchableOpacity style={styles.row}>
+                        <Text style={styles.rowText} onPress={() => setModalVisible(true)}>Editar Perfil</Text>
+                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
+                    </TouchableOpacity>
+                    {/* <TouchableOpacity style={styles.row}>
+                        <Text style={styles.rowText}>Configurações</Text>
+                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row}>
+                        <Text style={styles.rowText}>Meu salário</Text>
+                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row}>
+                        <Text style={styles.rowText}>Minhas horas semanais</Text>
+                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row}>
+                        <Text style={styles.rowText}>Planejamento Entrada e Saída</Text>
+                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
+                    </TouchableOpacity> */}
+                </View>
+            </View>
+            <View style={[styles.LogoutLayer, { backgroundColor: '#FFFFFF' }]}>
+                <Image
+                    style={styles.logo}
+                    source={require('../../../../assets/Logo.png')}
+                />
+                <TouchableOpacity style={[styles.LogoutButton, { backgroundColor: "#FFD95A" }]} onPress={() => navigation.navigate("Initial")}>
+                    <LogoutIcon width={28} height={28} />
+                    <Text style={styles.LogoutText}>Sair da Conta</Text>
+                </TouchableOpacity>
+            </View>
+            <Modal visible={modalVisible} animationType="slide" transparent>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder="Digite um novo nome"
+                            value={editedName}
+                            onChangeText={setEditedName}
+                        />
+                        <TouchableOpacity
+                            style={[styles.button, styles.saveButton, { backgroundColor: '#FFD95A', }]}
+                            onPress={() => {
+                                setModalVisible(false);
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Salvar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.button, styles.cancelButton, { backgroundColor: '#4C3D3D', }]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            <Text style={styles.buttonText}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <Modal visible={modalHelpVisible} animationType="slide" transparent>
+                <View style={styles.modalContent}>
+                    <Text style={{ fontSize: 30 }}>S.O.S</Text>
+                    <TouchableOpacity
+                        style={[styles.button, styles.cancelButton, { backgroundColor: '#FFD95A' }]}
+                        onPress={() => setModalHelpVisible(false)}
+                    >
+                        <Text style={styles.buttonText}>Fechar</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+        </View>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  yellowSection: {
-    flex: 1,
-    backgroundColor: '#ffd95a',
-  },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-  },
-  nameLeft: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  nameRight: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  bottomRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-  },
-  userInfo: {
-    marginLeft: 20,
-  },
-  userName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  userDescription: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  whiteSection: {
-    flex: 3,
-    backgroundColor: 'white',
-    padding: 20,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  rowText: {
-    fontSize: 16,
-    marginRight: 10,
-  },
-});
+export default Profiles;

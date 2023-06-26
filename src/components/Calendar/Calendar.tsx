@@ -4,8 +4,8 @@ import styles from "./styles"
 import { AntDesign } from '@expo/vector-icons';
 
 interface CalendarProps {
-    onDatePress: (date: number) => void;
-}
+    onDatePress: (date: { day: number, month: number, year: number }) => void;
+  }
 
 const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -51,8 +51,8 @@ const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
                 <TouchableOpacity
                     key={day}
                     style={styles.dayContainer}
-                    onPress={() => onDatePress(day)}
-                >
+                    onPress={() => onDatePress({ day, month: currentMonth, year: currentYear })}
+                    >
                     <Text style={[styles.dayText, {fontWeight:'bold'}]}>{day}</Text>
                 </TouchableOpacity>
             );

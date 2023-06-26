@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Calendar from "../../../components/Calendar/index";
+import Calendar from "../../../components/Calendar/Calendar";
 import FooterMenu from "../../../components/FooterMenu/manage";
 import SearchBar from "../../../components/SearchBar/index";
+import CalendarIcon from '../../../../assets/svg/calendar.svg';
+
 import styles from './style';
 
 interface TimeData {
@@ -149,7 +151,8 @@ const TaskList: React.FC<TaskListProps> = () => {
         <Text style={styles.headerText}>Texto 2</Text>
       </View>
       <TouchableOpacity onPress={handleOpenModal} style={styles.headerIcon}>
-        {/* Substitua a imagem pelo ícone desejado */}
+          <CalendarIcon width={30} height={30} />
+
       </TouchableOpacity>
     </View>
   );
