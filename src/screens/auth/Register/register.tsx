@@ -87,7 +87,7 @@ function Register() {
                     color="#4C3D3D"
                     textColor="#CBE4DE"
                     centralized={1}
-                    nextPage="ClockIn"
+                    nextPage="Home"
                     borderBottomRightRadius={33}
                 />
             </View>

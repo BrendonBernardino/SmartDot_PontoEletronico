@@ -20,7 +20,7 @@ export type StackNavigation = {
   Login: undefined;
   About: undefined;
   Register: undefined;
-  ClockIn: undefined;
+  HomeTabs: undefined;
 };
 
 const Stack = createNativeStackNavigator();
@@ -31,27 +31,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen
-          name="ManagerCollaborators"
-          component={ManagerCollaborators}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }} />
-        <Stack.Screen
-          name="ManagerPointPresences"
-          component={ManagerPointPresences}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }} />
-        <Stack.Screen
-          name="ManagerProfiles"
-          component={ManagerProfiles}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }} />
         <Stack.Screen
           name="Initial"
           component={Initial}
@@ -80,15 +59,8 @@ export default function App() {
             headerShown: false,
           }} />
         <Stack.Screen
-          name="ClockIn"
-          component={ClockIn}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }} />
-        <Stack.Screen
-          name="Dashboard"
-          component={Dashboard}
+          name="HomeTabs"
+          component={HomeTabs}
           options={{
             headerBackVisible: false,
             headerShown: false,
