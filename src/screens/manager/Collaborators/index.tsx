@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import FooterMenu from "../../../components/FooterMenu/manage";
 import SearchBar from "../../../components/SearchBar/index";
 import styles from './style';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
   id: number;
@@ -71,6 +72,7 @@ const TaskList: React.FC = () => {
 
   const fetchUsers = async (name?: string) => {
     try {
+      const token = await AsyncStorage.getItem('token');
       let url = `https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users`;
 
       if (name) {
@@ -81,7 +83,7 @@ const TaskList: React.FC = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+          'Authorization': `Bearer ${token}`,
         }
       });
       const data = await response.json();
@@ -93,11 +95,12 @@ const TaskList: React.FC = () => {
 
   const removeUser = async (userId: number) => {
     try {
+      const token = await AsyncStorage.getItem('token');
       await fetch(`https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+          'Authorization': `Bearer ${token}`,
         }
       });
       setUsers(users.filter((user) => user.id !== userId));
@@ -108,13 +111,13 @@ const TaskList: React.FC = () => {
 
   const editUser = async (userId: number) => {
     try {
-      // Fetch the user data from the API for the given userId
+      const token = await AsyncStorage.getItem('token');
       const response = await fetch(`https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users?id=${userId}`,
       {
         method: 'Get',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+          'Authorization': `Bearer ${token}`
         }
       });
       const userData = await response.json();
@@ -145,13 +148,13 @@ const TaskList: React.FC = () => {
 
   const updateUser = async () => {
     try {
-      // Fetch the user data from the API for the given userId
+      const token = await AsyncStorage.getItem('token');
       const response = await fetch(`https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users/${id}`,
       {
         method: 'Put',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           start_time_hour: startTimeHour,
@@ -182,11 +185,12 @@ const TaskList: React.FC = () => {
 
   const addUser = async () => {
     try {
-      // Send a POST request to the API with the new user data
+      const token = await AsyncStorage.getItem('token');
       const response = await fetch('https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/manager/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           email,

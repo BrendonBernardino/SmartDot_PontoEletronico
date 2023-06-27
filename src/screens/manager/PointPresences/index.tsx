@@ -5,6 +5,7 @@ import Calendar from "../../../components/Calendar/Calendar";
 import FooterMenu from "../../../components/FooterMenu/manage";
 import SearchBar from "../../../components/SearchBar/index";
 import CalendarIcon from '../../../../assets/svg/calendar.svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style';
 
@@ -95,11 +96,13 @@ const TaskList: React.FC<TaskListProps> = () => {
       if (name) {
         url += `&name=${name}`;
       }
+      const token = await AsyncStorage.getItem('token');
+
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJyZW5kb25AZ21haWwuY29tIiwiZXhwIjoxNzE5MjU4NzI1fQ.9AyJA-0nmnDBmLcbBcoXqgBRqWMMRNgtQM0lXqSgcps',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -146,9 +149,9 @@ const TaskList: React.FC<TaskListProps> = () => {
         <Icon name="bars" size={24} color="black" />
       </TouchableOpacity>
       <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>Texto 1</Text>
+        <Text style={styles.headerText}>Gestor</Text>
         <View style={styles.headerDivider} />
-        <Text style={styles.headerText}>Texto 2</Text>
+        <Text style={styles.headerText}>{data}</Text>
       </View>
       <TouchableOpacity onPress={handleOpenModal} style={styles.headerIcon}>
           <CalendarIcon width={30} height={30} />
