@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Switch, Text, TextInput, TouchableOpacity, View, FlatList, Image } from 'react-native';
+import { Modal, Switch, ScrollView, Text, TextInput, TouchableOpacity, View, FlatList, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FooterMenu from "../../../components/FooterMenu/manage";
@@ -298,12 +298,14 @@ const TaskList: React.FC = () => {
       <Header />
       <SearchBar onSearch={handleSearch} />
 
-      <FlatList
-        data={users}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => <View style={styles.divider} />}
-      />
+      <ScrollView>
+        <FlatList
+          data={users}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          ItemSeparatorComponent={() => <View style={styles.divider} />}
+        />
+      </ScrollView>
 
       <Modal
         animationType="slide"
@@ -311,163 +313,166 @@ const TaskList: React.FC = () => {
         visible={modalVisible}
         onRequestClose={closeModal}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={{ fontSize: 18, marginBottom: 10 }}>Usuário:</Text>
-            <CustomTextInput
-              label="Email"
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-            />
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 1, marginRight: 10 }}>
+        <ScrollView>
+
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={{ fontSize: 18, marginBottom: 10 }}>Usuário:</Text>
               <CustomTextInput
-                label="Entrada (Hora)"
-                value={startTimeHour.toString()}
-                onChangeText={(text) => {
-                  const input = parseInt(text);
-                  if (input >= 0 && input <= 23) {
-                    setStartTimeHour(input);
-                  }
-                }}
+                label="Email"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
               />
-              </View>
-              <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 1, marginRight: 10 }}>
                 <CustomTextInput
-                  label="Entrada (Minuto)"
-                  value={startTimeMinute.toString()}
-                  onChangeText={(text) => {
-                    const input = parseInt(text);
-                    if (input >= 0 && input <= 59) {
-                      setStartTimeMinute(input);
-                    }
-                  }}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <CustomTextInput
-                  label="Intervalo Inicio (Hour)"
-                  value={initialIntervalHour.toString()}
+                  label="Entrada (Hora)"
+                  value={startTimeHour.toString()}
                   onChangeText={(text) => {
                     const input = parseInt(text);
                     if (input >= 0 && input <= 23) {
-                      setInitialIntervalHour(input);
+                      setStartTimeHour(input);
                     }
                   }}
                 />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <CustomTextInput
+                    label="Entrada (Minuto)"
+                    value={startTimeMinute.toString()}
+                    onChangeText={(text) => {
+                      const input = parseInt(text);
+                      if (input >= 0 && input <= 59) {
+                        setStartTimeMinute(input);
+                      }
+                    }}
+                  />
+                </View>
               </View>
-              <View style={{ flex: 1 }}>
-                <CustomTextInput
-                  label="Intervalo Inic. (Minuto)"
-                  value={initialIntervalMinute.toString()}
-                  onChangeText={(text) => {
-                    const input = parseInt(text);
-                    if (input >= 0 && input <= 59) {
-                      setInitialIntervalMinute(input);
-                    }
-                  }}
-                />
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <CustomTextInput
+                    label="Intervalo Inicio (Hour)"
+                    value={initialIntervalHour.toString()}
+                    onChangeText={(text) => {
+                      const input = parseInt(text);
+                      if (input >= 0 && input <= 23) {
+                        setInitialIntervalHour(input);
+                      }
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <CustomTextInput
+                    label="Intervalo Inic. (Minuto)"
+                    value={initialIntervalMinute.toString()}
+                    onChangeText={(text) => {
+                      const input = parseInt(text);
+                      if (input >= 0 && input <= 59) {
+                        setInitialIntervalMinute(input);
+                      }
+                    }}
+                  />
+                </View>
               </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <CustomTextInput
-                  label="Intervalo Final (Hora)"
-                  value={finalIntervalHour.toString()}
-                  onChangeText={(text) => {
-                    const input = parseInt(text);
-                    if (input >= 0 && input <= 23) {
-                      setFinalIntervalHour(input);
-                    }
-                  }}
-                />
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <CustomTextInput
+                    label="Intervalo Final (Hora)"
+                    value={finalIntervalHour.toString()}
+                    onChangeText={(text) => {
+                      const input = parseInt(text);
+                      if (input >= 0 && input <= 23) {
+                        setFinalIntervalHour(input);
+                      }
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <CustomTextInput
+                    label="Intervalo Final (Minuto)"
+                    value={finalIntervalMinute.toString()}
+                    onChangeText={(text) => {
+                      const input = parseInt(text);
+                      if (input >= 0 && input <= 59) {
+                        setFinalIntervalMinute(input);
+                      }
+                    }}
+                  />
+                </View>
               </View>
-              <View style={{ flex: 1 }}>
-                <CustomTextInput
-                  label="Intervalo Final (Minuto)"
-                  value={finalIntervalMinute.toString()}
-                  onChangeText={(text) => {
-                    const input = parseInt(text);
-                    if (input >= 0 && input <= 59) {
-                      setFinalIntervalMinute(input);
-                    }
-                  }}
-                />
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 1, marginRight: 10 }}>
+                  <CustomTextInput
+                    label="Saída (Hora)"
+                    value={finalTimeHour.toString()}
+                    onChangeText={(text) => {
+                      const input = parseInt(text);
+                      if (input >= 0 && input <= 23) {
+                        setFinalTimeHour(input);
+                      }
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <CustomTextInput
+                    label="Saída (Minuto)"
+                    value={finalTimeMinute.toString()}
+                    onChangeText={(text) => {
+                      const input = parseInt(text);
+                      if (input >= 0 && input <= 59) {
+                        setFinalTimeMinute(input);
+                      }
+                    }}
+                  />
+                </View>
               </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 1, marginRight: 10 }}>
-                <CustomTextInput
-                  label="Saída (Hora)"
-                  value={finalTimeHour.toString()}
-                  onChangeText={(text) => {
-                    const input = parseInt(text);
-                    if (input >= 0 && input <= 23) {
-                      setFinalTimeHour(input);
-                    }
-                  }}
-                />
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ marginRight: 10 }}>Segunda:</Text>
+                <Switch value={monday} onValueChange={setMonday} />
               </View>
-              <View style={{ flex: 1 }}>
-                <CustomTextInput
-                  label="Saída (Minuto)"
-                  value={finalTimeMinute.toString()}
-                  onChangeText={(text) => {
-                    const input = parseInt(text);
-                    if (input >= 0 && input <= 59) {
-                      setFinalTimeMinute(input);
-                    }
-                  }}
-                />
+
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ marginRight: 10 }}>Terça:</Text>
+                <Switch value={tuesday} onValueChange={setTuesday} />
               </View>
+
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ marginRight: 10 }}>Quarta:</Text>
+                <Switch value={wednesday} onValueChange={setWednesday} />
+              </View>
+
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ marginRight: 10 }}>Quinta:</Text>
+                <Switch value={thursday} onValueChange={setThursday} />
+              </View>
+
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ marginRight: 10 }}>Sexta:</Text>
+                <Switch value={friday} onValueChange={setFriday} />
+              </View>
+
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ marginRight: 10 }}>Sábado:</Text>
+                <Switch value={saturday} onValueChange={setSaturday} />
+              </View>
+
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={{ marginRight: 10 }}>Domingo:</Text>
+                <Switch value={sunday} onValueChange={setSunday} />
+              </View>
+
+
+              <TouchableOpacity onPress={saveButton} style={{ backgroundColor: '#c88f20', padding: 10, borderRadius: 5 }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>Salvar</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={closeModal} style={{ marginTop: 10 }}>
+                <Text style={{ color: 'blue', textAlign: 'center' }}>Fechar</Text>
+              </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <Text style={{ marginRight: 10 }}>Segunda:</Text>
-              <Switch value={monday} onValueChange={setMonday} />
-            </View>
-
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <Text style={{ marginRight: 10 }}>Terça:</Text>
-              <Switch value={tuesday} onValueChange={setTuesday} />
-            </View>
-
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <Text style={{ marginRight: 10 }}>Quarta:</Text>
-              <Switch value={wednesday} onValueChange={setWednesday} />
-            </View>
-
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <Text style={{ marginRight: 10 }}>Quinta:</Text>
-              <Switch value={thursday} onValueChange={setThursday} />
-            </View>
-
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <Text style={{ marginRight: 10 }}>Sexta:</Text>
-              <Switch value={friday} onValueChange={setFriday} />
-            </View>
-
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <Text style={{ marginRight: 10 }}>Sábado:</Text>
-              <Switch value={saturday} onValueChange={setSaturday} />
-            </View>
-
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <Text style={{ marginRight: 10 }}>Domingo:</Text>
-              <Switch value={sunday} onValueChange={setSunday} />
-            </View>
-
-
-            <TouchableOpacity onPress={saveButton} style={{ backgroundColor: '#c88f20', padding: 10, borderRadius: 5 }}>
-              <Text style={{ color: 'white', textAlign: 'center' }}>Salvar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={closeModal} style={{ marginTop: 10 }}>
-              <Text style={{ color: 'blue', textAlign: 'center' }}>Fechar</Text>
-            </TouchableOpacity>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
 
       <TouchableOpacity

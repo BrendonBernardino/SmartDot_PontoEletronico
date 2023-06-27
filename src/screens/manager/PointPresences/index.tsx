@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Calendar from "../../../components/Calendar/Calendar";
 import FooterMenu from "../../../components/FooterMenu/manage";
@@ -165,12 +165,13 @@ const TaskList: React.FC<TaskListProps> = () => {
       <Header />
       <SearchBar onSearch={handleSearch} />
 
-      <View style={styles.containerCard}>
-        {jsonData.map((taskData, index) => (
-          <TaskCard key={index} taskData={taskData} index={index} />
-        ))}
-      </View>
-
+      <ScrollView>
+        <View style={styles.containerCard}>
+          {jsonData.map((taskData, index) => (
+            <TaskCard key={index} taskData={taskData} index={index} />
+          ))}
+        </View>
+      </ScrollView>
       <FooterMenu leftPage="ManagerPointPresences" centerPage="ManagerCollaborators" rightPage="ManagerProfiles" />
 
       <Modal
