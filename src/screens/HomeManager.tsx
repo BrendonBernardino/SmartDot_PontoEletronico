@@ -8,8 +8,8 @@ import ManagerCollaborators from "./manager/Collaborators/index";
 import ManagerPointPresences from "./manager/PointPresences/index";
 import ManagerProfiles from "./manager/Profiles/index";
 
-import ClockInIcon from '../.././assets/svg/clockin.svg';
 import DashIcon from '../.././assets/svg/dashboard.svg';
+import EmployeeIcon from '../.././assets/svg/colaborador.svg';
 import PerfilIcon from '../.././assets/svg/person.svg';
 
 const Tab = createBottomTabNavigator();
@@ -50,7 +50,7 @@ function HomeManger() {
                   animation="zoomIn"
                   duration={2000}
                 >
-                  <ClockInIcon
+                  <DashIcon
                     style={styles.iconFooter}
                     color={color}
                     width={size}
@@ -64,7 +64,7 @@ function HomeManger() {
                 animation="zoomIn"
                 duration={2000}
               >
-                <ClockInIcon
+                <DashIcon
                   style={styles.iconFooter}
                   color={color}
                   width={size}
@@ -89,7 +89,7 @@ function HomeManger() {
                   animation="zoomIn"
                   duration={2000}
                 >
-                  <DashIcon
+                  <EmployeeIcon
                     style={styles.iconFooter}
                     color={color}
                     width={size}
@@ -103,7 +103,7 @@ function HomeManger() {
                 animation="zoomIn"
                 duration={2000}
               >
-                <DashIcon
+                <EmployeeIcon
                   style={styles.iconFooter}
                   color={color}
                   width={size}

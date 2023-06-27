@@ -112,6 +112,15 @@ function ClockIn() {
     useEffect(() => {
         getDayWeek();
         handleRequisition();
+        console.log('entrada planejada:' + entradaplanned);
+        console.log('intervalo ini planejada:' + intervalInicioplanned);
+        console.log('intervalo fim planejada:' + intervalFimplanned);
+        console.log('saida planejada:' + saidaplanned);
+        console.log('entrada real:' + entradaReal);
+        console.log('intervalo ini real:' + intervaloInicioReal);
+        console.log('intervalo fim real:' + intervaloFimReal);
+        console.log('saida real:' + saidaReal);
+        console.log('tempo total:' + tempoTotal);
         checkIntervalIsOpen();
         tempoTotalSlicer();
     }, []);
@@ -139,22 +148,16 @@ function ClockIn() {
                 setIntervalInicioplanned(data[0].intervalo_inicial.padrao);//data[0].intervalo_inicial.padrao
                 setIntervalFimplanned(data[0].intervalo_final.padrao);//data[0].intervalo_final.padrao
                 setSaidaplanned(data[0].tempo_final.padrao);
-                console.log('entrada planejada:' + entradaplanned);
-                console.log('intervalo ini planejada:' + intervalInicioplanned);
-                console.log('intervalo fim planejada:' + intervalFimplanned);
-                console.log('saida planejada:' + saidaplanned);
+                
 
                 setEntradaReal(data[0].tempo_inicial.real);
                 setintervaloInicioReal('');//data[0].intervalo_inicial.real
                 setintervaloFimReal('');//data[0].intervalo_final.real
                 setSaidaReal(data[0].tempo_final.real);
-                console.log('entrada real:' + entradaReal);
-                console.log('intervalo ini real:' + intervaloInicioReal);
-                console.log('intervalo fim real:' + intervaloFimReal);
-                console.log('saida real:' + saidaReal);
+                
 
                 setTempoTotal(data[0].tempo_total);
-                console.log('tempo total:' + tempoTotal);
+                
 
             } else {
                 console.log('Solicitacao falhou');
@@ -174,30 +177,30 @@ function ClockIn() {
         setModalPontoVisible(false);
         if (cardPontoType == 1) {
             setEntradaReal(getCurrentTime);
+            getGeolocalization();
             console.log('Entrada: ');
             console.log(entradaReal);
-            getGeolocalization();
             // handlePOSTapi();
         }
         if (cardPontoType == 2) {
             setintervaloInicioReal(getCurrentTime);
+            getGeolocalization();
             console.log('Intervalo Inicio: ');
             console.log(intervaloInicioReal);
-            getGeolocalization();
             // handlePOSTapi();
         }
         if (cardPontoType == 3) {
             setintervaloFimReal(getCurrentTime);
+            getGeolocalization();
             console.log('Intervalo Fim: ');
             console.log(intervaloFimReal);
-            getGeolocalization();
             // handlePOSTapi();
         }
         if (cardPontoType == 4) {
             setSaidaReal(getCurrentTime);
+            getGeolocalization();
             console.log('Saida: ');
             console.log(saidaReal);
-            getGeolocalization();
             // handlePOSTapi();
         }
     };
