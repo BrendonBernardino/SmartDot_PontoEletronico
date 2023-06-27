@@ -51,8 +51,8 @@ function ClockIn() {
 
     const [cardPontoType, setCardPontoType] = useState(0);
 
-    const [myLatitude, setMyLatitude] = useState(-3.824426321813534);
-    const [myLongitude, setMyLongitude] = useState(-38.48832181744508);
+    const [myLatitude, setMyLatitude] = useState(-3.7448854253797106);
+    const [myLongitude, setMyLongitude] = useState(-38.57811524276128);
 
     const geoLocalization: number[] = [2];
 
@@ -414,17 +414,18 @@ function ClockIn() {
                             style={styles.map2}
                             initialRegion={{
                                 // -3.824426321813534, -38.48832181744508
-                                latitude: -3.824426321813534,
-                                longitude: -38.48832181744508,
+                                //  -3.7448854253797106, -38.57811524276128
+                                latitude: myLatitude,
+                                longitude: myLongitude,
                                 latitudeDelta: 0.0022,
                                 longitudeDelta: 0.0021,
                             }}
                         >
                             <Marker
-                                coordinate={{ latitude: -3.824426321813534, longitude: -38.48832181744508 }}
+                                coordinate={{ latitude: myLatitude, longitude: myLongitude }}
                             />
                             <Circle
-                                center={{ latitude: -3.824426321813534, longitude: -38.48832181744508 }}
+                                center={{ latitude: myLatitude, longitude: myLongitude }}
                                 radius={80}
                             />
                         </MapView>
