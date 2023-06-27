@@ -298,14 +298,12 @@ const TaskList: React.FC = () => {
       <Header />
       <SearchBar onSearch={handleSearch} />
 
-      <ScrollView>
-        <FlatList
-          data={users}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => <View style={styles.divider} />}
-        />
-      </ScrollView>
+      <FlatList
+        data={users}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        ItemSeparatorComponent={() => <View style={styles.divider} />}
+      />
 
       <Modal
         animationType="slide"
