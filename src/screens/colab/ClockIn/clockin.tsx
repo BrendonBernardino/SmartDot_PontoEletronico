@@ -1,4 +1,4 @@
-import { Text, View, Image, TouchableNativeFeedback, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, PermissionsAndroid, TouchableOpacity, Modal } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CheckBox from 'expo-checkbox';
 import { AntDesign } from '@expo/vector-icons';
@@ -17,6 +17,10 @@ import ClimbingIcon from '../../../../assets/svg/homem_subindo_escadas.svg';
 import Calendar from "../../../components/Calendar/Calendar";
 import FingerprintIcon from '../../../../assets/svg/fingerprint.svg';
 import PinIcon from '../../../../assets/svg/pin.svg';
+import Toast from 'react-native-toast-message'
+
+import * as Location from 'expo-location';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 
 
@@ -51,10 +55,13 @@ function ClockIn() {
 
     const [cardPontoType, setCardPontoType] = useState(0);
 
-    const [myLatitude, setMyLatitude] = useState(-3.7448854253797106);
-    const [myLongitude, setMyLongitude] = useState(-38.57811524276128);
+    const [myLatitude, setMyLatitude] = useState(0);
+    const [myLongitude, setMyLongitude] = useState(0);
+    const [location, setLocation] = useState(null);
+    const [streetName, setStreetName] = useState(null);
+    const apiKey = 'AIzaSyAdt_pKKCXJSEQKbiosdO_F26gtonhpROI';
 
-    const geoLocalization: number[] = [2];
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 
     const date = new Date();
@@ -73,12 +80,65 @@ function ClockIn() {
         return `${hour}:${minute}`;
     };
 
-    function getGeolocalization() {
-        geoLocalization.push(myLatitude);
-        geoLocalization.push(myLongitude);
-        console.log('Localização: ');
-        console.log(geoLocalization[1]);
-        console.log(geoLocalization[2]);
+    const getCurrentLocation = () => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Permissão para acessar a localização foi negada.'
+                })
+                //   setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            Toast.show({
+                type: 'success',
+                text1: 'Geolocalização obtida!'
+            })
+            setLocation(location);
+            console.log(JSON.stringify(location));
+            setMyLatitude(location.coords.latitude != null ? location.coords.latitude : 0);
+            setMyLongitude(location.coords.longitude != null ? location.coords.longitude : 0);
+        })();
+    }
+
+    const searchStreetName = async () => {
+        try {
+            const response = await fetch(
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${myLatitude},${myLongitude}&key=${apiKey}`
+            );
+
+            const data = await response.json();
+            console.log(data);
+            if (data.results && data.results.length > 0) {
+                const result = data.results[0];
+                const street = result.formatted_address;
+                setStreetName(street);
+                console.log(street);
+                console.log(streetName);
+            }
+        } catch (error) {
+            console.log('Error occurred while searching for street name:', error);
+        }
+    };
+
+    async function handleAuthentication() {
+        const isBiometricEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+        if (!isBiometricEnrolled) {
+            return Toast.show({
+                type: 'error',
+                text1: 'Nenhuma biometria encontrada. Cadastre uma.'
+            })
+        }
+
+        const auth = await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Bater Ponto com Biometria',
+            fallbackLabel: 'Biometria não reconhecida'
+        });
+        console.log(auth.success);
+        setIsAuthenticated(auth.success);
     }
 
     function getDayWeek() {
@@ -98,19 +158,9 @@ function ClockIn() {
             setDayWeek('Sábado');
     }
 
-    // useEffect(() => {
-    //     getMyLocation()
-    // }, [])
-
-    // function getMyLocation() {
-    //     Geolocation.getCurrentPosition(info => {
-    //         console.log('LAT ', info.coords.latitude)
-    //         console.log('LON ', info.coords.longitude)
-    //     })
-    // }
-
     useEffect(() => {
         getDayWeek();
+        getCurrentLocation();
         handleRequisition();
         console.log('entrada planejada:' + entradaplanned);
         console.log('intervalo ini planejada:' + intervalInicioplanned);
@@ -124,6 +174,9 @@ function ClockIn() {
         checkIntervalIsOpen();
         tempoTotalSlicer();
     }, []);
+
+    useEffect(() => {
+    }, [isAuthenticated]);
 
     const handleRequisition = async () => {
         const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';
@@ -143,65 +196,85 @@ function ClockIn() {
             console.log(currentDate)
             if (response.ok) {
                 const data = await response.json();
+                Toast.show({
+                    type: 'success',
+                    text1: 'Seja Bem-Vindo Colaborador!'
+                })
                 console.log(data);
                 setEntradaplanned(data[0].tempo_inicial.padrao);
                 setIntervalInicioplanned(data[0].intervalo_inicial.padrao);//data[0].intervalo_inicial.padrao
                 setIntervalFimplanned(data[0].intervalo_final.padrao);//data[0].intervalo_final.padrao
                 setSaidaplanned(data[0].tempo_final.padrao);
-                
+
 
                 setEntradaReal(data[0].tempo_inicial.real);
                 setintervaloInicioReal('');//data[0].intervalo_inicial.real
                 setintervaloFimReal('');//data[0].intervalo_final.real
                 setSaidaReal(data[0].tempo_final.real);
-                
+
 
                 setTempoTotal(data[0].tempo_total);
-                
+
 
             } else {
                 console.log('Solicitacao falhou');
+                Toast.show({
+                    type: 'error',
+                    text1: 'Não foi possível puxar suas informações da API. Desculpe o transtorno.'
+                })
             }
         } catch (error) {
             // Lidar com erros de rede ou da API
             console.log('Ocorreu um erro:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Falha na solicitação da API.'
+            })
         }
     };
 
     const handleBaterPontoPress = (index: number) => {
         setModalPontoVisible(true);
         setCardPontoType(index);
+        // getCurrentLocation();
+        console.log(myLatitude);
+        console.log(myLongitude);
+        searchStreetName();
     };
 
-    const handlePontoBatido = () => {
+    const handlePontoAuth = () => {
         setModalPontoVisible(false);
-        if (cardPontoType == 1) {
-            setEntradaReal(getCurrentTime);
-            getGeolocalization();
-            console.log('Entrada: ');
-            console.log(entradaReal);
-            // handlePOSTapi();
-        }
-        if (cardPontoType == 2) {
-            setintervaloInicioReal(getCurrentTime);
-            getGeolocalization();
-            console.log('Intervalo Inicio: ');
-            console.log(intervaloInicioReal);
-            // handlePOSTapi();
-        }
-        if (cardPontoType == 3) {
-            setintervaloFimReal(getCurrentTime);
-            getGeolocalization();
-            console.log('Intervalo Fim: ');
-            console.log(intervaloFimReal);
-            // handlePOSTapi();
-        }
-        if (cardPontoType == 4) {
-            setSaidaReal(getCurrentTime);
-            getGeolocalization();
-            console.log('Saida: ');
-            console.log(saidaReal);
-            // handlePOSTapi();
+        handleAuthentication();
+        console.log('cardPontoType: '+cardPontoType)
+        if (isAuthenticated == true) {
+            if (cardPontoType == 1) {
+                setEntradaReal(getCurrentTime);
+                console.log('Entrada: ');
+                console.log(entradaReal);
+                setIsAuthenticated(false);
+                // handlePOSTapi();
+            }
+            if (cardPontoType == 2) {
+                setintervaloInicioReal(getCurrentTime);
+                console.log('Intervalo Inicio: ');
+                console.log(intervaloInicioReal);
+                setIsAuthenticated(false);
+                // handlePOSTapi();
+            }
+            if (cardPontoType == 3) {
+                setintervaloFimReal(getCurrentTime);
+                console.log('Intervalo Fim: ');
+                console.log(intervaloFimReal);
+                setIsAuthenticated(false);
+                // handlePOSTapi();
+            }
+            if (cardPontoType == 4) {
+                setSaidaReal(getCurrentTime);
+                console.log('Saida: ');
+                console.log(saidaReal);
+                setIsAuthenticated(false);
+                // handlePOSTapi();
+            }
         }
     };
 
@@ -429,11 +502,11 @@ function ClockIn() {
                                 radius={80}
                             />
                         </MapView>
-                        <Text style={styles.addressText}>123 Main St, City</Text>
+                        <Text style={styles.addressText}>{streetName}</Text>
                         <View style={styles.pin}>
                             <PinIcon width={30} height={30} color='#C07F00' />
                         </View>
-                        <TouchableOpacity style={[styles.fingerprint, { borderColor: '#C07F00' }]} onPress={handlePontoBatido}>
+                        <TouchableOpacity style={[styles.fingerprint, { borderColor: '#C07F00' }]} onPress={handlePontoAuth}>
                             <FingerprintIcon width={50} height={50} color='#C07F00' />
                         </TouchableOpacity>
                         <TouchableOpacity

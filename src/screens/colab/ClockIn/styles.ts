@@ -126,10 +126,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
     },
-    addressText: {
-        flex: 1,
-        marginRight: 10,
-    },
+    // addressText: {
+    //     flex: 1,
+    //     marginRight: 10,
+    // },
     bottomRowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -163,10 +163,12 @@ const styles = StyleSheet.create({
     pin: {
         position: 'absolute',
         bottom: 170,
-        right: 30,
+        right: 15,
     },
     addressText: {
-        marginBottom: 30,
+        marginBottom: 10,
+        marginRight: 20,
+        width:'80%',
         color: 'white',
         fontSize: 20,
     },

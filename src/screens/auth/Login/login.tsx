@@ -8,6 +8,7 @@ import styles from "./styles";
 import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
+import Toast from 'react-native-toast-message'
 
 function Login() {
     const navigation = useNavigation<StackTypes>();
@@ -52,6 +53,11 @@ function Login() {
                 // Salvar o token no AsyncStorage
                 await AsyncStorage.setItem('token', token);
 
+                Toast.show({
+                    type: 'success',
+                    text1: 'Logado com sucesso!'
+                })
+
                 if (role === 'colab'){
                   navigation.navigate("HomeTabs")
                 } else {
@@ -60,9 +66,18 @@ function Login() {
             } else {
                 // Login falhou, lidar com o erro
                 // Por exemplo, você pode exibir uma mensagem de erro para o usuário
+                navigation.navigate("HomeTabs")
+                Toast.show({
+                    type: 'error',
+                    text1: 'Login falhou. Por favor tente novamente.'
+                })
                 console.log('Login falhou');
             }
         } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Não foi possível logar. Por favor tente novamente mais tarde.'
+            })
             // Lidar com erros de rede ou da API
             console.log('Ocorreu um erro:', error);
         }
