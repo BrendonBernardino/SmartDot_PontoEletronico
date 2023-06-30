@@ -28,7 +28,7 @@ function Dashboard() {
     };
 
     const handleRequisition = async () => {
-        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/collaborator/dashboards';
+        const apiUrl = 'https://07be-2804-d4b-7aa4-c00-777e-3364-c647-4e66.ngrok-free.app/collaborator/dashboards';
         console.log(apiUrl)
 
         setSyncTime(getCurrentTime());

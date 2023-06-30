@@ -28,7 +28,7 @@ function Login() {
     };
 
     const handleLogin = async () => {
-        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/login'
+        const apiUrl = 'https://07be-2804-d4b-7aa4-c00-777e-3364-c647-4e66.ngrok-free.app/login'
         const credentials = {
             email: usernameOrEmail,
             password: password,
@@ -66,7 +66,7 @@ function Login() {
             } else {
                 // Login falhou, lidar com o erro
                 // Por exemplo, você pode exibir uma mensagem de erro para o usuário
-                navigation.navigate("HomeTabs")
+                // navigation.navigate("HomeTabs")
                 Toast.show({
                     type: 'error',
                     text1: 'Login falhou. Por favor tente novamente.'

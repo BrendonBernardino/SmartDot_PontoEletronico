@@ -49,6 +49,8 @@ function ClockIn() {
     const [intervaloFimReal, setintervaloFimReal] = useState("");
     const [saidaReal, setSaidaReal] = useState("");
 
+    const [scheduleTime, setScheduleTime] = useState("");
+
     const [tempoTotal, setTempoTotal] = useState("");
     const [horaTotal, setHoraTotal] = useState('');
     const [minTotal, setMinTotal] = useState('');
@@ -115,7 +117,7 @@ function ClockIn() {
                 const result = data.results[0];
                 const street = result.formatted_address;
                 setStreetName(street);
-                console.log(street);
+                // console.log(street);
                 console.log(streetName);
             }
         } catch (error) {
@@ -124,6 +126,8 @@ function ClockIn() {
     };
 
     async function handleAuthentication() {
+        console.log('========handleAuthentication========')
+        setIsAuthenticated(false);
         const isBiometricEnrolled = await LocalAuthentication.isEnrolledAsync();
 
         if (!isBiometricEnrolled) {
@@ -132,13 +136,63 @@ function ClockIn() {
                 text1: 'Nenhuma biometria encontrada. Cadastre uma.'
             })
         }
-
+        console.log('isAuthenticated: '+isAuthenticated);
         const auth = await LocalAuthentication.authenticateAsync({
             promptMessage: 'Bater Ponto com Biometria',
             fallbackLabel: 'Biometria não reconhecida'
         });
-        console.log(auth.success);
+        console.log(auth);
         setIsAuthenticated(auth.success);
+        console.log('Autenticacao: '+auth.success);
+        console.log('isAuthenticated: '+isAuthenticated);
+        if(isAuthenticated == true) {
+            clockIn();
+        }
+    }
+
+    function showCardPontos() {
+        return (
+            <View style={styles.cardslayer}>
+                <CardPonto
+                    cardType={1}
+                    ponto={entradaReal}
+                    color='#FFD95A'
+                    textColor='black'
+                    clockin={false}
+                    planned={entradaplanned}
+                    intervalAtived={true}
+                    onBaterPontoPress={() => handleBaterPontoPress(1)}
+                />
+                <CardPonto
+                    cardType={2}
+                    ponto={intervaloInicioReal}
+                    color='#FFF7D4'
+                    textColor='black'
+                    clockin={false}
+                    intervalAtived={interval_Atived}
+                    onBaterPontoPress={() => handleBaterPontoPress(2)}
+                />
+                <CardPonto
+                    cardType={3}
+                    ponto={intervaloFimReal}
+                    color='#FFD95A'
+                    textColor='black'
+                    clockin={false}
+                    intervalAtived={interval_Atived}
+                    onBaterPontoPress={() => handleBaterPontoPress(3)}
+                />
+                <CardPonto
+                    cardType={4}
+                    ponto={saidaReal}
+                    color='#FFF7D4'
+                    textColor='black'
+                    clockin={false}
+                    planned={saidaplanned}
+                    intervalAtived={true}
+                    onBaterPontoPress={() => handleBaterPontoPress(4)}
+                />
+            </View>
+        )
     }
 
     function getDayWeek() {
@@ -176,10 +230,18 @@ function ClockIn() {
     }, []);
 
     useEffect(() => {
-    }, [isAuthenticated]);
+        if(isAuthenticated == true) {
+            clockIn();
+        }
+        showCardPontos();
+    }, [isAuthenticated, entradaReal, intervaloInicioReal, intervaloFimReal, saidaReal]);
+
+    useEffect(() => {
+        handleUpdate();
+    }, [scheduleTime]);
 
     const handleRequisition = async () => {
-        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';
+        const apiUrl = 'https://07be-2804-d4b-7aa4-c00-777e-3364-c647-4e66.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';
         console.log(apiUrl)
 
         try {
@@ -233,6 +295,59 @@ function ClockIn() {
         }
     };
 
+    const handleUpdate = async () => {
+        console.log('scheduleTime: '+scheduleTime);
+        const apiUrl = 'https://07be-2804-d4b-7aa4-c00-777e-3364-c647-4e66.ngrok-free.app/login'
+        const credentials = {
+            schedule_time: scheduleTime,
+            latitude: myLatitude,
+            longitude: myLongitude,
+            local_name: streetName,
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(credentials)
+            });
+
+            console.log(scheduleTime)
+            console.log(myLatitude)
+            console.log(myLongitude)
+            console.log(streetName)
+            if (response.ok) {
+                const data = await response.json();
+                const token = data.token;
+                console.log(data.status);
+
+                // Salvar o token no AsyncStorage
+                await AsyncStorage.setItem('token', token);
+
+                Toast.show({
+                    type: 'success',
+                    text1: 'Ponto cadastrado!'
+                })
+
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Erro ao cadastrar ponto.'
+                })
+                console.log('Cadastro de Ponto falhou');
+            }
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Não foi possível registrar seu ponto.'
+            })
+            // Lidar com erros de rede ou da API
+            console.log('Ocorreu um erro:', error);
+        }
+    };
+
     const handleBaterPontoPress = (index: number) => {
         setModalPontoVisible(true);
         setCardPontoType(index);
@@ -243,40 +358,53 @@ function ClockIn() {
     };
 
     const handlePontoAuth = () => {
+        console.log('========handlePontoAuth========')
         setModalPontoVisible(false);
+        setIsAuthenticated(false);
         handleAuthentication();
-        console.log('cardPontoType: '+cardPontoType)
-        if (isAuthenticated == true) {
-            if (cardPontoType == 1) {
-                setEntradaReal(getCurrentTime);
-                console.log('Entrada: ');
-                console.log(entradaReal);
-                setIsAuthenticated(false);
-                // handlePOSTapi();
-            }
-            if (cardPontoType == 2) {
-                setintervaloInicioReal(getCurrentTime);
-                console.log('Intervalo Inicio: ');
-                console.log(intervaloInicioReal);
-                setIsAuthenticated(false);
-                // handlePOSTapi();
-            }
-            if (cardPontoType == 3) {
-                setintervaloFimReal(getCurrentTime);
-                console.log('Intervalo Fim: ');
-                console.log(intervaloFimReal);
-                setIsAuthenticated(false);
-                // handlePOSTapi();
-            }
-            if (cardPontoType == 4) {
-                setSaidaReal(getCurrentTime);
-                console.log('Saida: ');
-                console.log(saidaReal);
-                setIsAuthenticated(false);
-                // handlePOSTapi();
-            }
-        }
+        // console.log('cardPontoType: '+cardPontoType)
+        // console.log('isAuthenticated: '+isAuthenticated)
     };
+
+    function clockIn() {
+        console.log('========clockIn========')
+        if (cardPontoType == 1) {
+            setEntradaReal(getCurrentTime);
+            setScheduleTime(entradaReal);
+            console.log('Entrada: ');
+            console.log(entradaReal);
+            setIsAuthenticated(false);
+            console.log('isAuthenticated: '+isAuthenticated)
+            // handleUpdate();
+        }
+        if (cardPontoType == 2) {
+            setintervaloInicioReal(getCurrentTime);
+            setScheduleTime(intervaloInicioReal);
+            console.log('Intervalo Inicio: ');
+            console.log(intervaloInicioReal);
+            setIsAuthenticated(false);
+            console.log('isAuthenticated: '+isAuthenticated)
+            // handleUpdate();
+        }
+        if (cardPontoType == 3) {
+            setintervaloFimReal(getCurrentTime);
+            setScheduleTime(intervaloFimReal);
+            console.log('Intervalo Fim: ');
+            console.log(intervaloFimReal);
+            setIsAuthenticated(false);
+            console.log('isAuthenticated: '+isAuthenticated)
+            // handleUpdate();
+        }
+        if (cardPontoType == 4) {
+            setSaidaReal(getCurrentTime);
+            setScheduleTime(saidaReal);
+            console.log('Saida: ');
+            console.log(saidaReal);
+            setIsAuthenticated(false);
+            console.log('isAuthenticated: '+isAuthenticated)
+            // handleUpdate();
+        }
+    }
 
     function checkIntervalIsOpen() {
         if (intervalInicioplanned == '' && intervalFimplanned == '') { //não tem intervalo
@@ -390,46 +518,7 @@ function ClockIn() {
                     <CalendarIcon width={30} height={30} />
                 </TouchableOpacity>
             </View>
-            <View style={styles.cardslayer}>
-                <CardPonto
-                    cardType={1}
-                    ponto={entradaReal}
-                    color='#FFD95A'
-                    textColor='black'
-                    clockin={false}
-                    planned={entradaplanned}
-                    intervalAtived={true}
-                    onBaterPontoPress={() => handleBaterPontoPress(1)}
-                />
-                <CardPonto
-                    cardType={2}
-                    ponto={intervaloInicioReal}
-                    color='#FFF7D4'
-                    textColor='black'
-                    clockin={false}
-                    intervalAtived={interval_Atived}
-                    onBaterPontoPress={() => handleBaterPontoPress(2)}
-                />
-                <CardPonto
-                    cardType={3}
-                    ponto={intervaloFimReal}
-                    color='#FFD95A'
-                    textColor='black'
-                    clockin={false}
-                    intervalAtived={interval_Atived}
-                    onBaterPontoPress={() => handleBaterPontoPress(3)}
-                />
-                <CardPonto
-                    cardType={4}
-                    ponto={saidaReal}
-                    color='#FFF7D4'
-                    textColor='black'
-                    clockin={false}
-                    planned={saidaplanned}
-                    intervalAtived={true}
-                    onBaterPontoPress={() => handleBaterPontoPress(4)}
-                />
-            </View>
+            {showCardPontos()}
             {switchAvailable()}
             <View style={styles.statuslayer}>
                 {DailyJourneyActivated()}
