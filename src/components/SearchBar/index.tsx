@@ -23,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           backgroundColor: '#FFF7D4',
           borderRadius: 20,
           paddingHorizontal: 10,
-          borderWidth: 1,
+          // borderWidth: 1,
           borderColor: 'gray',
           flex: 1,
         }}

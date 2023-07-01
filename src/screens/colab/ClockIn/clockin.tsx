@@ -61,7 +61,7 @@ function ClockIn() {
     const [myLongitude, setMyLongitude] = useState(0);
     const [location, setLocation] = useState(null);
     const [streetName, setStreetName] = useState(null);
-    const apiKey = 'AIzaSyAdt_pKKCXJSEQKbiosdO_F26gtonhpROI';
+    const apiKey = 'AIzaSyAdt_pKKCXJSEQKbiosdO_F26gtonhpROI'; //Key do Google Maps
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -86,18 +86,18 @@ function ClockIn() {
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Permissão para acessar a localização foi negada.'
-                })
+                // Toast.show({
+                //     type: 'error',
+                //     text1: 'Permissão para acessar a localização foi negada.'
+                // })
                 //   setErrorMsg('Permission to access location was denied');
                 return;
             }
             let location = await Location.getCurrentPositionAsync({});
-            Toast.show({
-                type: 'success',
-                text1: 'Geolocalização obtida!'
-            })
+            // Toast.show({
+            //     type: 'success',
+            //     text1: 'Geolocalização obtida!'
+            // })
             setLocation(location);
             console.log(JSON.stringify(location));
             setMyLatitude(location.coords.latitude != null ? location.coords.latitude : 0);
@@ -236,9 +236,9 @@ function ClockIn() {
         showCardPontos();
     }, [isAuthenticated, entradaReal, intervaloInicioReal, intervaloFimReal, saidaReal]);
 
-    useEffect(() => {
-        handleUpdate();
-    }, [scheduleTime]);
+    // useEffect(() => {
+    //     handleUpdate();
+    // }, [scheduleTime]);
 
     const handleRequisition = async () => {
         const apiUrl = 'https://07be-2804-d4b-7aa4-c00-777e-3364-c647-4e66.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';

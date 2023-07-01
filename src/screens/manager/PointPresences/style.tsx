@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,12 +10,25 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  headerlayer: {
+    flex: 0.3,
+    alignItems: "center",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    width: '100%',
+  },
+  header: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: '50%',
+  },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     marginBottom: 10,
+    marginTop: 40,
   },
   headerIcon: {
     padding: 10,

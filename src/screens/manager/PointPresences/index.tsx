@@ -6,6 +6,7 @@ import FooterMenu from "../../../components/FooterMenu/manage";
 import SearchBar from "../../../components/SearchBar/index";
 import CalendarIcon from '../../../../assets/svg/calendar.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ListIcon from '../../../../assets/svg/lista.svg';
 
 import styles from './style';
 
@@ -82,12 +83,21 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData, index }) => {
   );
 };
 
-interface TaskListProps {}
+interface TaskListProps { }
 
 const TaskList: React.FC<TaskListProps> = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [jsonData, setJsonData] = useState<TaskData[]>([]);
   const [data, setData] = useState('');
+  const [dayWeek, setDayWeek] = useState("");
+  
+  const date = new Date();
+  const yearCurrent = date.getFullYear();
+  const monthCurrent = String(date.getMonth() + 1).padStart(2, '0');
+  const dayCurrent = String(date.getDate()).padStart(2, '0');
+  const dayWeekCurrent = date.getDay();
+
+  const currentDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
 
   const fetchData = async (date: string, name?: string) => {
     try {
@@ -120,9 +130,27 @@ const TaskList: React.FC<TaskListProps> = () => {
 
   useEffect(() => {
     const currentDate = new Date();
+    getDayWeek();
     const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
     fetchData(formattedDate);
   }, []);
+
+  function getDayWeek() {
+    if (dayWeekCurrent == 0)
+        setDayWeek('Domingo');
+    if (dayWeekCurrent == 1)
+        setDayWeek('Segunda');
+    if (dayWeekCurrent == 2)
+        setDayWeek('Terça');
+    if (dayWeekCurrent == 3)
+        setDayWeek('Quarta');
+    if (dayWeekCurrent == 4)
+        setDayWeek('Quinta');
+    if (dayWeekCurrent == 5)
+        setDayWeek('Sexta');
+    if (dayWeekCurrent == 6)
+        setDayWeek('Sábado');
+}
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -144,18 +172,31 @@ const TaskList: React.FC<TaskListProps> = () => {
   };
 
   const Header: React.FC = () => (
-    <View style={styles.headerContainer}>
-      <TouchableOpacity style={styles.headerIcon}>
-        <Icon name="bars" size={24} color="black" />
-      </TouchableOpacity>
-      <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>Gestor</Text>
-        <View style={styles.headerDivider} />
-        <Text style={styles.headerText}>{data}</Text>
-      </View>
-      <TouchableOpacity onPress={handleOpenModal} style={styles.headerIcon}>
-          <CalendarIcon width={30} height={30} />
+    // <View style={styles.headerContainer}>
+    //   <TouchableOpacity style={styles.headerIcon}>
+    //     <Icon name="bars" size={24} color="black" />
+    //   </TouchableOpacity>
+    //   <View style={styles.headerTextContainer}>
+    //     <Text style={styles.headerText}>Gestor</Text>
+    //     <View style={styles.headerDivider} />
+    //     <Text style={styles.headerText}>{data}</Text>
+    //   </View>
+    //   <TouchableOpacity onPress={handleOpenModal} style={styles.headerIcon}>
+    //       <CalendarIcon width={30} height={30} />
 
+    //   </TouchableOpacity>
+    // </View>
+    <View style={styles.headerlayer}>
+      <TouchableOpacity>
+        <ListIcon width={30} height={30} />
+      </TouchableOpacity>
+      <View style={styles.header}>
+        <Text style={{ fontWeight: "bold", fontSize: 25, color: "#C07F00" }}>HOJE</Text>
+        <View style={styles.headerDivider} />
+        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{dayWeek}, {currentDate}</Text>
+      </View>
+      <TouchableOpacity onPress={handleOpenModal}>
+        <CalendarIcon width={30} height={30} />
       </TouchableOpacity>
     </View>
   );

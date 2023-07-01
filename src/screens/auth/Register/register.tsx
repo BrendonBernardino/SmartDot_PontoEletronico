@@ -44,7 +44,7 @@ function Register() {
             </View>
             <View style={styles.midlayer}>
                 <InputBlock
-                    text='Nome'
+                    text='Nome de Usuário'
                     color='#C07F00'
                     textColor='#FFD95A'
                     size={userType == 2 ? 53 : 59}

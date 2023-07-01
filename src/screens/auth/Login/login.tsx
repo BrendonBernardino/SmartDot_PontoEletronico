@@ -9,6 +9,7 @@ import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
 import Toast from 'react-native-toast-message'
+import Loading from '../../../components/Loading/Loading'
 
 function Login() {
     const navigation = useNavigation<StackTypes>();
@@ -16,6 +17,7 @@ function Login() {
     const [password, setPassword] = useState('')
 
     const [isChecked, setChecked] = useState(false);
+    const [loginPending, setLoginPending] = useState(false);
 
     const handleUsernameOrEmailChange = (inputUsernameOrEmail: string) => {
         setUsernameOrEmail(inputUsernameOrEmail);
@@ -28,6 +30,7 @@ function Login() {
     };
 
     const handleLogin = async () => {
+        setLoginPending(true);
         const apiUrl = 'https://07be-2804-d4b-7aa4-c00-777e-3364-c647-4e66.ngrok-free.app/login'
         const credentials = {
             email: usernameOrEmail,
@@ -58,6 +61,8 @@ function Login() {
                     text1: 'Logado com sucesso!'
                 })
 
+                setLoginPending(false);
+
                 if (role === 'colab'){
                   navigation.navigate("HomeTabs")
                 } else {
@@ -71,6 +76,8 @@ function Login() {
                     type: 'error',
                     text1: 'Login falhou. Por favor tente novamente.'
                 })
+
+                setLoginPending(false);
                 console.log('Login falhou');
             }
         } catch (error) {
@@ -79,6 +86,7 @@ function Login() {
                 text1: 'Não foi possível logar. Por favor tente novamente mais tarde.'
             })
             // Lidar com erros de rede ou da API
+            setLoginPending(false);
             console.log('Ocorreu um erro:', error);
         }
     };
@@ -140,6 +148,7 @@ function Login() {
                     <Text style={{ color: "#C07F00", fontWeight: "bold", fontSize: 19, paddingBottom: "10%" }}>Criar Conta</Text>
                 </TouchableOpacity>
             </View>
+            {loginPending ? <Loading/> : null}
         </View>
     )
 }
