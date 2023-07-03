@@ -5,9 +5,10 @@ import { AntDesign } from '@expo/vector-icons';
 
 interface CalendarProps {
     onDatePress: (date: { day: number, month: number, year: number }) => void;
-  }
+    selectedDay: number;
+}
 
-const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
+const Calendar: React.FC<CalendarProps> = ({ onDatePress, selectedDay }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const currentYear = new Date().getFullYear();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -19,11 +20,22 @@ const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
         const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const weekdaysPT = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
+        const selectedDayStyle = { // Estilos para o dia selecionado
+            fontWeight: 'bold',
+            color: '#C07F00',
+            // backgroundColor: '#FFFF00'
+        };
+
+        const normalDayStyle = { // Estilos para os dias normais
+            fontWeight: 'bold',
+            color: '#000000'
+        };
+
         if (languageType == false) {
             weekdays.map((weekday) => (
                 calendarDays.push(
                     <View key={weekday} style={styles.weekDayText}>
-                        <Text style={[styles.dayText, {color: '#83908D'}]}>{weekday}</Text>
+                        <Text style={[styles.dayText, { color: '#83908D' }]}>{weekday}</Text>
                     </View>
                 )
             ))
@@ -32,7 +44,7 @@ const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
             weekdaysPT.map((weekday) => (
                 calendarDays.push(
                     <View key={weekday} style={styles.weekDayText}>
-                        <Text style={[styles.dayText, {color: '#83908D'}]}>{weekday}</Text>
+                        <Text style={[styles.dayText, { color: '#83908D' }]}>{weekday}</Text>
                     </View>
                 )
             ))
@@ -47,13 +59,16 @@ const Calendar: React.FC<CalendarProps> = ({ onDatePress }) => {
         }
 
         for (let day = 1; day <= daysInMonth; day++) {
+            const isDaySelected = day === selectedDay;
+            const dayStyle = isDaySelected ? selectedDayStyle : normalDayStyle;
+
             calendarDays.push(
                 <TouchableOpacity
                     key={day}
                     style={styles.dayContainer}
                     onPress={() => onDatePress({ day, month: currentMonth, year: currentYear })}
-                    >
-                    <Text style={[styles.dayText, {fontWeight:'bold'}]}>{day}</Text>
+                >
+                    <Text style={[styles.dayText, dayStyle]}>{day}</Text>
                 </TouchableOpacity>
             );
         }

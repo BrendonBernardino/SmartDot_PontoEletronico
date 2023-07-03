@@ -350,7 +350,7 @@ const TaskList: React.FC = () => {
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ flex: 1, marginRight: 10 }}>
                   <CustomTextInput
-                    label="Intervalo Inicio (Hour)"
+                    label="Intervalo Inicio (Hora)"
                     value={initialIntervalHour.toString()}
                     onChangeText={(text) => {
                       const input = parseInt(text);

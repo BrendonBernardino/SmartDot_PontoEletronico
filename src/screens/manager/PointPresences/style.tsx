@@ -78,6 +78,19 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
   },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 15,
+  },
+  titleModal: {
+    flex: 0.1,
+    fontSize: 25,
+    fontWeight: "bold",
+    marginTop: '2%',
+    // marginBottom: '2%',
+    height: '5%',
+  },
 });
 
 export default styles;

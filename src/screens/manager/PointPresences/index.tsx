@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Calendar from "../../../components/Calendar/Calendar";
 import FooterMenu from "../../../components/FooterMenu/manage";
@@ -90,7 +91,7 @@ const TaskList: React.FC<TaskListProps> = () => {
   const [jsonData, setJsonData] = useState<TaskData[]>([]);
   const [data, setData] = useState('');
   const [dayWeek, setDayWeek] = useState("");
-  
+
   const date = new Date();
   const yearCurrent = date.getFullYear();
   const monthCurrent = String(date.getMonth() + 1).padStart(2, '0');
@@ -137,20 +138,20 @@ const TaskList: React.FC<TaskListProps> = () => {
 
   function getDayWeek() {
     if (dayWeekCurrent == 0)
-        setDayWeek('Domingo');
+      setDayWeek('Domingo');
     if (dayWeekCurrent == 1)
-        setDayWeek('Segunda');
+      setDayWeek('Segunda');
     if (dayWeekCurrent == 2)
-        setDayWeek('Terça');
+      setDayWeek('Terça');
     if (dayWeekCurrent == 3)
-        setDayWeek('Quarta');
+      setDayWeek('Quarta');
     if (dayWeekCurrent == 4)
-        setDayWeek('Quinta');
+      setDayWeek('Quinta');
     if (dayWeekCurrent == 5)
-        setDayWeek('Sexta');
+      setDayWeek('Sexta');
     if (dayWeekCurrent == 6)
-        setDayWeek('Sábado');
-}
+      setDayWeek('Sábado');
+  }
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -222,11 +223,15 @@ const TaskList: React.FC<TaskListProps> = () => {
         onRequestClose={handleCloseModal}
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+          <View style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginTop: '120%', padding: 10, borderRadius: 10, width: '100%', height: '50%' }}>
+            <Text style={[styles.titleModal, { color: '#C07F00' }]}>Histórico</Text>
             <Calendar onDatePress={handleDatePress} />
 
-            <TouchableOpacity onPress={handleCloseModal} style={{ marginTop: 10 }}>
+            {/* <TouchableOpacity onPress={handleCloseModal} style={{ marginTop: 10 }}>
               <Text style={{ color: 'blue', textAlign: 'center' }}>Fechar</Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
+              <AntDesign name="close" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </View>

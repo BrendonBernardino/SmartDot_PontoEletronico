@@ -71,7 +71,7 @@ function Login() {
             } else {
                 // Login falhou, lidar com o erro
                 // Por exemplo, você pode exibir uma mensagem de erro para o usuário
-                // navigation.navigate("HomeTabs")
+                navigation.navigate("HomeManager")
                 Toast.show({
                     type: 'error',
                     text1: 'Login falhou. Por favor tente novamente.'
