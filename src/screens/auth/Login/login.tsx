@@ -1,5 +1,4 @@
 import { Text, View, Image, TouchableOpacity } from 'react-native';
-import CheckBox from 'expo-checkbox';
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
@@ -62,6 +61,9 @@ function Login() {
 
                 if (role === 'manager'){
                    navigation.navigate("HomeManager")
+                }
+                if (role === 'collaborator_pending'){
+                    navigation.navigate("Perfil")
                 } else {
                    navigation.navigate("HomeTabs")
                 }

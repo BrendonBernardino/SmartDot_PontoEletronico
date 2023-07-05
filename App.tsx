@@ -8,12 +8,14 @@ import HomeManager from "./src/screens/HomeManager";
 import Initial from "./src/screens/auth/Initial/initial";
 import Login from "./src/screens/auth/Login/login";
 import Register from "./src/screens/auth/Register/register";
+import Perfil from "./src/screens/colab/Perfil/perfil";
 import About from "./src/screens/auth/About/about";
 import Toast from 'react-native-toast-message'
 
 export type StackNavigation = {
   Initial: undefined;
   Login: undefined;
+  Perfil: undefined;
   About: undefined;
   Register: undefined;
   HomeTabs: undefined;
@@ -52,6 +54,13 @@ export default function App() {
           <Stack.Screen
             name="Register"
             component={Register}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }} />
+          <Stack.Screen
+            name="Perfil"
+            component={Perfil}
             options={{
               headerBackVisible: false,
               headerShown: false,

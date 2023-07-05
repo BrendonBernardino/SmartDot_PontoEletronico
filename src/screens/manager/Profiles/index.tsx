@@ -15,7 +15,6 @@ const apiUrl = ENV.API_URL;
 
 function Profiles() {
     const navigation = useNavigation<StackTypes>();
-    const animation = useRef(new Animated.Value(0)).current;
 
     const [name, setName] = useState('');
     const [id, setId] = useState('');
@@ -23,7 +22,6 @@ function Profiles() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-    const [modalHelpVisible, setModalHelpVisible] = useState(false);
 
     const handleRequisition = async () => {
         const url = `${apiUrl}/manager/info`;
@@ -45,7 +43,9 @@ function Profiles() {
                 setName(data.name);
                 setId(data.id);
                 setEmail(data.email);
-                setCompanyName(data.company_name);
+                if (data.role) {
+                    setCompanyName(data.company_name);
+                }
             } else {
                 Toast.show({
                     type: 'error',
@@ -63,7 +63,7 @@ function Profiles() {
     const updateUser = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/manager/users/${id}`,
+            const response = await fetch(`${apiUrl}/users/${id}`,
                 {
                     method: 'Put',
                     headers: {
@@ -95,7 +95,7 @@ function Profiles() {
                 text1: String(error)
             });
         }
-        };
+    };
     
     useEffect(() => {
         handleRequisition();
@@ -105,6 +105,7 @@ function Profiles() {
         await AsyncStorage.removeItem('token');
         navigation.navigate("Initial")
     };
+
     const closeModal = () => {
         setModalVisible(false);
     };
@@ -116,14 +117,14 @@ function Profiles() {
     }
     
     const CustomTextInput: React.FC<CustomTextInputProps> = ({ label, value, onChangeText }) => (
-    <View style={{ marginBottom: 10 }}>
-        <Text>{label}</Text>
-        <TextInput
-        style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
-        value={value}
-        onChangeText={onChangeText}
-        />
-    </View>
+        <View style={{ marginBottom: 10 }}>
+            <Text>{label}</Text>
+            <TextInput
+            style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
+            value={value}
+            onChangeText={onChangeText}
+            />
+        </View>
     );
     
     return (
@@ -192,18 +193,6 @@ function Profiles() {
                         <Text style={styles.buttonText}>Fechar</Text>
                     </TouchableOpacity>
                     </View>
-                </View>
-            </Modal>
-
-            <Modal visible={modalHelpVisible} animationType="slide" transparent>
-                <View style={styles.modalContent}>
-                    <Text style={{ fontSize: 30 }}>S.O.S</Text>
-                    <TouchableOpacity
-                        style={[styles.button, styles.cancelButton, { backgroundColor: '#FFD95A' }]}
-                        onPress={() => setModalHelpVisible(false)}
-                    >
-                        <Text style={styles.buttonText}>Fechar</Text>
-                    </TouchableOpacity>
                 </View>
             </Modal>
         </View>
