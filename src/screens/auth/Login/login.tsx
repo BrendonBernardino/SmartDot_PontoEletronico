@@ -9,13 +9,14 @@ import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
 import Toast from 'react-native-toast-message'
+import ENV from '../../../../env';
+
+const apiUrl = ENV.API_URL;
 
 function Login() {
     const navigation = useNavigation<StackTypes>();
     const [usernameOrEmail, setUsernameOrEmail] = useState('')
     const [password, setPassword] = useState('')
-
-    const [isChecked, setChecked] = useState(false);
 
     const handleUsernameOrEmailChange = (inputUsernameOrEmail: string) => {
         setUsernameOrEmail(inputUsernameOrEmail);
@@ -28,14 +29,15 @@ function Login() {
     };
 
     const handleLogin = async () => {
-        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/login'
+        const url = `${apiUrl}/login`
+        console.log(url);
         const credentials = {
             email: usernameOrEmail,
             password: password,
         };
 
         try {
-            const response = await fetch(apiUrl, {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -58,10 +60,10 @@ function Login() {
                     text1: 'Logado com sucesso!'
                 })
 
-                if (role === 'colab'){
-                  navigation.navigate("HomeTabs")
+                if (role === 'manager'){
+                   navigation.navigate("HomeManager")
                 } else {
-                  navigation.navigate("HomeManager")
+                   navigation.navigate("HomeTabs")
                 }
             } else {
                 // Login falhou, lidar com o erro
@@ -71,15 +73,12 @@ function Login() {
                     type: 'error',
                     text1: 'Login falhou. Por favor tente novamente.'
                 })
-                console.log('Login falhou');
             }
         } catch (error) {
             Toast.show({
                 type: 'error',
                 text1: 'Não foi possível logar. Por favor tente novamente mais tarde.'
             })
-            // Lidar com erros de rede ou da API
-            console.log('Ocorreu um erro:', error);
         }
     };
 
@@ -111,17 +110,6 @@ function Login() {
                     password={true}
                     visible={true}
                     onChangeText={handlePassChange}
-                />
-                {/* <Ionicons name="eye-outline" size={25}/> */}
-            </View>
-            <View style={[styles.infolayer, { flexDirection: "row", width: "80%" }]}>
-                <Text style={{ color: "#83908D", fontWeight: "bold", fontSize: 15 }}>Esqueceu a senha?</Text>
-                <Text style={{ color: "#83908D", fontWeight: "bold", fontSize: 15 }}>Lembrar de mim</Text>
-                <CheckBox
-                    style={{ borderColor: "#C07F00" }}
-                    value={isChecked}
-                    onValueChange={setChecked}
-                    color={isChecked ? '#C07F00' : undefined}
                 />
             </View>
             <View style={styles.loginlayer}>

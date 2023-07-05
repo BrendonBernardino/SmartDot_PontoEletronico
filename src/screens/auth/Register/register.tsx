@@ -7,16 +7,57 @@ import styles from "./styles";
 import Button from "../../../components/Button/Button";
 import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
+import Toast from 'react-native-toast-message'
+import ENV from '../../../../env';
+
+const apiUrl = ENV.API_URL;
 
 function Register() {
     const navigation = useNavigation<StackTypes>();
 
     const [userType, setUserType] = useState(0);
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
+    const [nomeEmpresa, setNomeEmpresa] = useState('');
+    const [senha, setSenha] = useState('');
 
     const data = [
         { key: '1', value: 'Colaborador' },
         { key: '2', value: 'Gestor' }
     ]
+
+    const handleRegistrar = () => {
+        const data = {
+          name: nome,
+          email: email,
+          company_name: nomeEmpresa,
+          password: senha,
+          role_type: userType
+        };
+        const url = `${apiUrl}/register`
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({'user': data}),
+        })
+          .then(response => response.json())
+          .then(responseData => {
+            Toast.show({
+                type: 'success',
+                text1: 'Registro com sucesso!'
+            })
+            navigation.navigate("Login")
+          })
+          .catch(error => {
+            Toast.show({
+                type: 'error',
+                text1: error
+            })
+          });
+      };
 
     useEffect(() => {
     }, [userType]);
@@ -44,41 +85,45 @@ function Register() {
             </View>
             <View style={styles.midlayer}>
                 <InputBlock
-                    text='Nome'
-                    color='#C07F00'
-                    textColor='#FFD95A'
+                    text="Nome"
+                    color="#C07F00"
+                    textColor="#FFD95A"
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     borderTopLeftRadius={33}
                     password={false}
                     visible={true}
+                    onChangeText={setNome}
                 />
                 <InputBlock
-                    text='Email'
-                    color='#C07F00'
-                    textColor='#FFD95A'
+                    text="Email"
+                    color="#C07F00"
+                    textColor="#FFD95A"
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={false}
                     visible={true}
+                    onChangeText={setEmail}
                 />
                 <InputBlock
-                    text='Nome da Empresa'
-                    color='#C07F00'
-                    textColor='#FFD95A'
+                    text="Nome da Empresa"
+                    color="#C07F00"
+                    textColor="#FFD95A"
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={false}
                     visible={userType == 2 ? true : false}
-                />                   
+                    onChangeText={setNomeEmpresa}
+                />
                 <InputBlock
-                    text='Senha'
-                    color='#C07F00'
-                    textColor='#FFD95A'
+                    text="Senha"
+                    color="#C07F00"
+                    textColor="#FFD95A"
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={true}
                     visible={true}
+                    onChangeText={setSenha}
                 />
             </View>
             <View style={styles.registerlayer}>
@@ -87,7 +132,7 @@ function Register() {
                     color="#4C3D3D"
                     textColor="#CBE4DE"
                     centralized={1}
-                    nextPage="Home"
+                    onPress={handleRegistrar}
                     borderBottomRightRadius={33}
                 />
             </View>

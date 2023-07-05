@@ -102,12 +102,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    width: "100%",
   },
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    alignItems: 'center',
+    width: '80%', // Defina a largura desejada para o modal
   },
   textInput: {
     width: '100%',
@@ -126,10 +127,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  saveButton: {
-    width: 100,
-    borderRadius: 10,
-  },
   cancelButton: {
     backgroundColor: '#CCCCCC',
     width: 100,
@@ -139,6 +136,24 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  formTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  saveButton: {
+    backgroundColor: '#c88f20',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  closeButton: {
+    backgroundColor: '#4C3D3D',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    alignItems: 'center',
   },
 });
 export default styles;

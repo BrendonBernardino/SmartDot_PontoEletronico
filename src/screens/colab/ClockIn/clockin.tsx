@@ -21,7 +21,9 @@ import Toast from 'react-native-toast-message'
 
 import * as Location from 'expo-location';
 import * as LocalAuthentication from 'expo-local-authentication';
+import ENV from '../../../../env';
 
+const apiUrl = ENV.API_URL;
 
 
 function ClockIn() {
@@ -179,13 +181,12 @@ function ClockIn() {
     }, [isAuthenticated]);
 
     const handleRequisition = async () => {
-        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/collaborator/point_presences' + '?data=' + currentDate;//'25-06-2023';
-        console.log(apiUrl)
+        const url = `${apiUrl}/collaborator/point_presences` + '?data=' + currentDate;//'25-06-2023';
 
         try {
             const token = await AsyncStorage.getItem('token');
 
-            const response = await fetch(apiUrl, {
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

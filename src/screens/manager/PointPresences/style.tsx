@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    padding: 20,
     marginBottom: 10,
   },
   headerIcon: {
@@ -31,8 +31,12 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   headerText: {
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 4,
+    color: "#C07F00",
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', // Cor do sombreamento
+    textShadowOffset: { width: 1, height: 1 }, // Deslocamento do sombreamento
+    textShadowRadius: 2,
   },
   card: {
     flexDirection: 'row',
@@ -64,7 +68,21 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+    marginTop: 10,
   },
+  logo: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+  },
+  map: {
+    // minHeight : '20%',
+    width: '90%',
+    height: '20%',
+    marginBottom: 150,
+    borderRadius: 20,
+  }
 });
 
 export default styles;

@@ -8,6 +8,9 @@ import { StackTypes } from '../../../../App';
 import PerfilIdIcon from '../../../.././assets/svg/perfil_id.svg';
 import HelpIcon from '../../../.././assets/svg/help.svg';
 import LogoutIcon from '../../../.././assets/svg/logout.svg';
+import ENV from '../../../../env';
+
+const apiUrl = ENV.API_URL;
 
 
 function Perfil() {
@@ -22,13 +25,13 @@ function Perfil() {
     const [modalHelpVisible, setModalHelpVisible] = useState(false);
 
     const handleRequisition = async () => {
-        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/collaborator/users';
-        console.log(apiUrl)
+        const url = `${apiUrl}/collaborator/users`;
+        console.log(url)
 
         try {
             const token = await AsyncStorage.getItem('token');
 
-            const response = await fetch(apiUrl, {
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,22 +90,6 @@ function Perfil() {
                         <Text style={styles.rowText} onPress={() => setModalVisible(true)}>Editar Perfil</Text>
                         <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
-                    {/* <TouchableOpacity style={styles.row}>
-                        <Text style={styles.rowText}>Configurações</Text>
-                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.row}>
-                        <Text style={styles.rowText}>Meu salário</Text>
-                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.row}>
-                        <Text style={styles.rowText}>Minhas horas semanais</Text>
-                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.row}>
-                        <Text style={styles.rowText}>Planejamento Entrada e Saída</Text>
-                        <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
-                    </TouchableOpacity> */}
                 </View>
             </View>
             <View style={[styles.LogoutLayer, { backgroundColor: '#FFFFFF' }]}>

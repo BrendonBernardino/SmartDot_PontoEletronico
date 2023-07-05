@@ -4,6 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "./styles";
 import CardDashboard from "../../../components/CardDashboard/CardDashboard";
 import ReloadIcon from '../../../../assets/svg/reload.svg';
+import ENV from '../../../../env';
+
+const apiUrl = ENV.API_URL;
 
 function Dashboard() {
     const [day, setDay] = useState(23);
@@ -28,15 +31,15 @@ function Dashboard() {
     };
 
     const handleRequisition = async () => {
-        const apiUrl = 'https://4577-2804-d4b-7aa4-c00-afd7-6192-7c16-a8f4.ngrok-free.app/collaborator/dashboards';
-        console.log(apiUrl)
+        const url = `${apiUrl}/collaborator/dashboards`;
+        console.log(url)
 
         setSyncTime(getCurrentTime());
 
         try {
             const token = await AsyncStorage.getItem('token');
 
-            const response = await fetch(apiUrl, {
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

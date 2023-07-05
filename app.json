@@ -6,6 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "extra": {
+      "API_URL": "https://55b3-2804-d4b-7aa4-c00-851a-9422-3899-47d0.ngrok-free.app"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

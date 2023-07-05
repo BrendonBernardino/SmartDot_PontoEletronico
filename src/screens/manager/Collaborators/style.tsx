@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    padding: 20,
     marginBottom: 10,
   },
   headerIcon: {
@@ -55,8 +55,12 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   headerText: {
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 4,
+    color: "#C07F00",
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', // Cor do sombreamento
+    textShadowOffset: { width: 1, height: 1 }, // Deslocamento do sombreamento
+    textShadowRadius: 2,
   },
   containerFooter: {
     position: 'absolute',
@@ -119,6 +123,47 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: '80%', // Defina a largura desejada para o modal
+  },
+  formTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  saveButton: {
+    backgroundColor: '#c88f20',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  closeButton: {
+    backgroundColor: '#4C3D3D',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  columnContainer: {
+    flex: 1,
+  },
+  dayContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  dayLabel: {
+    marginRight: 10,
+  },
+  iconItem: {
+    marginRight: 10,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
 });
 
