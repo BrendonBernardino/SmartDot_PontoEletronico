@@ -11,6 +11,7 @@ import MapView, { Marker, Circle } from 'react-native-maps';
 import { format, parse } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Toast from 'react-native-toast-message'
+import Loading from '../../../components/Loading/Loading';
 
 import styles from './style';
 import ENV from '../../../../env';
@@ -252,8 +253,9 @@ const TaskList: React.FC<TaskListProps> = () => {
       <SearchBar onSearch={handleSearch} />
 
       {isLoading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#0000ff" />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Loading/>
+          {/* <ActivityIndicator size="large" color="#0000ff" /> */}
         </View>
       ) : (
         <ScrollView>

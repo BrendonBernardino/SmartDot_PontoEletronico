@@ -67,16 +67,14 @@ function ClockIn() {
 
 
     const date = new Date();
-
     const yearCurrent = date.getFullYear();
     const monthCurrent = String(date.getMonth() + 1).padStart(2, '0');
     const dayCurrent = String(date.getDate()).padStart(2, '0');
     const dayWeekCurrent = date.getDay();
-
     const currentDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
 
     const getCurrentTime = () => {
-        const date = new Date();
+        // const date = new Date();
         const hour = String(date.getHours()).padStart(2, '0');
         const minute = String(date.getMinutes()).padStart(2, '0');
         return `${hour}:${minute}`;
@@ -90,7 +88,6 @@ function ClockIn() {
                     type: 'error',
                     text1: 'Permissão para acessar a localização foi negada.'
                 })
-                //   setErrorMsg('Permission to access location was denied');
                 return;
             }
             let location = await Location.getCurrentPositionAsync({});

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as Animatable from 'react-native-animatable';
 import styles from "./styles";
+import Toast from 'react-native-toast-message'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ManagerCollaborators from "./manager/Collaborators/index";
 import ManagerPointPresences from "./manager/PointPresences/index";
@@ -11,10 +14,64 @@ import ManagerProfiles from "./manager/Profiles/index";
 import DashIcon from '../.././assets/svg/dashboard.svg';
 import EmployeeIcon from '../.././assets/svg/colaborador.svg';
 import PerfilIcon from '../.././assets/svg/person.svg';
+import Loading from '../components/Loading/Loading';
+
+import ENV from '../../env';
+
+const apiUrl = ENV.API_URL;
 
 const Tab = createBottomTabNavigator();
 
-function HomeManger() {
+function HomeManager() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRequisition = async () => {
+    const url = `${apiUrl}/manager/info`;
+
+    try {
+      setIsLoading(true)
+      const token = await AsyncStorage.getItem('token');
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // setRole(data.role_active);
+        setIsLoading(false)
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Não foi possível carregar'
+        });
+        setIsLoading(false)
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: String(error)
+      });
+      setIsLoading(false)
+    }
+  };
+
+  useEffect(() => {
+    handleRequisition();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF7D4' }}>
+        <Loading />
+        {/* <ActivityIndicator size="large" color="#0000ff" /> */}
+      </View>
+    )
+  }
 
   return (
     <Tab.Navigator
@@ -156,4 +213,4 @@ function HomeManger() {
     </Tab.Navigator>
   );
 }
-export default HomeManger;
+export default HomeManager;

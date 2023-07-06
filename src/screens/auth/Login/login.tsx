@@ -59,18 +59,25 @@ function Login() {
                     text1: 'Logado com sucesso!'
                 })
 
-                if (role === 'manager'){
-                   navigation.navigate("HomeManager")
+                console.log(data.token);
+                console.log(data.role);
+
+                if (role === 'manager') {
+                    console.log('entrou em manager');
+                    navigation.navigate("HomeManager")
                 }
-                if (role === 'collaborator_pending'){
+                if (role === 'collaborator_pending') {
+                    console.log('entrou em collaborator_pending');
                     navigation.navigate("Perfil")
-                } else {
-                   navigation.navigate("HomeTabs")
+                } 
+                if (role === 'collaborator')  {
+                    console.log('entrou em collaborator');
+                    navigation.navigate("HomeTabs")
                 }
             } else {
                 // Login falhou, lidar com o erro
                 // Por exemplo, você pode exibir uma mensagem de erro para o usuário
-                navigation.navigate("HomeTabs")
+                // navigation.navigate("HomeTabs")
                 Toast.show({
                     type: 'error',
                     text1: 'Login falhou. Por favor tente novamente.'

@@ -42,25 +42,46 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerIcon: {
-    padding: 10,
+    left: 80,
+    padding: 20,
   },
   headerTextContainer: {
     flex: 1,
     alignItems: 'center',
   },
+  headerTextContainer2: {
+    // flex: 2,
+    // left: 50,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   headerDivider: {
     backgroundColor: 'gray',
     height: 1,
-    width: '80%',
+    width: '30%',
     marginVertical: 4,
+    marginHorizontal: '20%',
+  },
+  headerDividerStyle: {
+    flexDirection: 'row',
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 25,
     marginBottom: 4,
     color: "#C07F00",
     textShadowColor: 'rgba(0, 0, 0, 0.5)', // Cor do sombreamento
-    textShadowOffset: { width: 1, height: 1 }, // Deslocamento do sombreamento
+    textShadowOffset: { width: 1.3, height: 1.3 }, // Deslocamento do sombreamento
     textShadowRadius: 2,
+  },
+  headerText2: {
+    fontSize: 25,
+    marginTop: 10,
+    // marginBottom: 0,
+    fontWeight:'bold',
+    // color: "#C07F00",
+    // textShadowColor: 'rgba(0, 0, 0, 0.5)', // Cor do sombreamento
+    // textShadowOffset: { width: 1, height: 1 }, // Deslocamento do sombreamento
+    // textShadowRadius: 2,
   },
   containerFooter: {
     position: 'absolute',

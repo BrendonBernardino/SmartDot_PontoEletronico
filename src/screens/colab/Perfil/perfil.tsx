@@ -214,7 +214,7 @@ function Perfil() {
                         <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
 
-                    {roleActive ? ('') : (
+                    {companyName == null ? ('') : (
                         <View style={styles.card}>
                             <Text style={styles.title}>Convite</Text>
                             <Text style={styles.description}>

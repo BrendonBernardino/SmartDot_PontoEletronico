@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "extra": {
-      "API_URL": "https://e265-2804-d4b-7ade-c300-5f0d-849b-b86c-b920.ngrok-free.app"
+      "API_URL": "https://649b-2804-d4b-7ade-c300-3e43-ab74-96c0-230a.ngrok-free.app"
     },
     "splash": {
       "image": "./assets/splash.png",

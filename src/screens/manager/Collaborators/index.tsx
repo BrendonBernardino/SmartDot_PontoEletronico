@@ -8,6 +8,7 @@ import styles from './style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ENV from '../../../../env';
 import Toast from 'react-native-toast-message'
+import Loading from '../../../components/Loading/Loading';
 
 const apiUrl = ENV.API_URL;
 
@@ -51,6 +52,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({ label, value, onChang
 const TaskList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [companyName, setCompanyName] = useState('');
 
   const [email, setEmail] = useState('');
   const [id, setId] = useState('');
@@ -72,8 +74,45 @@ const TaskList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    fetchCompany();
     fetchUsers();
   }, []);
+
+  const fetchCompany = async () => {
+    const url = `${apiUrl}/manager/info`;
+
+    try {
+      setIsLoading(true);
+      const token = await AsyncStorage.getItem('token');
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setCompanyName(data.company_name);
+        console.log(companyName)
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Não foi possível carregar'
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: String(error)
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const fetchUsers = async (name?: string) => {
     try {
@@ -84,14 +123,14 @@ const TaskList: React.FC = () => {
       if (name) {
         url += `?name=${name}`;
       }
-      const response = await fetch(url, 
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
+      const response = await fetch(url,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          }
+        });
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -132,13 +171,13 @@ const TaskList: React.FC = () => {
       setIsLoading(true);
       const token = await AsyncStorage.getItem('token');
       const response = await fetch(`${apiUrl}/manager/users?id=${userId}`,
-      {
-        method: 'Get',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
+        {
+          method: 'Get',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
       const userData = await response.json();
 
       if (response.ok) {
@@ -159,7 +198,7 @@ const TaskList: React.FC = () => {
         setFriday(userData[0].friday);
         setSaturday(userData[0].saturday);
         setSunday(userData[0].sunday);
-      
+
         setModalVisible(true);
       } else {
         Toast.show({
@@ -181,30 +220,32 @@ const TaskList: React.FC = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       const response = await fetch(`${apiUrl}/manager/users/${id}`,
-      {
-        method: 'Put',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          start_time_hour: startTimeHour,
-          start_time_minute: startTimeMinute,
-          initial_interval_hour: initialIntervalHour,
-          initial_interval_minute: initialIntervalMinute,
-          final_interval_hour: finalIntervalHour,
-          final_interval_minute: finalIntervalMinute,
-          final_time_hour: finalTimeHour,
-          final_time_minute: finalTimeMinute,
-          monday,
-          tuesday,
-          wednesday,
-          thursday,
-          friday,
-          saturday,
-          sunday,
-        }),
-      });
+        {
+          method: 'Put',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            start_time_hour: startTimeHour,
+            start_time_minute: startTimeMinute,
+            initial_interval_hour: initialIntervalHour,
+            initial_interval_minute: initialIntervalMinute,
+            final_interval_hour: finalIntervalHour,
+            final_interval_minute: finalIntervalMinute,
+            final_time_hour: finalTimeHour,
+            final_time_minute: finalTimeMinute,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            sunday,
+          }),
+        });
+
+      console.log('Atualizando usuário');
 
       if (response.ok) {
         setModalVisible(false);
@@ -255,6 +296,8 @@ const TaskList: React.FC = () => {
         }),
       });
 
+      console.log('Adicionando usuário');
+
       if (response.ok) {
         setModalVisible(false);
         Toast.show({
@@ -267,6 +310,7 @@ const TaskList: React.FC = () => {
           type: 'error',
           text1: 'Não foi possível adicionar'
         })
+        console.log(response)
       }
 
     } catch (error) {
@@ -341,9 +385,10 @@ const TaskList: React.FC = () => {
   const saveButton = () => {
     if (id && id.trim() !== "") {
       updateUser();
-    } else{
+    } else {
       addUser();
     }
+    closeModal();
   };
 
   const renderItem = (item: User) => (
@@ -369,18 +414,23 @@ const TaskList: React.FC = () => {
   const Header: React.FC = () => (
     <View style={styles.headerContainer}>
       <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>Colaboradores</Text>
-        <View style={styles.headerDivider} />
-        <Text style={styles.headerText}>Empresa</Text>
-      </View>
-      <TouchableOpacity style={styles.headerIcon}>
-        <View style={styles.logolayer}>
-          <Image
-            style={styles.logo}
-            source={require('../../../../assets/Logo.png')}
-          />
+        <View style={styles.headerTextContainer2}>
+          <Text style={styles.headerText}>Colaboradores</Text>
+          <TouchableOpacity style={styles.headerIcon}>
+            <View style={styles.logolayer}>
+              <Image
+                style={styles.logo}
+                source={require('../../../../assets/Logo.png')}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+        <View style={styles.headerDividerStyle}>
+          <View style={styles.headerDivider} />
+          <View style={styles.headerDivider} />
+        </View>
+        <Text style={styles.headerText2}>{companyName}</Text>
+      </View>
     </View>
   );
 
@@ -391,7 +441,8 @@ const TaskList: React.FC = () => {
 
       {isLoading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <Loading />
+          {/* <ActivityIndicator size="large" color="#0000ff" /> */}
         </View>
       ) : (
         <ScrollView>
@@ -531,21 +582,21 @@ const TaskList: React.FC = () => {
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Segunda:</Text>
-                    <Switch value={monday} onValueChange={setMonday} />
+                    <Switch value={monday} onValueChange={setMonday} thumbColor={'#C07F00'}/>
                   </View>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Quarta:</Text>
-                    <Switch value={wednesday} onValueChange={setWednesday} />
+                    <Switch value={wednesday} onValueChange={setWednesday} thumbColor={'#C07F00'} trackColor={'#C07F00'}/>
                   </View>
                 </View>
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Terça:</Text>
-                    <Switch value={tuesday} onValueChange={setTuesday} />
+                    <Switch value={tuesday} onValueChange={setTuesday} thumbColor={'#C07F00'}/>
                   </View>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Quinta:</Text>
-                    <Switch value={thursday} onValueChange={setThursday} />
+                    <Switch value={thursday} onValueChange={setThursday} thumbColor={'#C07F00'}/>
                   </View>
                 </View>
               </View>
@@ -553,17 +604,17 @@ const TaskList: React.FC = () => {
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Sexta:</Text>
-                    <Switch value={friday} onValueChange={setFriday} />
+                    <Switch value={friday} onValueChange={setFriday} thumbColor={'#C07F00'}/>
                   </View>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Domingo:</Text>
-                    <Switch value={sunday} onValueChange={setSunday} />
+                    <Switch value={sunday} onValueChange={setSunday} thumbColor={'#C07F00'}/>
                   </View>
                 </View>
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Sábado:</Text>
-                    <Switch value={saturday} onValueChange={setSaturday} />
+                    <Switch value={saturday} onValueChange={setSaturday} thumbColor={'#C07F00'}/>
                   </View>
                 </View>
               </View>
