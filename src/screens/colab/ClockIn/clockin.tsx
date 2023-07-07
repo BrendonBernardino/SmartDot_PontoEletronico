@@ -64,6 +64,9 @@ function ClockIn() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [timePOST, setTimePOST] = useState("");
+    const [latitudeString, setLatitudeString] = useState("");
+    const [longitudeString, setLongitudeString] = useState("");
 
     const date = new Date();
     const yearCurrent = date.getFullYear();
@@ -183,6 +186,46 @@ function ClockIn() {
     useEffect(() => {
     }, [isAuthenticated]);
 
+    const handleClockIn = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const response = await fetch(`${apiUrl}/collaborator/point_presences`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              schedule_time: timePOST,
+              latitude: latitudeString,
+              longitude: longitudeString,
+              local_name: streetName
+            }),
+          });
+    
+          console.log('Ponto Batido');
+    
+          if (response.ok) {
+            Toast.show({
+              type: 'success',
+              text1: 'Ponto Batido!'
+            })
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Não foi possível bater seu ponto'
+            })
+            console.log(response)
+          }
+    
+        } catch (error) {
+          Toast.show({
+            type: 'error',
+            text1: String(error)
+          });
+        }
+      };
+
     const handleRequisition = async () => {
         setIsLoading(true);
         const url = `${apiUrl}/collaborator/point_presences` + '?data=' + currentDate;//'25-06-2023';
@@ -205,6 +248,7 @@ function ClockIn() {
                     type: 'success',
                     text1: 'Seja Bem-Vindo Colaborador!'
                 })
+                console.log('requisição tela clockIN:');
                 console.log(data);
                 setEntradaplanned(data[0].tempo_inicial.padrao);
                 setIntervalInicioplanned(data[0].intervalo_inicial.padrao);//data[0].intervalo_inicial.padrao
@@ -213,12 +257,12 @@ function ClockIn() {
 
 
                 setEntradaReal(data[0].tempo_inicial.real);
-                setintervaloInicioReal('');//data[0].intervalo_inicial.real
-                setintervaloFimReal('');//data[0].intervalo_final.real
+                setintervaloInicioReal(data[0].intervalo_inicial.real);//data[0].intervalo_inicial.real
+                setintervaloFimReal(data[0].intervalo_final.real);//data[0].intervalo_final.real
                 setSaidaReal(data[0].tempo_final.real);
 
 
-                setTempoTotal(data[0].tempo_total);
+                setTempoTotal(data.tempo_total);
 
                 setIsLoading(false);
             } else {
@@ -253,34 +297,41 @@ function ClockIn() {
         setModalPontoVisible(false);
         handleAuthentication();
         console.log('cardPontoType: '+cardPontoType)
+        setLatitudeString(myLatitude.toString());
+        setLongitudeString(myLongitude.toString());
+
         if (isAuthenticated == true) {
             if (cardPontoType == 1) {
                 setEntradaReal(getCurrentTime);
                 console.log('Entrada: ');
                 console.log(entradaReal);
                 setIsAuthenticated(false);
-                // handlePOSTapi();
+                setTimePOST(entradaReal);
+                handleClockIn();
             }
             if (cardPontoType == 2) {
                 setintervaloInicioReal(getCurrentTime);
                 console.log('Intervalo Inicio: ');
                 console.log(intervaloInicioReal);
                 setIsAuthenticated(false);
-                // handlePOSTapi();
+                setTimePOST(intervaloInicioReal);
+                handleClockIn();
             }
             if (cardPontoType == 3) {
                 setintervaloFimReal(getCurrentTime);
                 console.log('Intervalo Fim: ');
                 console.log(intervaloFimReal);
                 setIsAuthenticated(false);
-                // handlePOSTapi();
+                setTimePOST(intervaloFimReal);
+                handleClockIn();
             }
             if (cardPontoType == 4) {
                 setSaidaReal(getCurrentTime);
                 console.log('Saida: ');
                 console.log(saidaReal);
                 setIsAuthenticated(false);
-                // handlePOSTapi();
+                setTimePOST(saidaReal);
+                handleClockIn();
             }
         }
     };

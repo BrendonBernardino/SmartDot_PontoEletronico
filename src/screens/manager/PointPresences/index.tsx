@@ -91,11 +91,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData, index }) => {
           <MapView
             style={styles.map}
             initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-          }}>
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}>
             <Marker coordinate={{ latitude: 37.78825, longitude: -122.4324 }} />
             <Circle center={{ latitude: 0.0022, longitude: 0.0022 }} radius={80} />
           </MapView>
@@ -145,7 +145,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData, index }) => {
   );
 };
 
-interface TaskListProps {}
+interface TaskListProps { }
 
 const TaskList: React.FC<TaskListProps> = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -153,7 +153,15 @@ const TaskList: React.FC<TaskListProps> = () => {
   const [data, setData] = useState('');
   const [formattedDate, setFormattedDate] = useState('');
   const [weekday, setWeekday] = useState('');
+  const [dayWeek, setDayWeek] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const date = new Date();
+  const yearCurrent = date.getFullYear();
+  const monthCurrent = String(date.getMonth() + 1).padStart(2, '0');
+  const dayCurrent = String(date.getDate()).padStart(2, '0');
+  const dayWeekCurrent = date.getDay();
+  const currentDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
 
   const fetchData = async (date: string, name?: string) => {
     try {
@@ -202,6 +210,7 @@ const TaskList: React.FC<TaskListProps> = () => {
   };
 
   useEffect(() => {
+    getDayWeek();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
     fetchData(formattedDate);
@@ -228,21 +237,67 @@ const TaskList: React.FC<TaskListProps> = () => {
     handleCloseModal();
   };
 
+  function getDayWeek() {
+    if (dayWeekCurrent == 0)
+      setDayWeek('Domingo');
+    if (dayWeekCurrent == 1)
+      setDayWeek('Segunda');
+    if (dayWeekCurrent == 2)
+      setDayWeek('Terça');
+    if (dayWeekCurrent == 3)
+      setDayWeek('Quarta');
+    if (dayWeekCurrent == 4)
+      setDayWeek('Quinta');
+    if (dayWeekCurrent == 5)
+      setDayWeek('Sexta');
+    if (dayWeekCurrent == 6)
+      setDayWeek('Sábado');
+  }
+
   const Header: React.FC = () => (
-    <View style={styles.headerContainer}>
+    // <View style={styles.headerContainer}>
+    // <TouchableOpacity style={styles.headerIcon}>
+    //   <Image
+    //         style={styles.logo}
+    //         source={require('../../../../assets/Logo.png')}
+    //       />
+    // </TouchableOpacity>
+    //   <View style={styles.headerTextContainer}>
+    //     <Text style={styles.headerText}>{weekday}</Text>
+    //     <View style={styles.headerDivider} />
+    //     <Text style={styles.headerText}>{formattedDate}</Text>
+    //   </View>
+    //   <TouchableOpacity onPress={handleOpenModal} style={styles.headerIcon}>
+    //       <CalendarIcon width={30} height={30} />
+    //   </TouchableOpacity>
+    // </View>
+    <View style={styles.headerlayer}>
+      {/* <View style={styles.themeBar}>
+        <View style={[
+          styles.themeCard,
+          { backgroundColor: '' }
+        ]}>
+          <TouchableOpacity onPress={setLightMode}>
+            <Feather name="sun" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.gray }} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={setDarkMode}>
+            <Entypo name="moon" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.gray_erased : themeMode.tertiary }} />
+          </TouchableOpacity>
+        </View>
+      </View> */}
       <TouchableOpacity style={styles.headerIcon}>
         <Image
-              style={styles.logo}
-              source={require('../../../../assets/Logo.png')}
-            />
+          style={styles.logo}
+          source={require('../../../../assets/Logosvg_1.png')}
+        />
       </TouchableOpacity>
-      <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>{weekday}</Text>
+      <View style={styles.header}>
+        <Text style={{ fontWeight: "bold", fontSize: 25, color: "#C07F00" }}>HOJE</Text>
         <View style={styles.headerDivider} />
-        <Text style={styles.headerText}>{formattedDate}</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{dayWeek}, {currentDate}</Text>
       </View>
-      <TouchableOpacity onPress={handleOpenModal} style={styles.headerIcon}>
-          <CalendarIcon width={30} height={30} />
+      <TouchableOpacity onPress={handleOpenModal}>
+        <CalendarIcon width={30} height={30} />
       </TouchableOpacity>
     </View>
   );
@@ -253,8 +308,8 @@ const TaskList: React.FC<TaskListProps> = () => {
       <SearchBar onSearch={handleSearch} />
 
       {isLoading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Loading/>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Loading />
           {/* <ActivityIndicator size="large" color="#0000ff" /> */}
         </View>
       ) : (
