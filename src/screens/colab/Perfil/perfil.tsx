@@ -96,7 +96,7 @@ function Perfil() {
             });
         }
     };
-    
+
     const rejectInvite = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
@@ -144,6 +144,7 @@ function Perfil() {
                 });
 
             if (response.ok) {
+                setModalVisible(false);
                 navigation.navigate("HomeTabs")
                 Toast.show({
                     type: 'success',
@@ -181,14 +182,14 @@ function Perfil() {
         value: string;
         onChangeText: (text: string) => void;
     }
-    
+
     const CustomTextInput: React.FC<CustomTextInputProps> = ({ label, value, onChangeText }) => (
         <View style={{ marginBottom: 10 }}>
             <Text>{label}</Text>
             <TextInput
-            style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
-            value={value}
-            onChangeText={onChangeText}
+                style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
+                value={value}
+                onChangeText={onChangeText}
             />
         </View>
     );
@@ -218,7 +219,7 @@ function Perfil() {
                         <View style={styles.card}>
                             <Text style={styles.title}>Convite</Text>
                             <Text style={styles.description}>
-                            Você recebeu um convite da {companyName}. Deseja aceitar?
+                                Você recebeu um convite da empresa {companyName}. Deseja aceitar?
                             </Text>
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity style={styles.declineButton} onPress={rejectInvite}>
@@ -232,9 +233,9 @@ function Perfil() {
                     )}
                 </View>
             </View>
-            
+
             <View style={[styles.LogoutLayer, { backgroundColor: '#FFFFFF' }]}>
-                
+
                 <Image
                     style={styles.logo}
                     source={require('../../../../assets/Logo.png')}
@@ -252,31 +253,31 @@ function Perfil() {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                    <CustomTextInput
-                        label="Nome"
-                        value={name}
-                        onChangeText={setName}
-                    />
+                        <CustomTextInput
+                            label="Nome"
+                            value={name}
+                            onChangeText={setName}
+                        />
 
-                    <CustomTextInput
-                        label="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
+                        <CustomTextInput
+                            label="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
 
-                    <CustomTextInput
-                        label="Senha"
-                        value={''}
-                        onChangeText={setPassword}
-                    />
+                        <CustomTextInput
+                            label="Senha"
+                            value={''}
+                            onChangeText={setPassword}
+                        />
 
-                    <TouchableOpacity onPress={updateUser} style={styles.saveButton}>
-                        <Text style={styles.buttonText}>Salvar</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={updateUser} style={styles.saveButton}>
+                            <Text style={styles.buttonText}>Salvar</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                        <Text style={styles.buttonText}>Fechar</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+                            <Text style={styles.buttonText}>Fechar</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>

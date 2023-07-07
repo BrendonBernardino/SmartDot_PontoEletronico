@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerIcon: {
-    left: 80,
+    position: 'absolute',
+    left: 180,
     padding: 20,
   },
   headerTextContainer: {
@@ -60,28 +61,25 @@ const styles = StyleSheet.create({
     height: 1,
     width: '30%',
     marginVertical: 4,
-    marginHorizontal: '20%',
+    marginHorizontal: '25%',
   },
   headerDividerStyle: {
     flexDirection: 'row',
   },
   headerText: {
     fontSize: 25,
-    marginBottom: 4,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight:'bold',
     color: "#C07F00",
-    textShadowColor: 'rgba(0, 0, 0, 0.5)', // Cor do sombreamento
-    textShadowOffset: { width: 1.3, height: 1.3 }, // Deslocamento do sombreamento
+    textShadowColor: 'rgba(0, 0, 0, 0.3)', // Cor do sombreamento
+    textShadowOffset: { width: 1, height: 2 }, // Deslocamento do sombreamento
     textShadowRadius: 2,
   },
   headerText2: {
     fontSize: 25,
     marginTop: 10,
-    // marginBottom: 0,
     fontWeight:'bold',
-    // color: "#C07F00",
-    // textShadowColor: 'rgba(0, 0, 0, 0.5)', // Cor do sombreamento
-    // textShadowOffset: { width: 1, height: 1 }, // Deslocamento do sombreamento
-    // textShadowRadius: 2,
   },
   containerFooter: {
     position: 'absolute',
@@ -140,13 +138,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFF7D4',
     padding: 20,
     borderRadius: 10,
-    width: '80%', // Defina a largura desejada para o modal
+    height: '70%',
+    marginTop: '90%',
+    width: '100%', // Defina a largura desejada para o modal
   },
   formTitle: {
-    fontSize: 18,
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   saveButton: {
@@ -171,10 +173,12 @@ const styles = StyleSheet.create({
   },
   columnContainer: {
     flex: 1,
+    marginHorizontal: '5%'
   },
   dayContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
   dayLabel: {

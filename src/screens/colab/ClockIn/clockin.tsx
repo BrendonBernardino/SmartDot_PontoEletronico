@@ -34,9 +34,7 @@ function ClockIn() {
 
     const [valueIgnored, setValueIgnored] = useState(false);
     const [dayWeek, setDayWeek] = useState("");
-    // const [day, setDay] = useState(23);
-    // const [month, setMonth] = useState(5);
-    // const [year, setYear] = useState(2023);
+
     const [visibleModal, setVisibleModal] = useState(false);
     const [modalPontoVisible, setModalPontoVisible] = useState(false);
     const [visibleModalList, setVisibleModalList] = useState(false);
@@ -45,7 +43,6 @@ function ClockIn() {
     const [intervalInicioplanned, setIntervalInicioplanned] = useState("");
     const [intervalFimplanned, setIntervalFimplanned] = useState("");
     const [saidaplanned, setSaidaplanned] = useState("");
-
     const [entradaReal, setEntradaReal] = useState("");
     const [intervaloInicioReal, setintervaloInicioReal] = useState("");
     const [intervaloFimReal, setintervaloFimReal] = useState("");
@@ -54,6 +51,7 @@ function ClockIn() {
     const [tempoTotal, setTempoTotal] = useState("");
     const [horaTotal, setHoraTotal] = useState('');
     const [minTotal, setMinTotal] = useState('');
+    const [progressNumber, setProgressNumber] = useState(0.0);
 
     const [cardPontoType, setCardPontoType] = useState(0);
 
@@ -64,6 +62,7 @@ function ClockIn() {
     const apiKey = 'AIzaSyAdt_pKKCXJSEQKbiosdO_F26gtonhpROI';
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const date = new Date();
@@ -81,6 +80,7 @@ function ClockIn() {
     };
 
     const getCurrentLocation = () => {
+        setIsLoading(true);
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -88,6 +88,7 @@ function ClockIn() {
                     type: 'error',
                     text1: 'Permissão para acessar a localização foi negada.'
                 })
+                setIsLoading(false);
                 return;
             }
             let location = await Location.getCurrentPositionAsync({});
@@ -95,6 +96,7 @@ function ClockIn() {
                 type: 'success',
                 text1: 'Geolocalização obtida!'
             })
+            setIsLoading(false);
             setLocation(location);
             console.log(JSON.stringify(location));
             setMyLatitude(location.coords.latitude != null ? location.coords.latitude : 0);
@@ -103,6 +105,7 @@ function ClockIn() {
     }
 
     const searchStreetName = async () => {
+        setIsLoading(true);
         try {
             const response = await fetch(
                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${myLatitude},${myLongitude}&key=${apiKey}`
@@ -116,9 +119,11 @@ function ClockIn() {
                 setStreetName(street);
                 console.log(street);
                 console.log(streetName);
+                setIsLoading(false);
             }
         } catch (error) {
             console.log('Error occurred while searching for street name:', error);
+            setIsLoading(false);
         }
     };
 
@@ -172,12 +177,14 @@ function ClockIn() {
         console.log('tempo total:' + tempoTotal);
         checkIntervalIsOpen();
         tempoTotalSlicer();
+        convertProgressBar();
     }, []);
 
     useEffect(() => {
     }, [isAuthenticated]);
 
     const handleRequisition = async () => {
+        setIsLoading(true);
         const url = `${apiUrl}/collaborator/point_presences` + '?data=' + currentDate;//'25-06-2023';
 
         try {
@@ -213,13 +220,14 @@ function ClockIn() {
 
                 setTempoTotal(data[0].tempo_total);
 
-
+                setIsLoading(false);
             } else {
                 console.log('Solicitacao falhou');
                 Toast.show({
                     type: 'error',
                     text1: 'Não foi possível puxar suas informações da API. Desculpe o transtorno.'
                 })
+                setIsLoading(false);
             }
         } catch (error) {
             // Lidar com erros de rede ou da API
@@ -228,6 +236,7 @@ function ClockIn() {
                 type: 'error',
                 text1: 'Falha na solicitação da API.'
             })
+            setIsLoading(false);
         }
     };
 
@@ -296,6 +305,10 @@ function ClockIn() {
             setMinTotal('0');
     }
 
+    function convertProgressBar() {
+        setProgressNumber(parseInt(tempoTotal)/((parseInt(saidaplanned) - parseInt(entradaplanned))) - ((parseInt(intervalFimplanned) - parseInt(intervalInicioplanned))))
+    }
+
     function DailyJourneyActivated() {
         if (dailyJourneyAtived == true) {
             return (
@@ -321,7 +334,7 @@ function ClockIn() {
             return (
                 <View style={styles.optional2}>
                     <MaletaIcon style={styles.cafeicon} width={40} height={40} color={"#4C3D3D"} />
-                    <Progress.Bar progress={0.8} width={200} color='#C07F00' unfilledColor='#4C3D3D' />
+                    <Progress.Bar progress={0.5} width={200} color='#C07F00' unfilledColor='#4C3D3D' />
                     <ClimbingIcon style={styles.cafeicon} width={40} height={40} color={"#C07F00"} />
                 </View>
             )
@@ -452,8 +465,8 @@ function ClockIn() {
                                 longitudeDelta: 0.0021,
                             }}
                         >
-                            <Marker coordinate={{ latitude: myLatitude, longitude: myLongitude }} />
-                            <Circle center={{ latitude: myLatitude, longitude: myLongitude }} radius={80} />
+                            <Marker coordinate={{ latitude: myLatitude, longitude: myLongitude }} pinColor='#C07F00'/>
+                            {/* <Circle center={{ latitude: myLatitude, longitude: myLongitude }} radius={80} /> */}
                         </MapView>
                         {/* <View style={styles.addressContainer}>
                             <Text style={styles.addressText}>Rua Muniz Freire, 128, Messejana, Brasil</Text>
@@ -495,10 +508,10 @@ function ClockIn() {
                             <Marker
                                 coordinate={{ latitude: myLatitude, longitude: myLongitude }}
                             />
-                            <Circle
+                            {/* <Circle
                                 center={{ latitude: myLatitude, longitude: myLongitude }}
                                 radius={80}
-                            />
+                            /> */}
                         </MapView>
                         <Text style={styles.addressText}>{streetName}</Text>
                         <View style={styles.pin}>

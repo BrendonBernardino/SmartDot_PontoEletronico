@@ -23,6 +23,23 @@ function Profiles() {
     const [password, setPassword] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [greeting, setGreeting] = useState('Bom dia');
+
+    const date = new Date();
+    const hour = String(date.getHours()).padStart(2, '0');
+
+    const verifyMorningEveningNight = () => {
+        if(date.getHours() >= 4 && date.getHours() <= 12) {
+            setGreeting('Bom dia');
+        }
+        if(date.getHours() >= 13 && date.getHours() <= 17) {
+            setGreeting('Boa tarde');
+        }
+        if((date.getHours() >= 18 && date.getHours() <= 23) || (date.getHours() >= 0 && date.getHours() <= 3)) {
+            setGreeting('Boa noite');
+        }
+    };
+
     const handleRequisition = async () => {
         const url = `${apiUrl}/manager/info`;
 
@@ -98,6 +115,7 @@ function Profiles() {
     };
     
     useEffect(() => {
+        verifyMorningEveningNight();
         handleRequisition();
     }, []);
 
@@ -136,15 +154,15 @@ function Profiles() {
                 <View style={styles.bottomRow}>
                     <PerfilIdIcon width={80} height={80} />
                     <View style={styles.userInfo}>
-                        <Text style={styles.userName}>Bom dia, {name}</Text>
+                        <Text style={styles.userName}>{greeting}, {name}</Text>
                         <Text style={styles.userDescription}>{companyName}</Text>
                     </View>
                 </View>
             </View>
             <View style={styles.whiteSection}>
                 <View style={styles.settings}>
-                    <TouchableOpacity style={styles.row}>
-                        <Text style={styles.rowText} onPress={() => setModalVisible(true)}>Editar Perfil</Text>
+                    <TouchableOpacity style={styles.row} onPress={() => setModalVisible(true)}>
+                        <Text style={styles.rowText}>Editar Perfil</Text>
                         <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
                 </View>

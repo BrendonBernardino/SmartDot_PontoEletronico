@@ -26,11 +26,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           borderWidth: 1,
           borderColor: 'gray',
           flex: 1,
+          height: '100%'
         }}
       >
         <TextInput
           style={{ flex: 1, height: 40, paddingHorizontal: 10 }}
-          placeholder="Pesquisar..."
+          placeholder="Quem eu estou procurando?"
           value={searchText}
           onChangeText={setSearchText}
         />
@@ -38,7 +39,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <View style={styles.searchContainer}>
           <TouchableOpacity onPress={handleSearch} style={styles.searchButton}>
             <View style={styles.searchIconContainer}>
-              <Ionicons name="search" size={24} color="white" />
+              <Ionicons name="search" size={20} color="white" />
             </View>
           </TouchableOpacity>
         </View>

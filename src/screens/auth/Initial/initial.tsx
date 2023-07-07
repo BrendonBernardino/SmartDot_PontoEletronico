@@ -52,15 +52,16 @@ function Initial() {
           style={styles.logo}
           source={themeMode === COLORSLIGHT ? require('../../../../assets/Logosvg_1.png') : require('../../../../assets/LogoDark.png')}
         />
-        {/* <LogoIcon/> */}
-        <Text style={[styles.title, { color: themeMode.text_2 }]}>SmartDot</Text>
+        <View style={styles.titleLayer}>
+          <Text style={[styles.title, { color: themeMode.tertiary, paddingLeft: '8%' }]}>Smart</Text>
+          <Text style={[styles.title, { color: themeMode.auxiliar, paddingRight: '8%' }]}>Dot</Text>
+        </View>
       </View>
       <View style={styles.buttons}>
         <Button
           text="Entrar"
           color={themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.secundary}
           textColor={themeMode === COLORSLIGHT ? themeMode.text : themeMode.text_2}
-          borderTopLeftRadius={33}
           elevation={5}
           centralized={1}
           onPress={handleEntrar}
@@ -70,7 +71,6 @@ function Initial() {
           text="Criar Conta"
           color={themeMode === COLORSLIGHT ? themeMode.auxiliar : themeMode.tertiary}
           textColor={themeMode.text}
-          borderBottomRightRadius={33}
           elevation={5}
           centralized={1}
           onPress={handleRegistrar}

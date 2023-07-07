@@ -8,6 +8,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 1,
   },
+  loading: {
+    width: '50%',
+    height: '100%',
+  },
 });
 
 export default styles;

@@ -9,6 +9,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ENV from '../../../../env';
 import Toast from 'react-native-toast-message'
 import Loading from '../../../components/Loading/Loading';
+import Cracha from '../../../../assets/svg/cracha.svg';
+import Trash from '../../../../assets/svg/trash.svg';
+import Edit from '../../../../assets/svg/edit.svg';
+import Reset from '../../../../assets/svg/reset.svg';
+import Adicao from '../../../../assets/svg/adicao.svg';
 
 const apiUrl = ENV.API_URL;
 
@@ -42,7 +47,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({ label, value, onChang
   <View style={{ marginBottom: 10 }}>
     <Text>{label}</Text>
     <TextInput
-      style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
+      style={{ borderWidth: 1, borderColor: '#4C3D3D', padding: 5, borderRadius: 10 }}
       value={value}
       onChangeText={onChangeText}
     />
@@ -53,6 +58,7 @@ const TaskList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [companyName, setCompanyName] = useState('');
+  const [editFlag, setEditFlag] = useState(false);
 
   const [email, setEmail] = useState('');
   const [id, setId] = useState('');
@@ -199,6 +205,7 @@ const TaskList: React.FC = () => {
         setSaturday(userData[0].saturday);
         setSunday(userData[0].sunday);
 
+        setEditFlag(true);
         setModalVisible(true);
       } else {
         Toast.show({
@@ -375,6 +382,7 @@ const TaskList: React.FC = () => {
   };
 
   const closeModal = () => {
+    setEditFlag(false);
     setModalVisible(false);
   };
 
@@ -399,13 +407,16 @@ const TaskList: React.FC = () => {
       </View>
       <View style={styles.iconsContainer}>
         <TouchableOpacity style={styles.iconItem} onPress={() => resetUser(item.id)}>
-          <Ionicons name="reload-circle-outline" size={24} color="black" />
+          {/* <Ionicons name="reload-circle-outline" size={24} color="black" /> */}
+          <Reset width={29} height={29} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconItem} onPress={() => editUser(item.id)}>
-          <Icon name="edit" size={24} color="black" />
+          {/* <Icon name="edit" size={24} color="black" /> */}
+          <Edit width={27} height={27} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconItem} onPress={() => removeUser(item.id)}>
-          <Icon name="trash" size={24} color="black" />
+          {/* <Icon name="trash" size={24} color="black" /> */}
+          <Trash width={25} height={25} />
         </TouchableOpacity>
       </View>
     </View>
@@ -416,14 +427,14 @@ const TaskList: React.FC = () => {
       <View style={styles.headerTextContainer}>
         <View style={styles.headerTextContainer2}>
           <Text style={styles.headerText}>Colaboradores</Text>
-          <TouchableOpacity style={styles.headerIcon}>
+          <View style={styles.headerIcon}>
             <View style={styles.logolayer}>
               <Image
                 style={styles.logo}
                 source={require('../../../../assets/Logo.png')}
               />
             </View>
-          </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.headerDividerStyle}>
           <View style={styles.headerDivider} />
@@ -438,12 +449,9 @@ const TaskList: React.FC = () => {
     <View style={styles.container}>
       <Header />
       <SearchBar onSearch={handleSearch} />
-
+      <Cracha width={70} height={70} color='#C07F00' />
       {isLoading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Loading />
-          {/* <ActivityIndicator size="large" color="#0000ff" /> */}
-        </View>
       ) : (
         <ScrollView>
           {users.map((item) => (
@@ -463,7 +471,7 @@ const TaskList: React.FC = () => {
         <ScrollView style={styles.scrollViewContent}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.formTitle}>Usuário:</Text>
+              <Text style={styles.formTitle}>{editFlag == true ? 'Editar': 'Adicionar'} Colaborador</Text>
               <CustomTextInput
                 label="Email"
                 value={email}
@@ -582,21 +590,21 @@ const TaskList: React.FC = () => {
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Segunda:</Text>
-                    <Switch value={monday} onValueChange={setMonday} thumbColor={'#C07F00'}/>
+                    <Switch value={monday} onValueChange={setMonday} thumbColor={'#C07F00'} trackColor={{false: '#CFCFCF', true: '#C07F00'}}/>
                   </View>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Quarta:</Text>
-                    <Switch value={wednesday} onValueChange={setWednesday} thumbColor={'#C07F00'} trackColor={'#C07F00'}/>
+                    <Switch value={wednesday} onValueChange={setWednesday} thumbColor={'#C07F00'} trackColor={{false: '#CFCFCF', true: '#C07F00'}}/>
                   </View>
                 </View>
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Terça:</Text>
-                    <Switch value={tuesday} onValueChange={setTuesday} thumbColor={'#C07F00'}/>
+                    <Switch value={tuesday} onValueChange={setTuesday} thumbColor={'#C07F00'} trackColor={{false: '#CFCFCF', true: '#C07F00'}}/>
                   </View>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Quinta:</Text>
-                    <Switch value={thursday} onValueChange={setThursday} thumbColor={'#C07F00'}/>
+                    <Switch value={thursday} onValueChange={setThursday} thumbColor={'#C07F00'} trackColor={{false: '#CFCFCF', true: '#C07F00'}}/>
                   </View>
                 </View>
               </View>
@@ -604,17 +612,17 @@ const TaskList: React.FC = () => {
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Sexta:</Text>
-                    <Switch value={friday} onValueChange={setFriday} thumbColor={'#C07F00'}/>
+                    <Switch value={friday} onValueChange={setFriday} thumbColor={'#C07F00'} trackColor={{false: '#CFCFCF', true: '#C07F00'}}/>
                   </View>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Domingo:</Text>
-                    <Switch value={sunday} onValueChange={setSunday} thumbColor={'#C07F00'}/>
+                    <Switch value={sunday} onValueChange={setSunday} thumbColor={'#C07F00'} trackColor={{false: '#CFCFCF', true: '#C07F00'}}/>
                   </View>
                 </View>
                 <View style={styles.columnContainer}>
                   <View style={styles.dayContainer}>
                     <Text style={styles.dayLabel}>Sábado:</Text>
-                    <Switch value={saturday} onValueChange={setSaturday} thumbColor={'#C07F00'}/>
+                    <Switch value={saturday} onValueChange={setSaturday} thumbColor={'#C07F00'} trackColor={{false: '#CFCFCF', true: '#C07F00'}}/>
                   </View>
                 </View>
               </View>
@@ -636,17 +644,16 @@ const TaskList: React.FC = () => {
         onPress={openModal}
         style={{
           position: 'absolute',
-          bottom: 20,
-          right: 20,
-          backgroundColor: '#c88f20',
+          bottom: 90,
+          right: 25,
           width: 60,
           height: 60,
-          borderRadius: 30,
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
-        <Icon name="plus" size={30} color="white" />
+        {/* <Icon name="plus" size={30} color="white" /> */}
+        <Adicao width={60} height={60} color="#C07F00"/>
       </TouchableOpacity>
 
       <FooterMenu leftPage="ManagerPointPresences" centerPage="ManagerCollaborators" rightPage="ManagerProfiles" />

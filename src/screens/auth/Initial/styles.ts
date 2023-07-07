@@ -33,6 +33,13 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-end',
       width: "100%",
     },
+    titleLayer: {
+      flex: 0.5,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      width: "60%",
+    },
     logo: {
       alignItems: 'center',
       justifyContent: 'center',
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'flex-end',
       fontSize: 35,
-      fontWeight: "bold"
+      fontWeight: "bold",
     },
     buttons: {
       flex: 0.5,

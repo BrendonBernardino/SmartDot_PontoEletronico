@@ -70,7 +70,7 @@ function Login() {
                     console.log('entrou em collaborator_pending');
                     navigation.navigate("Perfil")
                 } 
-                if (role === 'collaborator')  {
+                if (role === 'colab')  {
                     console.log('entrou em collaborator');
                     navigation.navigate("HomeTabs")
                 }

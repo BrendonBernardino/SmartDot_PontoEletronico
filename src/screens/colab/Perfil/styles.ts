@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   saveButton: {
-    backgroundColor: '#c88f20',
+    backgroundColor: '#C07F00',
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: '80%',
-    backgroundColor: '#fff',
+    width: '100%',
+    backgroundColor: '#FFD95A',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
