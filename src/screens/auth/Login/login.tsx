@@ -9,6 +9,7 @@ import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
 import Toast from 'react-native-toast-message'
 import ENV from '../../../../env';
+import Loading from '../../../components/Loading/Loading';
 
 const apiUrl = ENV.API_URL;
 
@@ -16,6 +17,7 @@ function Login() {
     const navigation = useNavigation<StackTypes>();
     const [usernameOrEmail, setUsernameOrEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleUsernameOrEmailChange = (inputUsernameOrEmail: string) => {
         setUsernameOrEmail(inputUsernameOrEmail);
@@ -28,6 +30,7 @@ function Login() {
     };
 
     const handleLogin = async () => {
+        setIsLoading(true);
         const url = `${apiUrl}/login`
         console.log(url);
         const credentials = {
@@ -58,6 +61,7 @@ function Login() {
                     type: 'success',
                     text1: 'Logado com sucesso!'
                 })
+                setIsLoading(false);
 
                 console.log(data.token);
                 console.log(data.role);
@@ -82,17 +86,23 @@ function Login() {
                     type: 'error',
                     text1: 'Login falhou. Por favor tente novamente.'
                 })
+                setIsLoading(false);
             }
         } catch (error) {
             Toast.show({
                 type: 'error',
                 text1: 'Não foi possível logar. Por favor tente novamente mais tarde.'
             })
+            setIsLoading(false);
         }
     };
 
 
-    return (
+    return isLoading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF7D4'}}>
+            <Loading />
+        </View>
+    ) : (
         <View style={styles.container}>
             <View style={styles.logolayer}>
                 <Image

@@ -7,7 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from '../../../../App';
 import PerfilIdIcon from '../../../.././assets/svg/perfil_id.svg';
 import LogoutIcon from '../../../.././assets/svg/logout.svg';
-import Toast from 'react-native-toast-message'
+import Toast from 'react-native-toast-message';
+import Loading from '../../../components/Loading/Loading';
 
 import ENV from '../../../../env';
 
@@ -23,8 +24,10 @@ function Perfil() {
     const [password, setPassword] = useState('');
     const [roleActive, setRoleActive] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleRequisition = async () => {
+        setIsLoading(true);
         const url = `${apiUrl}/collaborator/users`;
 
         try {
@@ -46,17 +49,20 @@ function Perfil() {
                 setEmail(data.email);
                 setCompanyName(data.company_name);
                 setRoleActive(data.role_active);
+                setIsLoading(false);
             } else {
                 Toast.show({
                     type: 'error',
                     text1: 'Não foi possível carregar'
                 });
+                setIsLoading(false);
             }
         } catch (error) {
             Toast.show({
                 type: 'error',
                 text1: String(error)
             });
+            setIsLoading(false);
         }
     };
 
@@ -194,7 +200,11 @@ function Perfil() {
         </View>
     );
 
-    return (
+    return isLoading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF7D4'}}>
+            <Loading />
+        </View>
+    ) : (
         <View style={styles.container}>
             <View style={[styles.yellowSection, { backgroundColor: '#FFD95A' }]}>
                 <View style={styles.topRow}>
@@ -215,7 +225,7 @@ function Perfil() {
                         <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
 
-                    {companyName == null ? ('') : (
+                    {companyName != '' ? ('') : (
                         <View style={styles.card}>
                             <Text style={styles.title}>Convite</Text>
                             <Text style={styles.description}>

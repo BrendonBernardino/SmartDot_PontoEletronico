@@ -315,7 +315,7 @@ const TaskList: React.FC = () => {
       } else {
         Toast.show({
           type: 'error',
-          text1: 'Não foi possível adicionar'
+          text1: 'Não foi possível adicionar. Verifique o email digitado.'
         })
         console.log(response)
       }
