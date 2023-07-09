@@ -1,5 +1,5 @@
 import { Text, View, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { Feather, Entypo } from 'react-native-vector-icons'
@@ -8,6 +8,7 @@ import styles from "./styles"
 import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
 import { StackTypes } from '../../../../App';
 import LogoIcon from '../../../.././assets/svg/Logosvg.svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Initial() {
   const [themeMode, setThemeMode] = useState(COLORSLIGHT);
@@ -24,6 +25,30 @@ function Initial() {
     }
   };
 
+  const redirectPage = async () => {
+    try {
+        const role = await AsyncStorage.getItem('role');
+        switch (role) {
+            case 'manager':
+                navigation.navigate("HomeManager");
+                break;
+            case 'collaborator_pending':
+                navigation.navigate("Perfil");
+                break;
+            case 'collaborator_banned':
+                navigation.navigate("Perfil");
+                break;
+            case 'collaborator_active':
+                navigation.navigate("HomeTabs");
+                break;
+            default:
+                break;
+        }
+      } catch (error) {
+          console.log(error);
+      }
+  };
+
   const handleEntrar = () => {
     navigation.navigate("Login");
   };
@@ -31,6 +56,10 @@ function Initial() {
   const handleRegistrar = () => {
     navigation.navigate("Register");
   };
+
+  useEffect(() => {
+    redirectPage();
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: themeMode.primary }]}>
