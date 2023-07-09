@@ -53,8 +53,8 @@ function Initial() {
           source={themeMode === COLORSLIGHT ? require('../../../../assets/Logosvg_1.png') : require('../../../../assets/LogoDark.png')}
         />
         <View style={styles.titleLayer}>
-          <Text style={[styles.title, { color: themeMode.tertiary, paddingLeft: '8%' }]}>Smart</Text>
-          <Text style={[styles.title, { color: themeMode.auxiliar, paddingRight: '8%' }]}>Dot</Text>
+          <Text style={[styles.title, { color: themeMode.tertiary, paddingLeft: '2%' }]}>Smart</Text>
+          <Text style={[styles.title, { color: themeMode.auxiliar, paddingRight: '2%' }]}>Dot</Text>
         </View>
       </View>
       <View style={styles.buttons}>

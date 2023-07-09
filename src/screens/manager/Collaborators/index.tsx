@@ -105,10 +105,13 @@ const TaskList: React.FC = () => {
         setCompanyName(data.company_name);
         console.log(companyName)
       } else {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.errors;
+        
         Toast.show({
-          type: 'error',
-          text1: 'Não foi possível carregar'
-        });
+            type: 'error',
+            text1: errorMessage || 'Não foi possível recarregar'
+        })
       }
     } catch (error) {
       Toast.show({
@@ -208,9 +211,12 @@ const TaskList: React.FC = () => {
         setEditFlag(true);
         setModalVisible(true);
       } else {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.errors;
+        
         Toast.show({
-          type: 'error',
-          text1: 'Não foi possível recarregar'
+            type: 'error',
+            text1: errorMessage || 'Não foi possível recarregar'
         })
       }
     } catch (error) {
@@ -261,9 +267,12 @@ const TaskList: React.FC = () => {
           text1: 'Atualizado com sucesso'
         })
       } else {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.errors;
+        
         Toast.show({
-          type: 'error',
-          text1: 'Não foi possível recarregar'
+            type: 'error',
+            text1: errorMessage || 'Não foi possível recarregar'
         })
       }
     } catch (error) {
@@ -313,11 +322,13 @@ const TaskList: React.FC = () => {
         })
         fetchUsers();
       } else {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.errors;
+
         Toast.show({
-          type: 'error',
-          text1: 'Não foi possível adicionar. Verifique o email digitado.'
+            type: 'error',
+            text1: errorMessage || 'Não foi possível recarregar'
         })
-        console.log(response)
       }
 
     } catch (error) {
@@ -346,9 +357,12 @@ const TaskList: React.FC = () => {
           text1: 'Resetado com sucesso'
         })
       } else {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.errors;
+        
         Toast.show({
-          type: 'error',
-          text1: 'Não foi possível resetar'
+            type: 'error',
+            text1: errorMessage || 'Não foi possível recarregar'
         })
       }
     } catch (error) {

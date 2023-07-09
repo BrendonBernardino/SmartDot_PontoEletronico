@@ -22,41 +22,21 @@ const apiUrl = ENV.API_URL;
 const Tab = createBottomTabNavigator();
 
 function HomeTabs() {
-  const [role, setRole] = useState(false);
+  const [role, setRole] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRequisition = async () => {
-    const url = `${apiUrl}/collaborator/users`;
-
+    setIsLoading(true);
     try {
-      setIsLoading(true)
-      const token = await AsyncStorage.getItem('token');
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setRole(data.role_active);
-        setIsLoading(false)
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Não foi possível carregar'
-        });
-        setIsLoading(false)
+      const storedRole = await AsyncStorage.getItem('role');
+      if (storedRole !== null) {
+        setRole(storedRole);
       }
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: String(error)
-      });
-      setIsLoading(false)
+      console.log(error);
+      // Tratar o erro de acordo com a sua lógica
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -92,7 +72,7 @@ function HomeTabs() {
         }
       }}
     >
-      {!role ? (
+      {role != 'collaborator_pending' ? (
         <Tab.Screen
           name="Perfil"
           component={Perfil}

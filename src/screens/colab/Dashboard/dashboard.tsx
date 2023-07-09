@@ -5,6 +5,7 @@ import styles from "./styles";
 import CardDashboard from "../../../components/CardDashboard/CardDashboard";
 import ReloadIcon from '../../../../assets/svg/reload.svg';
 import ENV from '../../../../env';
+import Toast from 'react-native-toast-message';
 
 const apiUrl = ENV.API_URL;
 
@@ -55,7 +56,13 @@ function Dashboard() {
                 setTotalFaltas(data.total_de_faltas);
 
             } else {
-                console.log('Solicitacao falhou');
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
+                Toast.show({
+                    type: 'error',
+                    text1: errorMessage || 'Não foi possível recarregar'
+                })
             }
         } catch (error) {
             // Lidar com erros de rede ou da API

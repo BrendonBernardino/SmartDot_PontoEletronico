@@ -22,9 +22,9 @@ function Perfil() {
     const [companyName, setCompanyName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [roleActive, setRoleActive] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [role, setRole] = useState('');
 
     const handleRequisition = async () => {
         setIsLoading(true);
@@ -32,7 +32,10 @@ function Perfil() {
 
         try {
             const token = await AsyncStorage.getItem('token');
-
+            const storedRole = await AsyncStorage.getItem('role');
+            if (storedRole !== null) {
+                setRole(storedRole);
+            }
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -48,13 +51,15 @@ function Perfil() {
                 setId(data.id);
                 setEmail(data.email);
                 setCompanyName(data.company_name);
-                setRoleActive(data.role_active);
                 setIsLoading(false);
             } else {
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Não foi possível carregar'
-                });
+                    text1: errorMessage || 'Não foi possível recarregar'
+                })
                 setIsLoading(false);
             }
         } catch (error) {
@@ -90,9 +95,12 @@ function Perfil() {
                     text1: 'Atualizado com sucesso'
                 })
             } else {
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Não foi possível recarregar'
+                    text1: errorMessage || 'Não foi possível recarregar'
                 })
             }
         } catch (error) {
@@ -123,9 +131,12 @@ function Perfil() {
                     text1: 'Atualizado com sucesso'
                 })
             } else {
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Não foi possível recarregar'
+                    text1: errorMessage || 'Não foi possível recarregar'
                 })
             }
         } catch (error) {
@@ -157,9 +168,12 @@ function Perfil() {
                     text1: 'Atualizado com sucesso'
                 })
             } else {
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Não foi possível recarregar'
+                    text1: errorMessage || 'Não foi possível recarregar'
                 })
             }
         } catch (error) {
@@ -176,6 +190,7 @@ function Perfil() {
 
     const logOut = async () => {
         await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('role');
         navigation.navigate("Initial")
     };
 
@@ -225,7 +240,7 @@ function Perfil() {
                         <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
 
-                    {companyName != '' ? ('') : (
+                    {role == 'collaborator_pending' && companyName != '' ? ('') : (
                         <View style={styles.card}>
                             <Text style={styles.title}>Convite</Text>
                             <Text style={styles.description}>

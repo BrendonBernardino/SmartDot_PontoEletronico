@@ -1,5 +1,5 @@
 import { Text, View, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
@@ -21,18 +21,39 @@ function Login() {
 
     const handleUsernameOrEmailChange = (inputUsernameOrEmail: string) => {
         setUsernameOrEmail(inputUsernameOrEmail);
-        console.log(usernameOrEmail);
+    };
+
+    const redirectPage = async () => {
+        try {
+            const role = await AsyncStorage.getItem('role');
+            switch (role) {
+                case 'manager':
+                    navigation.navigate("HomeManager");
+                    break;
+                case 'collaborator_pending':
+                    navigation.navigate("Perfil");
+                    break;
+                case 'collaborator_banned':
+                    navigation.navigate("Perfil");
+                    break;
+                case 'collaborator_active':
+                    navigation.navigate("HomeTabs");
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handlePassChange = (inputPass: string) => {
         setPassword(inputPass);
-        console.log(password);
     };
 
     const handleLogin = async () => {
         setIsLoading(true);
         const url = `${apiUrl}/login`
-        console.log(url);
         const credentials = {
             email: usernameOrEmail,
             password: password,
@@ -47,8 +68,6 @@ function Login() {
                 body: JSON.stringify(credentials)
             });
 
-            console.log(usernameOrEmail)
-            console.log(password)
             if (response.ok) {
                 const data = await response.json();
                 const token = data.token;
@@ -56,6 +75,7 @@ function Login() {
 
                 // Salvar o token no AsyncStorage
                 await AsyncStorage.setItem('token', token);
+                await AsyncStorage.setItem('role', role);
 
                 Toast.show({
                     type: 'success',
@@ -63,28 +83,14 @@ function Login() {
                 })
                 setIsLoading(false);
 
-                console.log(data.token);
-                console.log(data.role);
-
-                if (role === 'manager') {
-                    console.log('entrou em manager');
-                    navigation.navigate("HomeManager")
-                }
-                if (role === 'collaborator_pending') {
-                    console.log('entrou em collaborator_pending');
-                    navigation.navigate("Perfil")
-                } 
-                if (role === 'colab')  {
-                    console.log('entrou em collaborator');
-                    navigation.navigate("HomeTabs")
-                }
+                redirectPage();
             } else {
-                // Login falhou, lidar com o erro
-                // Por exemplo, você pode exibir uma mensagem de erro para o usuário
-                // navigation.navigate("HomeTabs")
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Login falhou. Por favor tente novamente.'
+                    text1: errorMessage || 'Login falhou. Por favor tente novamente.'
                 })
                 setIsLoading(false);
             }
@@ -97,6 +103,9 @@ function Login() {
         }
     };
 
+    useEffect(() => {
+        redirectPage();
+    }, []);
 
     return isLoading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF7D4'}}>

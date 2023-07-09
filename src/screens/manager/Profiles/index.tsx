@@ -64,10 +64,13 @@ function Profiles() {
                     setCompanyName(data.company_name);
                 }
             } else {
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Não foi possível carregar'
-                });
+                    text1: errorMessage || 'Não foi possível recarregar'
+                })
             }
         } catch (error) {
             Toast.show({
@@ -101,9 +104,12 @@ function Profiles() {
                     text1: 'Atualizado com sucesso'
                 })
             } else {
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Não foi possível recarregar'
+                    text1: errorMessage || 'Não foi possível recarregar'
                 })
             }
         } catch (error) {
@@ -121,6 +127,7 @@ function Profiles() {
 
     const logOut = async () => {
         await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('role');
         navigation.navigate("Initial")
     };
 

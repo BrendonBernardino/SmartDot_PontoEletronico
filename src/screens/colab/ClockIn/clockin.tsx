@@ -211,11 +211,13 @@ function ClockIn() {
               text1: 'Ponto Batido!'
             })
           } else {
+            const errorResponse = await response.json();
+            const errorMessage = errorResponse.errors;
+            
             Toast.show({
-              type: 'error',
-              text1: 'Não foi possível bater seu ponto'
+                type: 'error',
+                text1: errorMessage || 'Não foi possível recarregar'
             })
-            console.log(response)
           }
     
         } catch (error) {
@@ -266,10 +268,12 @@ function ClockIn() {
 
                 setIsLoading(false);
             } else {
-                console.log('Solicitacao falhou');
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+                
                 Toast.show({
                     type: 'error',
-                    text1: 'Não foi possível puxar suas informações da API. Desculpe o transtorno.'
+                    text1: errorMessage || 'Não foi possível recarregar'
                 })
                 setIsLoading(false);
             }

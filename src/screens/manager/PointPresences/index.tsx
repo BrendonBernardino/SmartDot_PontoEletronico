@@ -182,10 +182,13 @@ const TaskList: React.FC<TaskListProps> = () => {
       });
 
       if (!response.ok) {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.errors;
+        
         Toast.show({
-          type: 'error',
-          text1: 'Houve um erro ao recarregar!'
-        });
+            type: 'error',
+            text1: errorMessage || 'Não foi possível recarregar'
+        })
       }
 
       const data = await response.json();
