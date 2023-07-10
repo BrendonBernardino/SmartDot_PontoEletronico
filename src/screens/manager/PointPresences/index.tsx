@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Image, ScrollView, ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Calendar from "../../../components/Calendar/Calendar";
 import FooterMenu from "../../../components/FooterMenu/manage";
@@ -70,14 +70,21 @@ const getBadgeColor = (text: string): string => {
 const TaskCard: React.FC<TaskCardProps> = ({ taskData, index }) => {
   const isEvenIndex = index % 2 === 0;
   const cardColor = isEvenIndex ? '#FFD95A' : '#FFF7D4';
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+  const [localName, setLocalName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleIconPress = () => {
+  const handleIconPress = (map_latitude: string, map_longitude: string, map_local_name: string) => {
     setModalVisible(true);
+    setLatitude(map_latitude)
+    setLongitude(map_longitude)
+    setLocalName(map_local_name)
   };
 
   const handleCloseModal = () => {
     setModalVisible(false);
+    console.log('close modal')
   };
 
   const MapModal: React.FC = () => (
@@ -87,19 +94,26 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData, index }) => {
       visible={modalVisible}
       onRequestClose={handleCloseModal}
     >
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-        <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
-            }}>
-            <Marker coordinate={{ latitude: 37.78825, longitude: -122.4324 }} />
-            <Circle center={{ latitude: 0.0022, longitude: 0.0022 }} radius={80} />
-          </MapView>
+      <View style={[styles.modalMask, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
+        <View style={[styles.modalPontoContent, { backgroundColor: '#fff' }]}>
+        {latitude == '' ? (
+          <Text style={{ color: 'black', textAlign: 'center' }}>Aguardando</Text>
+        ) : (
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+                latitudeDelta: 0.0022,
+                longitudeDelta: 0.0021,
+              }}>
+
+              <Marker
+                coordinate={{ latitude: parseFloat(latitude), longitude: parseFloat(longitude) }}
+              />
+            </MapView>
+          )}
+          <Text style={{ color: 'black', textAlign: 'center' }}>{localName}</Text>
 
           <TouchableOpacity onPress={handleCloseModal}>
             <Text style={{ color: 'blue', textAlign: 'center' }}>Fechar</Text>
@@ -120,16 +134,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData, index }) => {
       </View>
       <View style={styles.columnCenter}>
         <Text style={styles.text} />
-        <TouchableOpacity onPress={() => handleIconPress()}>
+        <TouchableOpacity onPress={() => handleIconPress(taskData.tempo_inicial.latitude, taskData.tempo_inicial.longitude, taskData.tempo_inicial.local_name)}>
           <Text style={styles.text}><Icon name="map-pin" size={20} color="black" /></Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleIconPress()}>
+        <TouchableOpacity onPress={() => handleIconPress(taskData.intervalo_inicial.latitude, taskData.intervalo_inicial.longitude, taskData.intervalo_inicial.local_name)}>
           <Text style={styles.text}><Icon name="map-pin" size={20} color="black" /></Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleIconPress()}>
+        <TouchableOpacity onPress={() => handleIconPress(taskData.intervalo_final.latitude, taskData.intervalo_final.longitude, taskData.intervalo_final.local_name)}>
           <Text style={styles.text}><Icon name="map-pin" size={20} color="black" /></Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleIconPress()}>
+        <TouchableOpacity onPress={() => handleIconPress(taskData.tempo_final.latitude, taskData.tempo_final.longitude, taskData.tempo_final.local_name)}>
           <Text style={styles.text}><Icon name="map-pin" size={20} color="black" /></Text>
         </TouchableOpacity>
       </View>
@@ -154,15 +168,7 @@ const TaskList: React.FC<TaskListProps> = () => {
   const [data, setData] = useState('');
   const [formattedDate, setFormattedDate] = useState('');
   const [weekday, setWeekday] = useState('');
-  const [dayWeek, setDayWeek] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const date = new Date();
-  const yearCurrent = date.getFullYear();
-  const monthCurrent = String(date.getMonth() + 1).padStart(2, '0');
-  const dayCurrent = String(date.getDate()).padStart(2, '0');
-  const dayWeekCurrent = date.getDay();
-  const currentDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
 
   const fetchData = async (date: string, name?: string) => {
     try {
@@ -214,7 +220,6 @@ const TaskList: React.FC<TaskListProps> = () => {
   };
 
   useEffect(() => {
-    getDayWeek();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
     console.log(formattedDate);
@@ -241,23 +246,6 @@ const TaskList: React.FC<TaskListProps> = () => {
     formatDate(formattedDate)
     handleCloseModal();
   };
-
-  function getDayWeek() {
-    if (dayWeekCurrent == 0)
-      setDayWeek('Domingo');
-    if (dayWeekCurrent == 1)
-      setDayWeek('Segunda');
-    if (dayWeekCurrent == 2)
-      setDayWeek('Terça');
-    if (dayWeekCurrent == 3)
-      setDayWeek('Quarta');
-    if (dayWeekCurrent == 4)
-      setDayWeek('Quinta');
-    if (dayWeekCurrent == 5)
-      setDayWeek('Sexta');
-    if (dayWeekCurrent == 6)
-      setDayWeek('Sábado');
-  }
 
   const Header: React.FC = () => (
     // <View style={styles.headerContainer}>
@@ -299,7 +287,7 @@ const TaskList: React.FC<TaskListProps> = () => {
       <View style={styles.header}>
         <Text style={{ fontWeight: "bold", fontSize: 25, color: "#C07F00" }}>HOJE</Text>
         <View style={styles.headerDivider} />
-        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{dayWeek}, {currentDate}</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 20 }}>{weekday}, {formattedDate}</Text>
       </View>
       <TouchableOpacity onPress={handleOpenModal}>
         <CalendarIcon width={30} height={30} />

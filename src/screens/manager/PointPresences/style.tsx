@@ -94,7 +94,22 @@ const styles = StyleSheet.create({
     height: '20%',
     marginBottom: 150,
     borderRadius: 20,
-  }
+  },
+  modalMask: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%'
+  },
+  modalPontoContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    width: '100%',
+    height: '60%',
+    marginTop: '80%'
+},
 });
 
 export default styles;

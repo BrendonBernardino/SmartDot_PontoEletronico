@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, KeyboardAvoidingView, Text, TouchableOpacity, Image, TextInput, Modal, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, Image, TextInput, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "./styles";
@@ -42,7 +42,6 @@ function Profiles() {
     const handleRequisition = async () => {
         const url = `${apiUrl}/manager/info`;
 
-        
         try {
             const token = await AsyncStorage.getItem('token');
 
