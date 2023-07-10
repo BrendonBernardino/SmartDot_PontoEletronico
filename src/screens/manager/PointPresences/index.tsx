@@ -96,7 +96,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData, index }) => {
     >
       <View style={[styles.modalMask, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
         <View style={[styles.modalPontoContent, { backgroundColor: '#fff' }]}>
-        {latitude == '' ? (
+        {latitude == '' || longitude == '' || localName == '' ? (
           <Text style={{ color: 'black', textAlign: 'center' }}>Aguardando</Text>
         ) : (
             <MapView
