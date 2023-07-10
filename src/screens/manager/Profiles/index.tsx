@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Modal, Animated } from 'react-native';
+import { View, KeyboardAvoidingView, Text, TouchableOpacity, Image, TextInput, Modal, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "./styles";
@@ -26,7 +26,6 @@ function Profiles() {
     const [greeting, setGreeting] = useState('Bom dia');
 
     const date = new Date();
-    const hour = String(date.getHours()).padStart(2, '0');
 
     const verifyMorningEveningNight = () => {
         if(date.getHours() >= 4 && date.getHours() <= 12) {
@@ -43,6 +42,7 @@ function Profiles() {
     const handleRequisition = async () => {
         const url = `${apiUrl}/manager/info`;
 
+        
         try {
             const token = await AsyncStorage.getItem('token');
 
@@ -140,14 +140,14 @@ function Profiles() {
         value: string;
         onChangeText: (text: string) => void;
     }
-    
+
     const CustomTextInput: React.FC<CustomTextInputProps> = ({ label, value, onChangeText }) => (
         <View style={{ marginBottom: 10 }}>
             <Text>{label}</Text>
             <TextInput
-            style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
-            value={value}
-            onChangeText={onChangeText}
+                style={{ borderWidth: 1, borderColor: '#ccc', padding: 10 }}
+                value={value}
+                onChangeText={onChangeText}
             />
         </View>
     );
@@ -184,6 +184,7 @@ function Profiles() {
                     <Text style={styles.LogoutText}>Sair da Conta</Text>
                 </TouchableOpacity>
             </View>
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -192,31 +193,31 @@ function Profiles() {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                    <CustomTextInput
-                        label="Nome"
-                        value={name}
-                        onChangeText={setName}
-                    />
+                        <CustomTextInput
+                            label="Nome"
+                            value={name}
+                            onChangeText={(text) => setName(text)}
+                        />
 
-                    <CustomTextInput
-                        label="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
+                        <CustomTextInput
+                            label="Email"
+                            value={email}
+                            onChangeText={(text) => setEmail(text)}
+                        />
 
-                    <CustomTextInput
-                        label="Senha"
-                        value={''}
-                        onChangeText={setPassword}
-                    />
+                        <CustomTextInput
+                            label="Senha"
+                            value={password}
+                            onChangeText={(text) => setPassword(text)}
+                        />
 
-                    <TouchableOpacity onPress={updateUser} style={styles.saveButton}>
-                        <Text style={styles.buttonText}>Salvar</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={updateUser} style={styles.saveButton}>
+                            <Text style={styles.buttonText}>Salvar</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                        <Text style={styles.buttonText}>Fechar</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+                            <Text style={styles.buttonText}>Fechar</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>

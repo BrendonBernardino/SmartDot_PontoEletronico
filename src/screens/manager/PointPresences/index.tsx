@@ -56,13 +56,14 @@ const CustomBadge: React.FC<CustomBadgeProps> = ({ text }) => {
 };
 
 const getBadgeColor = (text: string): string => {
-  // Lógica para definir a cor com base no texto
   if (text === 'Atrasado') {
-    return 'red'; // Cor vermelha para 'Exemplo1'
+    return 'red';
   } else if (text === 'Pontual') {
-    return 'green'; // Cor verde para 'Exemplo2'
+    return 'green';
+  } else if (text === 'Aguardando') {
+    return 'gray';
   } else {
-    return 'blue'; // Cor azul para qualquer outro texto
+    return 'blue';
   }
 };
 

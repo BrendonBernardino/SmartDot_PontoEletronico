@@ -219,7 +219,7 @@ function Perfil() {
 
     function visibleInvite() {
         console.log(role);
-        if (role == 'collaborator_pending' && companyName != '') {
+        if (role == 'collaborator_pending' && (companyName !== "" && companyName !== null)) {
             return (
                 <View style={styles.card}>
                     <Text style={styles.title}>Convite</Text>
@@ -306,19 +306,20 @@ function Perfil() {
                         <CustomTextInput
                             label="Nome"
                             value={name}
-                            onChangeText={setName}
+                            onChangeText={(text) => setName(text)}
+
                         />
 
                         <CustomTextInput
                             label="Email"
                             value={email}
-                            onChangeText={setEmail}
+                            onChangeText={(text) => setEmail(text)}
                         />
 
                         <CustomTextInput
                             label="Senha"
-                            value={''}
-                            onChangeText={setPassword}
+                            value={password}
+                            onChangeText={(text) => setPassword(text)}
                         />
 
                         <TouchableOpacity onPress={updateUser} style={styles.saveButton}>
