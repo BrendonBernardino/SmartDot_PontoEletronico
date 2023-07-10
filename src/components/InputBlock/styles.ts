@@ -11,25 +11,23 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     input: {
-        flex: 0.7, 
-        width: "80%", 
+        flex: 1, 
+        width: "100%", 
         fontSize: 15, 
         fontWeight: "bold", 
         marginLeft: "10%",
         flexDirection: "row",
-        // backgroundColor: "pink",
     },
     layerButton: {
-        flex: 0,
+        flex: 1,
         width: "100%",
         flexDirection: "row",
         justifyContent: 'space-between',
-        // backgroundColor: "pink",
     },
     eye: {
+        paddingVertical: '5.5%',
         marginRight: '5%',
         width: '10%',
-        // backgroundColor: "pink",
     }
 });
 

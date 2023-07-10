@@ -6,6 +6,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+    restlayer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    worklayer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        width: '100%'
+    },
     headerlayer: {
         flex: 0.3,
         alignItems: "center",
@@ -48,7 +59,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "flex-start",
         width: '100%',
-        height: "50%",
+        height: "55%",
     },
     cafeicon: {
         alignItems: "center",
@@ -76,7 +87,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         width: '100%',
-        height: "30%",
+        height: "20%",
     },
     modalMask: {
         flex: 1,

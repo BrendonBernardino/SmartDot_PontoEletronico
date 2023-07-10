@@ -86,11 +86,11 @@ function Login() {
                 redirectPage();
             } else {
                 const errorResponse = await response.json();
-                const errorMessage = errorResponse.errors;
+                const errorMessage = errorResponse.error;
                 
                 Toast.show({
                     type: 'error',
-                    text1: errorMessage || 'Login falhou. Por favor tente novamente.'
+                    text1: errorMessage || 'Email ou senha errados. Tente novamente.'
                 })
                 setIsLoading(false);
             }

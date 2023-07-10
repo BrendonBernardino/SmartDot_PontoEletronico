@@ -34,7 +34,7 @@ function HomeTabs() {
       }
     } catch (error) {
       console.log(error);
-      // Tratar o erro de acordo com a sua lógica
+      // Tratar o erro de acordo com a lógica
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +72,7 @@ function HomeTabs() {
         }
       }}
     >
-      {role != 'collaborator_pending' ? (
+      {role == 'collaborator_pending' ? (
         <Tab.Screen
           name="Perfil"
           component={Perfil}

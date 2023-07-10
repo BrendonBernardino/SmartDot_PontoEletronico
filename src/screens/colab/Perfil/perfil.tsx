@@ -55,7 +55,7 @@ function Perfil() {
             } else {
                 const errorResponse = await response.json();
                 const errorMessage = errorResponse.errors;
-                
+
                 Toast.show({
                     type: 'error',
                     text1: errorMessage || 'Não foi possível recarregar'
@@ -97,7 +97,7 @@ function Perfil() {
             } else {
                 const errorResponse = await response.json();
                 const errorMessage = errorResponse.errors;
-                
+
                 Toast.show({
                     type: 'error',
                     text1: errorMessage || 'Não foi possível recarregar'
@@ -133,7 +133,7 @@ function Perfil() {
             } else {
                 const errorResponse = await response.json();
                 const errorMessage = errorResponse.errors;
-                
+
                 Toast.show({
                     type: 'error',
                     text1: errorMessage || 'Não foi possível recarregar'
@@ -162,6 +162,8 @@ function Perfil() {
 
             if (response.ok) {
                 setModalVisible(false);
+                setRole('collaborator_active');
+                await AsyncStorage.setItem('role', role);
                 navigation.navigate("HomeTabs")
                 Toast.show({
                     type: 'success',
@@ -170,7 +172,7 @@ function Perfil() {
             } else {
                 const errorResponse = await response.json();
                 const errorMessage = errorResponse.errors;
-                
+
                 Toast.show({
                     type: 'error',
                     text1: errorMessage || 'Não foi possível recarregar'
@@ -215,8 +217,30 @@ function Perfil() {
         </View>
     );
 
+    function visibleInvite() {
+        console.log(role);
+        if (role == 'collaborator_pending' && companyName != '') {
+            return (
+                <View style={styles.card}>
+                    <Text style={styles.title}>Convite</Text>
+                    <Text style={styles.description}>
+                        Você recebeu um convite da empresa {companyName}. Deseja aceitar?
+                    </Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.declineButton} onPress={rejectInvite}>
+                            <Text style={styles.buttonText}>Recusar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.acceptButton} onPress={acceptInvite}>
+                            <Text style={styles.buttonTextInvite}>Aceitar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+    }
+
     return isLoading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF7D4'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF7D4' }}>
             <Loading />
         </View>
     ) : (
@@ -240,7 +264,8 @@ function Perfil() {
                         <Ionicons style={styles.seta} name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
 
-                    {role == 'collaborator_pending' && companyName != '' ? ('') : (
+                    {visibleInvite()}
+                    {/* {role == 'collaborator_pending' && companyName != '' ? (
                         <View style={styles.card}>
                             <Text style={styles.title}>Convite</Text>
                             <Text style={styles.description}>
@@ -255,7 +280,7 @@ function Perfil() {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    )}
+                    ) : ('')} */}
                 </View>
             </View>
 

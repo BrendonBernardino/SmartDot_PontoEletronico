@@ -216,6 +216,7 @@ const TaskList: React.FC<TaskListProps> = () => {
     getDayWeek();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+    console.log(formattedDate);
     fetchData(formattedDate);
     formatDate(formattedDate)
   }, []);
@@ -313,7 +314,6 @@ const TaskList: React.FC<TaskListProps> = () => {
       {isLoading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Loading />
-          {/* <ActivityIndicator size="large" color="#0000ff" /> */}
         </View>
       ) : (
         <ScrollView>

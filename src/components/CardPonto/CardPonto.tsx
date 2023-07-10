@@ -120,7 +120,6 @@ export default function (props: Props) {
                     justifyContent: "space-evenly",
 
                 }]}
-        // onPress={() => navigation.navigate(props.nextPage, props.mode)}
         >
             {VerifyIcon()}
             <Text style={{
@@ -128,24 +127,11 @@ export default function (props: Props) {
                 fontWeight: "bold",
                 fontSize: 19,
                 width: "30%",
-                // backgroundColor: "green",
             }}>
                 {textCard}
             </Text>
             {Planejado()}
             {VerifyPonto()}
-            {/* {props.cardType === 4 && props.ponto === '' ? ( // Only show "Bater Ponto" button for cardType 1 when ponto is empty
-                <View style={styles.cardBaterPonto}>
-                    <TouchableOpacity
-                        style={[styles.buttonBaterPonto, { backgroundColor: '#4C3D3D' }]}
-                        onPress={props.onBaterPontoPress} // Call the onBaterPontoPress function on button press
-                    >
-                        <Text style={[styles.textBaterPonto, { color: '#FFFFFF' }]}>Bater Ponto</Text>
-                    </TouchableOpacity>
-                </View>
-            ) : (
-                <Text style={styles.textPonto}>{props.ponto}</Text>
-            )} */}
         </View>
     )
         : false
