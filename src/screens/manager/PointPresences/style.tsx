@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerlayer: {
-    flex: 0.3,
+    flex: 1,
     alignItems: "center",
     justifyContent: "space-around",
     flexDirection: "row",
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     justifyContent: "center",
-    width: '50%',
+    width: '60%',
   },
   headerIcon: {
     // padding: 10,

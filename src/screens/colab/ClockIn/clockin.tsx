@@ -687,8 +687,8 @@ function ClockIn() {
             >
                 <View style={[styles.modalMask, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
                     <View style={[styles.modalPontoContent, { backgroundColor: '#000000' }]}>
-                        <Text style={[styles.topLeftText, { color: '#C07F00' }]}>Você está:</Text>
-                        <Text style={[styles.topRightText, { color: '#C07F00' }]}>{getCurrentTime()}</Text>
+                        <Text style={[styles.topLeftText2, { color: '#C07F00' }]}>Você está:</Text>
+                        <Text style={[styles.topRightText2, { color: '#C07F00' }]}>{getCurrentTime()}</Text>
                         <MapView
                             style={styles.map2}
                             initialRegion={{
@@ -708,7 +708,7 @@ function ClockIn() {
                                 radius={80}
                             /> */}
                         </MapView>
-                        <Text style={styles.addressText}>{streetName}</Text>
+                        <Text style={[styles.addressText2, {color:'white'}]}>{streetName}</Text>
                         <View style={styles.pin}>
                             <PinIcon width={30} height={30} color='#C07F00' />
                         </View>

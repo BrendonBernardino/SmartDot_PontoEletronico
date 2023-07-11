@@ -272,7 +272,7 @@ const TaskList: React.FC<TaskListProps> = () => {
         />
       </TouchableOpacity>
       <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: 25, color: "#C07F00" }}>HOJE</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 25, color: "#C07F00" }}>PONTOS BATIDOS</Text>
         <View style={styles.headerDivider} />
         <Text style={{ fontWeight: "bold", fontSize: 20 }}>{weekday}, {formattedDate}</Text>
       </View>

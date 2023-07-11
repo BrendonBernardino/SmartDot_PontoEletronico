@@ -119,8 +119,14 @@ const styles = StyleSheet.create({
         top: 20,
         height: '5%',
     },
+    titleModal2: {
+        fontSize: 25,
+        fontWeight: "bold",
+        marginTop: '2%',
+        height: '5%',
+    },
     map1: {
-        width: '90%',
+        width: '70%',
         height: '20%',
         marginBottom: 20,
         marginTop: 20,
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     map2: {
         width: '70%',
         height: '30%',
-        marginBottom: 20,
+        marginBottom: 80,
         borderRadius: 20,
     },
     addressContainer: {
@@ -139,6 +145,12 @@ const styles = StyleSheet.create({
     },
     addressText: {
         flex: 1,
+        marginRight: 10,
+    },
+    addressText2: {
+        fontSize: 20,
+        width:'80%',
+        marginBottom: '2%',
         marginRight: 10,
     },
     bottomRowContainer: {
@@ -169,7 +181,21 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    topLeftText2: {
+        position: 'absolute',
+        top: 40,
+        left: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
     topRightText: {
+        position: 'absolute',
+        top: 40,
+        right: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    topRightText2: {
         position: 'absolute',
         top: 40,
         right: 10,
