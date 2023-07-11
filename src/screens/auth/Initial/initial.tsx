@@ -9,19 +9,36 @@ import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
 import { StackTypes } from '../../../../App';
 import LogoIcon from '../../../.././assets/svg/Logosvg.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { create } from 'zustand';
+
+interface Croma {
+  themeModeCroma: any;
+  changethemeModeCroma: (croma: any) => void;
+};
+
+export const useCromaChange = create<Croma>((set) => ({
+  themeModeCroma: COLORSLIGHT,
+  changethemeModeCroma(croma) {
+    set((state) => ({...state, themeModeCroma:croma}))
+  }
+}));
 
 function Initial() {
-  const [themeMode, setThemeMode] = useState(COLORSLIGHT);
+  // const [themeMode, setThemeMode] = useState(COLORSLIGHT);
   const navigation = useNavigation<StackTypes>();
+  const { themeModeCroma } = useCromaChange();
+  const { changethemeModeCroma } = useCromaChange();
 
   const setLightMode = () => {
-    if (themeMode === COLORSDARK) {
-      setThemeMode(COLORSLIGHT);
+    if (themeModeCroma === COLORSDARK) {
+      // setThemeMode(COLORSLIGHT);
+      changethemeModeCroma(COLORSLIGHT);
     }
   };
   const setDarkMode = () => {
-    if (themeMode === COLORSLIGHT) {
-      setThemeMode(COLORSDARK);
+    if (themeModeCroma === COLORSLIGHT) {
+      // setThemeMode(COLORSDARK);
+      changethemeModeCroma(COLORSDARK);
     }
   };
 
@@ -62,55 +79,55 @@ function Initial() {
   }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: themeMode.primary }]}>
+    <View style={[styles.container, { backgroundColor: themeModeCroma.primary }]}>
       <View style={styles.themeBar}>
         <View style={[
           styles.themeCard,
-          { backgroundColor: themeMode === COLORSLIGHT ? themeMode.primary : themeMode.secundary }
+          { backgroundColor: themeModeCroma === COLORSLIGHT ? themeModeCroma.primary : themeModeCroma.secundary }
         ]}>
           <TouchableOpacity onPress={setLightMode}>
-            <Feather name="sun" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.gray }} />
+            <Feather name="sun" size={25} style={{ color: themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.gray }} />
           </TouchableOpacity>
           <TouchableOpacity onPress={setDarkMode}>
-            <Entypo name="moon" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.gray_erased : themeMode.tertiary }} />
+            <Entypo name="moon" size={25} style={{ color: themeModeCroma === COLORSLIGHT ? themeModeCroma.gray_erased : themeModeCroma.tertiary }} />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.top}>
         <Image
           style={styles.logo}
-          source={themeMode === COLORSLIGHT ? require('../../../../assets/Logosvg_1.png') : require('../../../../assets/LogoDark.png')}
+          source={themeModeCroma === COLORSLIGHT ? require('../../../../assets/Logosvg_1.png') : require('../../../../assets/Logosvg_2.png')}
         />
         <View style={styles.titleLayer}>
-          <Text style={[styles.title, { color: themeMode.tertiary, paddingLeft: '7%' }]}>Smart</Text>
-          <Text style={[styles.title, { color: themeMode.auxiliar, paddingRight: '7%' }]}>Dot</Text>
+          <Text style={[styles.title, { color: themeModeCroma.tertiary, paddingLeft: '7%' }]}>Smart</Text>
+          <Text style={[styles.title, { color: themeModeCroma.auxiliar, paddingRight: '7%' }]}>Dot</Text>
         </View>
       </View>
       <View style={styles.buttons}>
         <Button
           text="Entrar"
-          color={themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.secundary}
-          textColor={themeMode === COLORSLIGHT ? themeMode.text : themeMode.text_2}
+          color={themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.secundary}
+          textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.text : themeModeCroma.text_2}
           elevation={5}
           centralized={1}
           onPress={handleEntrar}
-          mode={themeMode}
+          mode={themeModeCroma}
         />
         <Button
           text="Criar Conta"
-          color={themeMode === COLORSLIGHT ? themeMode.auxiliar : themeMode.tertiary}
-          textColor={themeMode.text}
+          color={themeModeCroma === COLORSLIGHT ? themeModeCroma.auxiliar : themeModeCroma.tertiary}
+          textColor={themeModeCroma.text}
           elevation={5}
           centralized={1}
           onPress={handleRegistrar}
-          mode={themeMode}
+          mode={themeModeCroma}
         />
       </View>
       <View style={styles.info}>
         <TouchableOpacity onPress={() => navigation.navigate("About")}>
           <Text
             style={{
-              color: themeMode.gray, fontWeight: "bold", fontSize: 19, paddingBottom: "10%"
+              color: themeModeCroma.gray, fontWeight: "bold", fontSize: 19, paddingBottom: "10%"
             }}
           >Mais sobre o projeto</Text>
         </TouchableOpacity>

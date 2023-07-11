@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import styles from "./styles";
 import { StackTypes } from '../../../App';
 import { Ionicons } from 'react-native-vector-icons';
+import { useCromaChange } from '../../screens/auth/Initial/initial';
+import { COLORSLIGHT, COLORSDARK } from '../../styles/themes/colors';
 
 interface Props {
     text: string;
@@ -17,6 +19,8 @@ interface Props {
 
 export default function (props: Props) {
     const [showPassword, setShowPassword] = useState(true);
+    const { themeModeCroma } = useCromaChange();
+    const { changethemeModeCroma } = useCromaChange();
 
     const handleTogglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -48,7 +52,7 @@ export default function (props: Props) {
                 />
                 {props.password == true ?
                     <TouchableOpacity style={styles.eye} onPress={handleTogglePasswordVisibility}>
-                        <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={25} color={'#FFD95A'} />
+                        <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={25} color={themeModeCroma === COLORSLIGHT ? themeModeCroma.secundary : themeModeCroma.gray} />
                     </TouchableOpacity>
                     : null}
                 {/* </TextInput> */}

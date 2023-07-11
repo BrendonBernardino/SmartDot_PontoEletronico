@@ -26,6 +26,22 @@ function Perfil() {
     const [isLoading, setIsLoading] = useState(false);
     const [role, setRole] = useState('');
 
+    const [greeting, setGreeting] = useState('Bom dia');
+
+    const date = new Date();
+
+    const verifyMorningEveningNight = () => {
+        if (date.getHours() >= 4 && date.getHours() <= 12) {
+            setGreeting('Bom dia');
+        }
+        if (date.getHours() >= 13 && date.getHours() <= 17) {
+            setGreeting('Boa tarde');
+        }
+        if ((date.getHours() >= 18 && date.getHours() <= 23) || (date.getHours() >= 0 && date.getHours() <= 3)) {
+            setGreeting('Boa noite');
+        }
+    };
+
     const handleRequisition = async () => {
         setIsLoading(true);
         const url = `${apiUrl}/collaborator/users`;
@@ -187,6 +203,7 @@ function Perfil() {
     };
 
     useEffect(() => {
+        verifyMorningEveningNight();
         handleRequisition();
     }, []);
 
@@ -218,7 +235,6 @@ function Perfil() {
     );
 
     function visibleInvite() {
-        console.log(role);
         if (role == 'collaborator_pending' && (companyName !== "" && companyName !== null)) {
             return (
                 <View style={styles.card}>
@@ -252,8 +268,8 @@ function Perfil() {
                 <View style={styles.bottomRow}>
                     <PerfilIdIcon width={80} height={80} />
                     <View style={styles.userInfo}>
-                        <Text style={styles.userName}>Bom dia, {name}</Text>
-                        <Text style={styles.userDescription}>{companyName}</Text>
+                        <Text style={styles.userName}>{greeting}, {name}</Text>
+                        <Text style={styles.userDescription}>Empresa: {companyName}</Text>
                     </View>
                 </View>
             </View>
@@ -265,22 +281,6 @@ function Perfil() {
                     </TouchableOpacity>
 
                     {visibleInvite()}
-                    {/* {role == 'collaborator_pending' && companyName != '' ? (
-                        <View style={styles.card}>
-                            <Text style={styles.title}>Convite</Text>
-                            <Text style={styles.description}>
-                                Você recebeu um convite da empresa {companyName}. Deseja aceitar?
-                            </Text>
-                            <View style={styles.buttonContainer}>
-                                <TouchableOpacity style={styles.declineButton} onPress={rejectInvite}>
-                                    <Text style={styles.buttonText}>Recusar</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.acceptButton} onPress={acceptInvite}>
-                                    <Text style={styles.buttonTextInvite}>Aceitar</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    ) : ('')} */}
                 </View>
             </View>
 
@@ -306,7 +306,7 @@ function Perfil() {
                         <CustomTextInput
                             label="Nome"
                             value={name}
-                            onChangeText={(text) => setName(text)}
+                            onChangeText={setName}
 
                         />
 

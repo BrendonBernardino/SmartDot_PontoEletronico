@@ -105,6 +105,15 @@ export default function (props: Props) {
             setTextCard("Saída");
     }, []);
 
+    // useEffect(() => {
+    //     // if (intervalInicioplanned !== '') {
+    //     //   setShowCard(true);
+    //     // } else {
+    //     //   setShowCard(false);
+    //     // }
+    //     VerifyPonto();
+    //   }, [props.intervalAtived]);
+
     return props.intervalAtived == true ? (
         <View
             style={[

@@ -10,6 +10,8 @@ import { StackTypes } from '../../../../App';
 import Toast from 'react-native-toast-message'
 import ENV from '../../../../env';
 import Loading from '../../../components/Loading/Loading';
+import { useCromaChange } from '../Initial/initial';
+import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
 
 const apiUrl = ENV.API_URL;
 
@@ -18,6 +20,9 @@ function Login() {
     const [usernameOrEmail, setUsernameOrEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false);
+
+    const { themeModeCroma } = useCromaChange();
+    const { changethemeModeCroma } = useCromaChange();
 
     const handleUsernameOrEmailChange = (inputUsernameOrEmail: string) => {
         setUsernameOrEmail(inputUsernameOrEmail);
@@ -112,18 +117,18 @@ function Login() {
             <Loading />
         </View>
     ) : (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: themeModeCroma === COLORSLIGHT ? themeModeCroma.primary : themeModeCroma.primary}]}>
             <View style={styles.logolayer}>
                 <Image
                     style={styles.logo}
-                    source={require('../../../../assets/Logosvg_1.png')}
+                    source={themeModeCroma === COLORSLIGHT ? require('../../../../assets/Logosvg_1.png') : require('../../../../assets/Logosvg_2.png')}
                 />
             </View>
             <View style={styles.midlayer}>
                 <InputBlock
                     text='Email ou Nome de usuário'
-                    color='#C07F00'
-                    textColor='#FFD95A'
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.secundary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.secundary : themeModeCroma.gray}
                     centralized={0}
                     borderTopLeftRadius={33}
                     password={false}
@@ -132,8 +137,8 @@ function Login() {
                 />
                 <InputBlock
                     text='Senha'
-                    color='#C07F00'
-                    textColor='#FFD95A'
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.secundary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.secundary : themeModeCroma.gray}
                     centralized={0}
                     password={true}
                     visible={true}
@@ -143,17 +148,17 @@ function Login() {
             <View style={styles.loginlayer}>
                 <Button
                     text="Entrar"
-                    color="#4C3D3D"
-                    textColor="#CBE4DE"
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.auxiliar : themeModeCroma.tertiary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.gray_erased : themeModeCroma.primary}
                     centralized={1}
                     onPress={handleLogin}
                     borderBottomRightRadius={33}
                 />
             </View>
             <View style={styles.infolayer}>
-                <Text style={{ color: "#83908D", fontWeight: "bold", fontSize: 19 }}>Não tem conta ainda?</Text>
+                <Text style={{ color: themeModeCroma === COLORSLIGHT ? themeModeCroma.gray : themeModeCroma.gray, fontWeight: "bold", fontSize: 19 }}>Não tem conta ainda?</Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-                    <Text style={{ color: "#C07F00", fontWeight: "bold", fontSize: 19, paddingBottom: "10%" }}>Criar Conta</Text>
+                    <Text style={{ color: themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.tertiary, fontWeight: "bold", fontSize: 19, paddingBottom: "10%" }}>Criar Conta</Text>
                 </TouchableOpacity>
             </View>
         </View>

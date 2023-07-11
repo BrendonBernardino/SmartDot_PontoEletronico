@@ -19,6 +19,7 @@ import FingerprintIcon from '../../../../assets/svg/fingerprint.svg';
 import PinIcon from '../../../../assets/svg/pin.svg';
 import RelaxIcon from '../../../../assets/svg/relax.svg';
 import Toast from 'react-native-toast-message'
+import Loading from '../../../components/Loading/Loading';
 
 // import { RSA } from 'react-native-rsa-native';
 // import DeviceInfo from 'react-native-device-info';
@@ -33,7 +34,7 @@ const apiUrl = ENV.API_URL;
 function ClockIn() {
     const [progressBarAtived, setProgressBarAtived] = useState(true);
     const [dailyJourneyAtived, setDailyJourneyAtived] = useState(true);
-    const [interval_Atived, setInterval_Atived] = useState(true);
+    const [interval_Atived, setInterval_Atived] = useState(false);
     const [interval_blocked, setInterval_blocked] = useState(false);
 
     const [valueIgnored, setValueIgnored] = useState(false);
@@ -69,6 +70,7 @@ function ClockIn() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [scheduleTime, setScheduleTime] = useState("");
     const [timePOST, setTimePOST] = useState("");
     const [latitudeString, setLatitudeString] = useState("");
     const [longitudeString, setLongitudeString] = useState("");
@@ -82,7 +84,6 @@ function ClockIn() {
     const currentDate = `${dayCurrent}-${monthCurrent}-${yearCurrent}`;
 
     const getCurrentTime = () => {
-        // const date = new Date();
         const hour = String(date.getHours()).padStart(2, '0');
         const minute = String(date.getMinutes()).padStart(2, '0');
         return `${hour}:${minute}`;
@@ -114,7 +115,6 @@ function ClockIn() {
     }
 
     const searchStreetName = async () => {
-        setIsLoading(true);
         try {
             const response = await fetch(
                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${myLatitude},${myLongitude}&key=${apiKey}`
@@ -127,11 +127,9 @@ function ClockIn() {
                 const street = result.formatted_address;
                 setStreetName(street);
                 console.log(street);
-                setIsLoading(false);
             }
         } catch (error) {
             console.log('Error occurred while searching for street name:', error);
-            setIsLoading(false);
         }
     };
 
@@ -156,28 +154,42 @@ function ClockIn() {
         getDayWeek();
         getCurrentLocation();
         handleRequisition();
-        console.log('entrada planejada:' + entradaplanned);
-        console.log('intervalo ini planejada:' + intervalInicioplanned);
-        console.log('intervalo fim planejada:' + intervalFimplanned);
-        console.log('saida planejada:' + saidaplanned);
-        console.log('entrada real:' + entradaReal);
-        console.log('intervalo ini real:' + intervaloInicioReal);
-        console.log('intervalo fim real:' + intervaloFimReal);
-        console.log('saida real:' + saidaReal);
-        console.log('tempo total:' + tempoTotal);
-        checkIntervalIsOpen();
-        // tempoTotalSlicer();
-        // convertProgressBar();
     }, []);
 
     useEffect(() => {
-        if (isAuthenticated == true) {
-            PontoPush();
+        if (tempoTotal == '' || tempoTotal == undefined) {
+            setHoraTotal('0');
+            setMinTotal('0');
         }
-    }, [isAuthenticated]);
+        else {
+            setHoraTotal(tempoTotal.substring(0, 2) == '00' ? '0' : tempoTotal.substring(0, 2));
+            setMinTotal(tempoTotal.substring(3, 5) == '00' ? '0' : tempoTotal.substring(3, 5));
+        }
+        convertProgressBar();
+    }, [tempoTotal]);
 
     useEffect(() => {
-        if(timePOST == 'start_time' || timePOST == 'initial_interval' || timePOST == 'final_interval' || timePOST == 'final_time') {
+        if (intervalInicioplanned == '') {
+            setInterval_Atived(false);
+            setInterval_blocked(true);
+        }
+        else {
+            setInterval_Atived(true);
+            setInterval_blocked(false);
+        }
+        console.log('interval_Atived: ' + interval_Atived);
+    }, [intervalInicioplanned]);
+
+    // useEffect(() => {
+    //     if (isAuthenticated == true) {
+    //         // PontoPush();
+    //         // setPonto(true);
+    //         handleClockIn();
+    //     }
+    // }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (timePOST == 'start_time' || timePOST == 'initial_interval' || timePOST == 'final_interval' || timePOST == 'final_time') {
             handleClockIn();
         }
     }, [timePOST]);
@@ -203,6 +215,20 @@ function ClockIn() {
             console.log('model:' + deviceId + ' nameDevice:' + deviceNameId);
             setAuthID('model:' + deviceId + ' nameDevice:' + deviceNameId);
             setIsAuthenticated(true);
+            // handleClockIn();
+            if (cardPontoType == 1) {
+                setTimePOST('start_time');
+            }
+            if (cardPontoType == 2) {
+                setTimePOST('initial_interval');
+            }
+            if (cardPontoType == 3) {
+                setTimePOST('final_interval');
+            }
+            if (cardPontoType == 4) {
+                setTimePOST('final_time');
+            }
+            console.log('timePOST: ' + timePOST);
         }
         else {
             setIsAuthenticated(false);
@@ -210,6 +236,7 @@ function ClockIn() {
     }
 
     const handleClockIn = async () => {
+        // PontoPush();
         console.log('timePOST: ' + timePOST);
         console.log('latitudeString: ' + latitudeString);
         console.log('longitudeString: ' + longitudeString);
@@ -238,6 +265,31 @@ function ClockIn() {
                     type: 'success',
                     text1: 'Ponto Batido!'
                 })
+
+                if (cardPontoType == 1) {
+                    setEntradaReal(scheduleTime);
+                    console.log('Entrada: ');
+                    console.log(entradaReal);
+                    setIsAuthenticated(false);
+                }
+                if (cardPontoType == 2) {
+                    setintervaloInicioReal(scheduleTime);
+                    console.log('Intervalo Inicio: ');
+                    console.log(intervaloInicioReal);
+                    setIsAuthenticated(false);
+                }
+                if (cardPontoType == 3) {
+                    setintervaloFimReal(scheduleTime);
+                    console.log('Intervalo Fim: ');
+                    console.log(intervaloFimReal);
+                    setIsAuthenticated(false);
+                }
+                if (cardPontoType == 4) {
+                    setSaidaReal(scheduleTime);
+                    console.log('Saida: ');
+                    console.log(saidaReal);
+                    setIsAuthenticated(false);
+                }
             } else {
                 const errorResponse = await response.json();
                 const errorMessage = errorResponse.errors;
@@ -260,7 +312,7 @@ function ClockIn() {
 
     const handleRequisition = async () => {
         setIsLoading(true);
-        const url = `${apiUrl}/collaborator/point_presences` + '?data=' + currentDate;//'25-06-2023';
+        const url = `${apiUrl}/collaborator/point_presences` + '?data=' + currentDate;
 
         try {
             const token = await AsyncStorage.getItem('token');
@@ -287,27 +339,23 @@ function ClockIn() {
                 }
                 else {
                     setEntradaplanned(data[0].tempo_inicial.padrao);
-                    setIntervalInicioplanned(data[0].intervalo_inicial.padrao);//data[0].intervalo_inicial.padrao
-                    setIntervalFimplanned(data[0].intervalo_final.padrao);//data[0].intervalo_final.padrao
+                    if ((data[0].intervalo_inicial.padrao == '') || (data[0].intervalo_inicial.padrao == '0:0')) {
+                        setIntervalInicioplanned('');
+                    }
+                    else {
+                        setIntervalInicioplanned(data[0].intervalo_inicial.padrao);
+                    }
+                    setIntervalFimplanned(data[0].intervalo_final.padrao);
                     setSaidaplanned(data[0].tempo_final.padrao);
 
 
                     setEntradaReal(data[0].tempo_inicial.real);
-                    setintervaloInicioReal(data[0].intervalo_inicial.real);//data[0].intervalo_inicial.real
-                    setintervaloFimReal(data[0].intervalo_final.real);//data[0].intervalo_final.real
+                    setintervaloInicioReal(data[0].intervalo_inicial.real);
+                    setintervaloFimReal(data[0].intervalo_final.real);
                     setSaidaReal(data[0].tempo_final.real);
 
 
-                    setTempoTotal(data.tempo_total);
-
-                    if (tempoTotal == '') {
-                        setHoraTotal('0');
-                        setMinTotal('0');
-                    }
-                    else {
-                        setHoraTotal(tempoTotal.slice(0, 2));
-                        setMinTotal(tempoTotal.slice(3, 5));
-                    }
+                    setTempoTotal(data[0].tempo_total);
 
                     setProgressNumber(parseInt(tempoTotal != '' ? tempoTotal : '0') / ((parseInt(saidaplanned != '' ? saidaplanned : '0') - parseInt(entradaplanned != '' ? entradaplanned : '0'))) - ((parseInt(intervalFimplanned != '' ? intervalFimplanned : '0') - parseInt(intervalInicioplanned != '' ? intervalInicioplanned : '0'))))
                     console.log('progress: ' + progressNumber);
@@ -337,11 +385,53 @@ function ClockIn() {
         }
     };
 
+    const fetchData = async (date: string, name?: string) => {
+        try {
+          setIsLoading(true);
+          let url = `${apiUrl}/manager/point_presences?data=${date}`;
+    
+          const token = await AsyncStorage.getItem('token');
+    
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+    
+          if (!response.ok) {
+            const errorResponse = await response.json();
+            const errorMessage = errorResponse.errors;
+            
+            Toast.show({
+                type: 'error',
+                text1: errorMessage || 'Não foi possível recarregar'
+            })
+          }
+    
+          const data = await response.json();
+        //   setJsonData(data);
+        //   setData(date);
+          console.log(data);
+        } catch (error) {
+          Toast.show({
+            type: 'error',
+            text1: String(error)
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
     const handleBaterPontoPress = (index: number) => {
         setModalPontoVisible(true);
         setCardPontoType(index);
         console.log(myLatitude);
         console.log(myLongitude);
+        setLatitudeString(myLatitude.toString());
+        setLongitudeString(myLongitude.toString());
+        setScheduleTime(getCurrentTime);
         searchStreetName();
     };
 
@@ -349,47 +439,6 @@ function ClockIn() {
         setModalPontoVisible(false);
         handleAuthentication();
     }
-
-    const PontoPush = () => {
-        console.log('cardPontoType: ' + cardPontoType)
-        setLatitudeString(myLatitude.toString());
-        setLongitudeString(myLongitude.toString());
-
-        console.log('isAuthenticated: ' + isAuthenticated);
-
-        if (cardPontoType == 1) {
-            setEntradaReal(getCurrentTime);
-            console.log('Entrada: ');
-            console.log(entradaReal);
-            setIsAuthenticated(false);
-            setTimePOST('start_time');
-            // handleClockIn();
-        }
-        if (cardPontoType == 2) {
-            setintervaloInicioReal(getCurrentTime);
-            console.log('Intervalo Inicio: ');
-            console.log(intervaloInicioReal);
-            setIsAuthenticated(false);
-            setTimePOST('initial_interval');
-            // handleClockIn();
-        }
-        if (cardPontoType == 3) {
-            setintervaloFimReal(getCurrentTime);
-            console.log('Intervalo Fim: ');
-            console.log(intervaloFimReal);
-            setIsAuthenticated(false);
-            setTimePOST('final_interval');
-            // handleClockIn();
-        }
-        if (cardPontoType == 4) {
-            setSaidaReal(getCurrentTime);
-            console.log('Saida: ');
-            console.log(saidaReal);
-            setIsAuthenticated(false);
-            setTimePOST('final_time');
-            // handleClockIn();
-        }
-    };
 
     function checkIntervalIsOpen() {
         if (intervalInicioplanned == '') { //não tem intervalo
@@ -400,24 +449,27 @@ function ClockIn() {
             setInterval_Atived(true);
             setInterval_blocked(false);
         }
-        console.log(interval_Atived);
+        console.log('interval_Atived: ' + interval_Atived);
     }
 
-    // function tempoTotalSlicer() {
-    //     if(tempoTotal == '') {
-    //         setHoraTotal('0');
-    //         setMinTotal('0');
-    //     }
-    //     else {
-    //         setHoraTotal(tempoTotal.slice(0, 2));
-    //         setMinTotal(tempoTotal.slice(3, 5));
-    //     }
-    // }
-
-    // function convertProgressBar() {
-    //     setProgressNumber(parseInt(tempoTotal != '' ? tempoTotal : '0') / ((parseInt(saidaplanned != '' ? saidaplanned : '0') - parseInt(entradaplanned != '' ? entradaplanned : '0'))) - ((parseInt(intervalFimplanned != '' ? intervalFimplanned : '0') - parseInt(intervalInicioplanned != '' ? intervalInicioplanned : '0'))))
-    //     console.log('progress: ' + progressNumber);
-    // }
+    function convertProgressBar() {
+        const jornadaAtual = parseInt(tempoTotal != '' ? tempoTotal : '0');
+        console.log(jornadaAtual);
+        const jornadaTotal = ((parseInt(saidaplanned != '' ? saidaplanned : '0') - parseInt(entradaplanned != '' ? entradaplanned : '0'))) - ((parseInt(intervalFimplanned != '' ? intervalFimplanned : '0') - parseInt(intervalInicioplanned != '' ? intervalInicioplanned : '0')));
+        console.log(jornadaTotal);
+        const progress = jornadaAtual/jornadaTotal;
+        console.log(progress);
+        if(progress > 1) {
+            setProgressNumber(1);
+        }
+        if(progress < 0 || progress == null || progress == undefined || isNaN(progress)) {
+            setProgressNumber(0);
+        }
+        else {
+            setProgressNumber(progress);
+        }
+        console.log('progress: ' + progressNumber);
+    }
 
     function DailyJourneyActivated() {
         if (dailyJourneyAtived == true) {
@@ -444,7 +496,7 @@ function ClockIn() {
             return (
                 <View style={styles.optional2}>
                     <MaletaIcon style={styles.cafeicon} width={40} height={40} color={"#4C3D3D"} />
-                    <Progress.Bar progress={0.5} width={200} color='#C07F00' unfilledColor='#4C3D3D' />
+                    <Progress.Bar progress={progressNumber} width={200} color='#C07F00' unfilledColor='#4C3D3D' />
                     <ClimbingIcon style={styles.cafeicon} width={40} height={40} color={"#C07F00"} />
                 </View>
             )
@@ -497,7 +549,7 @@ function ClockIn() {
                     <View style={styles.cardslayer}>
                         <CardPonto
                             cardType={1}
-                            ponto={entradaReal}//isAuthenticated == true ? entradaReal : ''
+                            ponto={entradaReal}
                             color='#FFD95A'
                             textColor='black'
                             clockin={false}
@@ -512,7 +564,7 @@ function ClockIn() {
                             textColor='black'
                             clockin={false}
                             planned={intervalInicioplanned}
-                            intervalAtived={interval_Atived}
+                            intervalAtived={interval_Atived == true ? true : false}
                             onBaterPontoPress={() => handleBaterPontoPress(2)}
                         />
                         <CardPonto
@@ -522,7 +574,7 @@ function ClockIn() {
                             textColor='black'
                             clockin={false}
                             planned={intervalFimplanned}
-                            intervalAtived={interval_Atived}
+                            intervalAtived={interval_Atived == true ? true : false}
                             onBaterPontoPress={() => handleBaterPontoPress(3)}
                         />
                         <CardPonto
@@ -546,8 +598,12 @@ function ClockIn() {
         }
     }
 
-    const handleDatePress = (date: number) => {
+    const handleDatePress = (date: any) => {
         console.log('Data clicada:', date);
+        const { day, month, year } = date;
+        const formattedDate = `${day}-${month + 1}-${year}`;
+        fetchData(formattedDate);
+        // formatDate(formattedDate);
     };
 
     const handleCloseModal = () => {
@@ -558,7 +614,11 @@ function ClockIn() {
         setVisibleModalList(false);
     };
 
-    return (
+    return isLoading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF7D4' }}>
+            <Loading />
+        </View>
+    ) : (
         <View style={styles.container}>
             <View style={styles.headerlayer}>
                 <TouchableOpacity onPress={() => setVisibleModalList(true)}>
@@ -594,18 +654,16 @@ function ClockIn() {
                             }}
                         >
                             <Marker coordinate={{ latitude: myLatitude, longitude: myLongitude }} pinColor='#C07F00' />
-                            {/* <Circle center={{ latitude: myLatitude, longitude: myLongitude }} radius={80} /> */}
+                            <Circle center={{ latitude: myLatitude, longitude: myLongitude }} radius={80} />
                         </MapView>
-                        {/* <View style={styles.addressContainer}>
-                            <Text style={styles.addressText}>Rua Muniz Freire, 128, Messejana, Brasil</Text>
-                            <View style={styles.pin}>
-                                <PinIcon width={30} height={30} color='#C07F00' />
-                            </View>
-                        </View>
                         <View style={styles.bottomRowContainer}>
                             <Text style={styles.periodoTrabalhoText}>Período de Trabalho</Text>
                             <Text style={styles.intervaloText}>Intervalo</Text>
-                        </View> */}
+                        </View>
+                        <View style={styles.bottomRowContainer}>
+                            <Text style={styles.periodoTrabalhoText}>12:20 - 18:50</Text>
+                            <Text style={styles.intervaloText}>15:00 - 15:30</Text>
+                        </View>
                         <TouchableOpacity style={styles.closeButton} onPress={() => setVisibleModal(false)}>
                             <AntDesign name="close" size={24} color="black" />
                         </TouchableOpacity>

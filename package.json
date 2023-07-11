@@ -48,7 +48,8 @@
     "react-native-switch": "^1.5.1",
     "react-native-toast-message": "^2.1.6",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.10"
+    "react-native-web": "~0.18.10",
+    "zustand": "^4.3.9"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

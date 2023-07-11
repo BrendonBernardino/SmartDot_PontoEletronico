@@ -115,21 +115,21 @@ const styles = StyleSheet.create({
     titleModal: {
         fontSize: 25,
         fontWeight: "bold",
-        marginTop: '2%',
+        position: 'absolute',
+        top: 20,
         height: '5%',
     },
     map1: {
-        // minHeight : '20%',
         width: '90%',
         height: '20%',
-        marginBottom: 150,
+        marginBottom: 20,
+        marginTop: 20,
         borderRadius: 20,
     },
     map2: {
-        // minHeight : '20%',
         width: '70%',
         height: '30%',
-        marginBottom: 80,
+        marginBottom: 20,
         borderRadius: 20,
     },
     addressContainer: {
@@ -137,20 +137,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
     },
-    // addressText: {
-    //     flex: 1,
-    //     marginRight: 10,
-    // },
+    addressText: {
+        flex: 1,
+        marginRight: 10,
+    },
     bottomRowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        width: '100%',
         marginTop: 10,
     },
     periodoTrabalhoText: {
-        marginLeft: 10,
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginLeft: 20,
     },
     intervaloText: {
-        marginRight: 10,
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginRight: 20,
     },
     modalContainer: {
         flex: 1,
@@ -175,13 +180,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 170,
         right: 15,
-    },
-    addressText: {
-        marginBottom: 10,
-        marginRight: 20,
-        width:'80%',
-        color: 'white',
-        fontSize: 20,
     },
     fingerprint: {
         justifyContent: 'center',
@@ -219,21 +217,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
         fontSize: 16,
     },
-    //   circle: {
-    //     width: 20,
-    //     height: 20,
-    //     borderRadius: 10,
-    //     borderWidth: 2,
-    //     borderColor: 'black',
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //   },
-    //   circleInner: {
-    //     width: 10,
-    //     height: 10,
-    //     borderRadius: 5,
-    //     backgroundColor: 'black',
-    //   },
 });
 
 export default styles;

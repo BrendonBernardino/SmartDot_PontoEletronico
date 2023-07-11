@@ -9,6 +9,8 @@ import InputBlock from "../../../components/InputBlock/InputBlock";
 import { StackTypes } from '../../../../App';
 import Toast from 'react-native-toast-message'
 import ENV from '../../../../env';
+import { useCromaChange } from '../Initial/initial';
+import { COLORSLIGHT, COLORSDARK } from '../../../styles/themes/colors';
 
 const apiUrl = ENV.API_URL;
 
@@ -20,6 +22,9 @@ function Register() {
     const [email, setEmail] = useState('');
     const [nomeEmpresa, setNomeEmpresa] = useState('');
     const [senha, setSenha] = useState('');
+
+    const { themeModeCroma } = useCromaChange();
+    const { changethemeModeCroma } = useCromaChange();
 
     const data = [
         { key: '1', value: 'Colaborador' },
@@ -63,11 +68,11 @@ function Register() {
     }, [userType]);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: themeModeCroma === COLORSLIGHT ? themeModeCroma.primary : themeModeCroma.primary}]}>
             <View style={styles.logolayer}>
                 <Image
                     style={styles.logo}
-                    source={require('../../../../assets/Logosvg_1.png')}
+                    source={themeModeCroma === COLORSLIGHT ? require('../../../../assets/Logosvg_1.png') : require('../../../../assets/Logosvg_2.png')}
                 />
                 <SelectList
                     data={data}
@@ -77,17 +82,17 @@ function Register() {
                     maxHeight={80}
                     setSelected={setUserType}
                     boxStyles={{ borderWidth: 0 }}
-                    inputStyles={{ height: "100%", color: "#C07F00", fontSize: 20, fontWeight: "bold" }}
+                    inputStyles={{ height: "100%", color: themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.tertiary, fontSize: 20, fontWeight: "bold" }}
                     dropdownStyles={{ height: "50%", borderWidth: 0 }}
-                    dropdownTextStyles={{ fontWeight: "bold" }}
+                    dropdownTextStyles={{ fontWeight: "bold", color: themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.tertiary }}
                 // arrowicon={<Text></Text>}
                 />
             </View>
             <View style={styles.midlayer}>
                 <InputBlock
                     text="Nome"
-                    color="#C07F00"
-                    textColor="#FFD95A"
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.secundary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.secundary : themeModeCroma.gray}
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     borderTopLeftRadius={33}
@@ -97,8 +102,8 @@ function Register() {
                 />
                 <InputBlock
                     text="Email"
-                    color="#C07F00"
-                    textColor="#FFD95A"
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.secundary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.secundary : themeModeCroma.gray}
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={false}
@@ -107,8 +112,8 @@ function Register() {
                 />
                 <InputBlock
                     text="Nome da Empresa"
-                    color="#C07F00"
-                    textColor="#FFD95A"
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.secundary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.secundary : themeModeCroma.gray}
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={false}
@@ -117,8 +122,8 @@ function Register() {
                 />
                 <InputBlock
                     text="Senha"
-                    color="#C07F00"
-                    textColor="#FFD95A"
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.secundary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.secundary : themeModeCroma.gray}
                     size={userType == 2 ? 53 : 59}
                     centralized={0}
                     password={true}
@@ -129,8 +134,8 @@ function Register() {
             <View style={styles.registerlayer}>
                 <Button
                     text="Criar Conta"
-                    color="#4C3D3D"
-                    textColor="#CBE4DE"
+                    color={themeModeCroma === COLORSLIGHT ? themeModeCroma.auxiliar : themeModeCroma.tertiary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.gray : themeModeCroma.primary}
                     centralized={1}
                     onPress={handleRegistrar}
                     borderBottomRightRadius={33}
@@ -139,7 +144,7 @@ function Register() {
             <View style={styles.infolayer}>
                 <Text style={{ color: "#83908D", fontWeight: "bold", fontSize: 19 }}>Já tem uma conta?</Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                    <Text style={{ color: "#C07F00", fontWeight: "bold", fontSize: 19, paddingBottom: "10%" }}>Entrar</Text>
+                    <Text style={{ color: themeModeCroma === COLORSLIGHT ? themeModeCroma.tertiary : themeModeCroma.tertiary, fontWeight: "bold", fontSize: 19, paddingBottom: "10%" }}>Entrar</Text>
                 </TouchableOpacity>
             </View>
         </View>

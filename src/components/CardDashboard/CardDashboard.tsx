@@ -67,10 +67,10 @@ export default function (props: Props) {
 
     function Result() {
         if (props.cardType == 1) {
-            if (horasExtras >= 0 && minExtras >= 0)
+            if (parseInt(props.value) > 0)
                 return <Text style={[styles.textResult, { color: "#4AD658" }]}>{props.value == '' ? 0 : '+'+props.value}</Text>
             else
-                return <Text style={[styles.textResult, { color: "#D64A4A" }]}>-{props.value}</Text>
+                return <Text style={[styles.textResult, { color: "#D64A4A" }]}>{props.value}</Text>
         }
         if (props.cardType == 2) {
             return <Text style={[styles.textResult, { color: "#000000" }]}>{props.value}</Text>
