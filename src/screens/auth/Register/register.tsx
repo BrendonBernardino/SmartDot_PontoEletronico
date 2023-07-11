@@ -135,7 +135,7 @@ function Register() {
                 <Button
                     text="Criar Conta"
                     color={themeModeCroma === COLORSLIGHT ? themeModeCroma.auxiliar : themeModeCroma.tertiary}
-                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.gray : themeModeCroma.primary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.text : themeModeCroma.primary}
                     centralized={1}
                     onPress={handleRegistrar}
                     borderBottomRightRadius={33}

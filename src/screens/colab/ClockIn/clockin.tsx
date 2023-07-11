@@ -54,6 +54,13 @@ function ClockIn() {
     const [intervaloFimReal, setintervaloFimReal] = useState("");
     const [saidaReal, setSaidaReal] = useState("");
 
+    const [entradaRealHistory, setEntradaRealHistory] = useState("");
+    const [intervaloInicioRealHistory, setintervaloInicioRealHistory] = useState("");
+    const [intervaloFimRealHistory, setintervaloFimRealHistory] = useState("");
+    const [saidaRealHistory, setSaidaRealHistory] = useState("");
+    const [myLatitudeHistory, setMyLatitudeHistory] = useState(0);
+    const [myLongitudeHistory, setMyLongitudeHistory] = useState(0);
+
     const [tempoTotal, setTempoTotal] = useState("");
     const [horaTotal, setHoraTotal] = useState('');
     const [minTotal, setMinTotal] = useState('');
@@ -179,14 +186,6 @@ function ClockIn() {
         }
         console.log('interval_Atived: ' + interval_Atived);
     }, [intervalInicioplanned]);
-
-    // useEffect(() => {
-    //     if (isAuthenticated == true) {
-    //         // PontoPush();
-    //         // setPonto(true);
-    //         handleClockIn();
-    //     }
-    // }, [isAuthenticated]);
 
     useEffect(() => {
         if (timePOST == 'start_time' || timePOST == 'initial_interval' || timePOST == 'final_interval' || timePOST == 'final_time') {
@@ -387,42 +386,49 @@ function ClockIn() {
 
     const fetchData = async (date: string, name?: string) => {
         try {
-          setIsLoading(true);
-          let url = `${apiUrl}/manager/point_presences?data=${date}`;
-    
-          const token = await AsyncStorage.getItem('token');
-    
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-    
-          if (!response.ok) {
-            const errorResponse = await response.json();
-            const errorMessage = errorResponse.errors;
-            
+            setIsLoading(true);
+            let url = `${apiUrl}/collaborator/point_presences?data=${date}`;
+
+            const token = await AsyncStorage.getItem('token');
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.errors;
+
+                Toast.show({
+                    type: 'error',
+                    text1: errorMessage || 'Não foi possível recarregar'
+                })
+            }
+
+            const data = await response.json();
+            //   setJsonData(data);
+            //   setData(date);
+            setEntradaRealHistory(data[0].tempo_inicial.real);
+            setintervaloInicioRealHistory(data[0].intervalo_inicial.real);
+            setintervaloFimRealHistory(data[0].intervalo_final.real);
+            setSaidaRealHistory(data[0].tempo_final.real);
+
+            setMyLatitudeHistory(parseFloat(data[0].tempo_final.latitude));
+            setMyLongitudeHistory(parseFloat(data[0].tempo_final.longitude));
+            console.log(data);
+        } catch (error) {
             Toast.show({
                 type: 'error',
-                text1: errorMessage || 'Não foi possível recarregar'
-            })
-          }
-    
-          const data = await response.json();
-        //   setJsonData(data);
-        //   setData(date);
-          console.log(data);
-        } catch (error) {
-          Toast.show({
-            type: 'error',
-            text1: String(error)
-          });
+                text1: String(error)
+            });
         } finally {
-          setIsLoading(false);
+            setIsLoading(false);
         }
-      };
+    };
 
     const handleBaterPontoPress = (index: number) => {
         setModalPontoVisible(true);
@@ -457,16 +463,19 @@ function ClockIn() {
         console.log(jornadaAtual);
         const jornadaTotal = ((parseInt(saidaplanned != '' ? saidaplanned : '0') - parseInt(entradaplanned != '' ? entradaplanned : '0'))) - ((parseInt(intervalFimplanned != '' ? intervalFimplanned : '0') - parseInt(intervalInicioplanned != '' ? intervalInicioplanned : '0')));
         console.log(jornadaTotal);
-        const progress = jornadaAtual/jornadaTotal;
+        const progress = tempoTotal != '' ? jornadaAtual / jornadaTotal : '';
         console.log(progress);
-        if(progress > 1) {
+        if (progress > 1) {
             setProgressNumber(1);
         }
-        if(progress < 0 || progress == null || progress == undefined || isNaN(progress)) {
+        if (progress < 0 || progress == null || progress == undefined) {
             setProgressNumber(0);
         }
-        else {
+        if (progress >= 0 && progress <= 1) {
             setProgressNumber(progress);
+        }
+        else {
+            setProgressNumber(0);
         }
         console.log('progress: ' + progressNumber);
     }
@@ -496,7 +505,7 @@ function ClockIn() {
             return (
                 <View style={styles.optional2}>
                     <MaletaIcon style={styles.cafeicon} width={40} height={40} color={"#4C3D3D"} />
-                    <Progress.Bar progress={progressNumber} width={200} color='#C07F00' unfilledColor='#4C3D3D' />
+                    <Progress.Bar progress={0.1} width={200} color='#C07F00' unfilledColor='#4C3D3D' />
                     <ClimbingIcon style={styles.cafeicon} width={40} height={40} color={"#C07F00"} />
                 </View>
             )
@@ -647,22 +656,22 @@ function ClockIn() {
                         <MapView
                             style={styles.map1}
                             initialRegion={{
-                                latitude: myLatitude,
-                                longitude: myLongitude,
+                                latitude: myLatitudeHistory,
+                                longitude: myLongitudeHistory,
                                 latitudeDelta: 0.0022,
                                 longitudeDelta: 0.0021,
                             }}
                         >
-                            <Marker coordinate={{ latitude: myLatitude, longitude: myLongitude }} pinColor='#C07F00' />
-                            <Circle center={{ latitude: myLatitude, longitude: myLongitude }} radius={80} />
+                            <Marker coordinate={{ latitude: myLatitudeHistory, longitude: myLongitudeHistory }} pinColor='#C07F00' />
+                            <Circle center={{ latitude: myLatitudeHistory, longitude: myLongitudeHistory }} radius={80} />
                         </MapView>
                         <View style={styles.bottomRowContainer}>
                             <Text style={styles.periodoTrabalhoText}>Período de Trabalho</Text>
                             <Text style={styles.intervaloText}>Intervalo</Text>
                         </View>
                         <View style={styles.bottomRowContainer}>
-                            <Text style={styles.periodoTrabalhoText}>12:20 - 18:50</Text>
-                            <Text style={styles.intervaloText}>15:00 - 15:30</Text>
+                            <Text style={styles.periodoTrabalhoText}>{entradaRealHistory} - {saidaRealHistory}</Text>
+                            <Text style={styles.intervaloText}>{intervaloInicioRealHistory} - {intervaloFimRealHistory}</Text>
                         </View>
                         <TouchableOpacity style={styles.closeButton} onPress={() => setVisibleModal(false)}>
                             <AntDesign name="close" size={24} color="black" />

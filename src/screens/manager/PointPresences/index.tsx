@@ -265,19 +265,6 @@ const TaskList: React.FC<TaskListProps> = () => {
     //   </TouchableOpacity>
     // </View>
     <View style={styles.headerlayer}>
-      {/* <View style={styles.themeBar}>
-        <View style={[
-          styles.themeCard,
-          { backgroundColor: '' }
-        ]}>
-          <TouchableOpacity onPress={setLightMode}>
-            <Feather name="sun" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.tertiary : themeMode.gray }} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={setDarkMode}>
-            <Entypo name="moon" size={25} style={{ color: themeMode === COLORSLIGHT ? themeMode.gray_erased : themeMode.tertiary }} />
-          </TouchableOpacity>
-        </View>
-      </View> */}
       <TouchableOpacity style={styles.headerIcon}>
         <Image
           style={styles.logo}

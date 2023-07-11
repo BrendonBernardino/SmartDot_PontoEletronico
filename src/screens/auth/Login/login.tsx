@@ -149,7 +149,7 @@ function Login() {
                 <Button
                     text="Entrar"
                     color={themeModeCroma === COLORSLIGHT ? themeModeCroma.auxiliar : themeModeCroma.tertiary}
-                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.gray_erased : themeModeCroma.primary}
+                    textColor={themeModeCroma === COLORSLIGHT ? themeModeCroma.text : themeModeCroma.primary}
                     centralized={1}
                     onPress={handleLogin}
                     borderBottomRightRadius={33}
