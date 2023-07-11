@@ -656,8 +656,8 @@ function ClockIn() {
                         <MapView
                             style={styles.map1}
                             initialRegion={{
-                                latitude: myLatitudeHistory,
-                                longitude: myLongitudeHistory,
+                                latitude: myLatitudeHistory == null ? -3.824426321813534 : myLatitudeHistory,
+                                longitude: myLongitudeHistory == null ? -38.48832181744508 : myLongitudeHistory,
                                 latitudeDelta: 0.0022,
                                 longitudeDelta: 0.0021,
                             }}

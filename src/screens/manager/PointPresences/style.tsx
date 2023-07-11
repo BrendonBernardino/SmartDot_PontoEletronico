@@ -7,7 +7,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   containerCard: {
-    flex: 1,
+    // flex: 1,
+    marginTop: '2%',
     padding: 16,
   },
   headerContainer: {
@@ -18,7 +19,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerlayer: {
-    flex: 1,
+    // flex: 1,
+    marginTop: '10%',
+    marginBottom: '10%',
     alignItems: "center",
     justifyContent: "space-around",
     flexDirection: "row",

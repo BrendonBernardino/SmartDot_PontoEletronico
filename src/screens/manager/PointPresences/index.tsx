@@ -248,22 +248,6 @@ const TaskList: React.FC<TaskListProps> = () => {
   };
 
   const Header: React.FC = () => (
-    // <View style={styles.headerContainer}>
-    // <TouchableOpacity style={styles.headerIcon}>
-    //   <Image
-    //         style={styles.logo}
-    //         source={require('../../../../assets/Logo.png')}
-    //       />
-    // </TouchableOpacity>
-    //   <View style={styles.headerTextContainer}>
-    //     <Text style={styles.headerText}>{weekday}</Text>
-    //     <View style={styles.headerDivider} />
-    //     <Text style={styles.headerText}>{formattedDate}</Text>
-    //   </View>
-    //   <TouchableOpacity onPress={handleOpenModal} style={styles.headerIcon}>
-    //       <CalendarIcon width={30} height={30} />
-    //   </TouchableOpacity>
-    // </View>
     <View style={styles.headerlayer}>
       <TouchableOpacity style={styles.headerIcon}>
         <Image
